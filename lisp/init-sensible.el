@@ -12,10 +12,24 @@
   (load-file custom-file)
   )
 
+;; Stop warning prompt for some commands. There's always undo.
+(progn
+  (put 'narrow-to-region 'disabled nil)
+  (put 'narrow-to-page 'disabled nil)
+  (put 'upcase-region 'disabled nil)
+  (put 'downcase-region 'disabled nil)
+  (put 'erase-buffer 'disabled nil)
+  (put 'scroll-left 'disabled nil)
+  (put 'dired-find-alternate-file 'disabled nil)
+  )
+
 ;; Clean up ui clutter
 (tool-bar-mode 0)
 (menu-bar-mode 0)
 (scroll-bar-mode 0)
+
+;; Use y-or-n instead of yes-or-n
+(setq use-short-answers t)
 
 ;; Show column number in modeline
 (column-number-mode 1)
@@ -56,6 +70,12 @@
 (setq create-lockfiles nil)
 ;; Disable automatic backup~ files
 (setq make-backup-files nil)
+
+;; Save cursor position (by default in "~/.emacs.d/places")
+(save-place-mode 1)
+
+;; Disable recentf mode
+(recentf-mode -1)
 
 (provide 'init-sensible)
 

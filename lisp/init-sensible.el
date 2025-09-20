@@ -12,6 +12,11 @@
   (load-file custom-file)
   )
 
+;; Package repository setup
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+(package-initialize)
+
 ;; Stop warning prompt for some commands. There's always undo.
 (progn
   (put 'narrow-to-region 'disabled nil)
@@ -50,10 +55,10 @@
 (setq ring-bell-function 'ignore)
 
 ;; Hide the initial frame decorations
-(setq default-frame-alist '((undecorated . t)))
+;; (setq default-frame-alist '((undecorated . t)))
 ;; The following 2 lines allow resizing of frame with mouse by adding a border to the frame
-;;(add-to-list 'default-frame-alist '(drag-internal-border . 1))
-;;(add-to-list 'default-frame-alist '(internal-border-width . 2))
+;; (add-to-list 'default-frame-alist '(drag-internal-border . 1))
+;; (add-to-list 'default-frame-alist '(internal-border-width . 2))
 
 ;; Font - change height to modify the global scale
 (set-face-attribute 'default nil :font "JetBrains Mono" :height 150)
@@ -76,6 +81,28 @@
 
 ;; Disable recentf mode
 (recentf-mode -1)
+
+;; Replace highlighted text
+(delete-selection-mode 1)
+
+;; Which-key
+(setq which-key-idle-delay 0.01)
+(which-key-mode)
+
+;; Auto close brackets
+(setq electric-pair-pairs
+      '(
+	(?\" . ?\")
+	(?\{ . ?\})
+	(?\[ . ?\])
+	(?\` . ?\`)
+	(?\' . ?\')
+	))
+(electric-pair-mode 1)
+
+;; Enable editorconfig support
+(require 'editorconfig)
+(editorconfig-mode 1)
 
 (provide 'init-sensible)
 

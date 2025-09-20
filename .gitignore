@@ -1,5 +1,7 @@
 auto-save-list/
 eshell/
+eln-cache/
+elpa/
 .emacs.custom.el
 places
 recentf

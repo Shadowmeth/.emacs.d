@@ -2,6 +2,7 @@ auto-save-list/
 eshell/
 eln-cache/
 elpa/
+transient/
 .emacs.custom.el
 places
 recentf

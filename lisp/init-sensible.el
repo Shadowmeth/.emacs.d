@@ -54,12 +54,6 @@
 ;; Disable the bell (both audio and visual)
 (setq ring-bell-function 'ignore)
 
-;; Hide the initial frame decorations
-;; (setq default-frame-alist '((undecorated . t)))
-;; The following 2 lines allow resizing of frame with mouse by adding a border to the frame
-;; (add-to-list 'default-frame-alist '(drag-internal-border . 1))
-;; (add-to-list 'default-frame-alist '(internal-border-width . 2))
-
 ;; Font - change height to modify the global scale
 (set-face-attribute 'default nil :font "JetBrains Mono" :height 150)
 

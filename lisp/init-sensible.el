@@ -2,15 +2,10 @@
 ;;; Commentary:
 ;;; Code:
 
-;; Custom file
-(let ((custom-file (expand-file-name ".emacs.custom.el" user-emacs-directory)))
-  ;; Ensure the file exists
-  (unless (file-exists-p custom-file)
-    (with-temp-buffer (write-file custom-file)))
-  ;; Use custom-file for `customize` variables
-  (setq custom-file custom-file)
-  (load-file custom-file)
-  )
+;; Make native compilation silent prune its cache
+(when (native-comp-available-p)
+  (setq native-comp-async-report-warnings-errors 'silent)
+  (setq native-compile-prune-cache t))
 
 ;; Package repository setup
 (require 'package)
@@ -97,6 +92,12 @@
 ;; Enable editorconfig support
 (require 'editorconfig)
 (editorconfig-mode 1)
+
+;; Display battery percentage
+(display-battery-mode 1)
+
+;; Display time
+(display-time-mode 1)
 
 (provide 'init-sensible)
 

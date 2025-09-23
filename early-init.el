@@ -10,3 +10,13 @@
 ;; and hide title bar
 (add-hook 'window-size-change-functions
 	  #'frame-hide-title-bar-when-maximized)
+
+;; Custom file
+(let ((custom-file (expand-file-name ".emacs.custom.el" user-emacs-directory)))
+  ;; Ensure the file exists
+  (unless (file-exists-p custom-file)
+    (with-temp-buffer (write-file custom-file)))
+  ;; Use custom-file for `customize` variables
+  (setq custom-file custom-file)
+  (load-file custom-file)
+  )

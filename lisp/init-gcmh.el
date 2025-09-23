@@ -1,4 +1,4 @@
-;;; init-gcmh.el --- Garbage Collector Magic Hcak -*- lexical-binding: t; -*-
+;;; init-gcmh.el --- Garbage Collector Magic Hack -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
 

@@ -10,6 +10,27 @@
 (require 'init-sensible)
 (require 'init-magit)
 (require 'init-gcmh)
+(require 'init-nerd-icons)
+(require 'init-doom)
+(require 'init-avy)
+(require 'init-expand-region)
+(require 'init-zzz-to-char)
+(require 'init-rainbow-delimiters)
+(require 'init-multiple-cursors)
 
 (provide 'init)
 ;;; init.el ends here
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(doom-modeline exec-path-from-shell expand-region gcmh magit
+		   multiple-cursors rainbow-delimiters zzz-to-char)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

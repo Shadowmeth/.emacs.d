@@ -50,7 +50,7 @@
 (setq ring-bell-function 'ignore)
 
 ;; Font - change height to modify the global scale
-(set-face-attribute 'default nil :font "JetBrains Mono" :height 150)
+(set-face-attribute 'default nil :font "JetBrains Mono" :height 140)
 
 ;; Line numbers
 ;; (global-display-line-numbers-mode)

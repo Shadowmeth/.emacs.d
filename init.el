@@ -17,10 +17,10 @@
 (require 'init-zzz-to-char)
 (require 'init-rainbow-delimiters)
 (require 'init-multiple-cursors)
-(require 'init-projectile)
 (require 'init-orderless)
 (require 'init-vertico)
 (require 'init-marginalia)
+(require 'init-consult)
 
 (provide 'init)
 ;;; init.el ends here

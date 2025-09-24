@@ -4,6 +4,7 @@ eln-cache/
 elpa/
 transient/
 .emacs.custom.el
+projectile-bookmarks.eld
 places
 recentf
 history

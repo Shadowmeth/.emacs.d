@@ -99,6 +99,23 @@
 ;; Display time
 (display-time-mode 1)
 
+;; Disable case-sensitivity and buffer matching when built-in completion styles are used
+(setq read-file-name-completion-ignore-case t)
+(setq read-buffer-completion-ignore-case t)
+(setq completion-ignore-case t)
+
+;; Enable minibuffer history
+(savehist-mode t)
+
+;; Enable context menu
+(context-menu-mode t)
+
+;; Support opening new minibuffers from inside existing minibuffers.
+(setq enable-recursive-minibuffers t)
+
+;; Hide commands in M-x which do not work in the current mode.
+(setq read-extended-command-predicate #'command-completion-default-include-p)
+
 (provide 'init-sensible)
 
 ;;; init-sensible.el ends here

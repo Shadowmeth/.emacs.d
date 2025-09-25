@@ -49,11 +49,8 @@
 ;; Disable the bell (both audio and visual)
 (setq ring-bell-function 'ignore)
 
-;; Font - change height to modify the global scale
-(set-face-attribute 'default nil :font "JetBrains Mono" :height 140)
-
-;; Fix child-frames font
-(setq frame-resize-pixelwise t)
+;; Font - Do M-x menu-set-font for font
+(set-face-attribute 'default nil :family "JetBrains Mono" :height 144)
 
 ;; Line numbers
 ;; (global-display-line-numbers-mode)

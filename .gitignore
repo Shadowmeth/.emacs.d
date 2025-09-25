@@ -1,9 +1,11 @@
 auto-save-list/
+.cache/
 eshell/
 eln-cache/
 elpa/
 transient/
 .emacs.custom.el
+tramp
 projectile-bookmarks.eld
 places
 recentf

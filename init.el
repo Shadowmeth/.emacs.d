@@ -7,6 +7,10 @@
   (when (file-directory-p lisp-dir)
     (add-to-list 'load-path lisp-dir)))
 
+;; Custom file
+(setq custom-file "~/.emacs.d/.emacs.custom.el")
+(load-file custom-file)
+
 (require 'init-sensible)
 (require 'init-magit)
 (require 'init-gcmh)
@@ -21,8 +25,12 @@
 (require 'init-projectile)
 (require 'init-orderless)
 (require 'init-vertico)
+(require 'init-embark)
 (require 'init-marginalia)
 (require 'init-consult)
+(require 'init-flycheck)
+(require 'init-yasnippet)
+(require 'init-corfu)
 
 (provide 'init)
 ;;; init.el ends here

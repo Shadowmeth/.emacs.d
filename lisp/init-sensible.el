@@ -52,6 +52,9 @@
 ;; Font - change height to modify the global scale
 (set-face-attribute 'default nil :font "JetBrains Mono" :height 140)
 
+;; Fix child-frames font
+(setq frame-resize-pixelwise t)
+
 ;; Line numbers
 ;; (global-display-line-numbers-mode)
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
@@ -115,6 +118,10 @@
 
 ;; Hide commands in M-x which do not work in the current mode.
 (setq read-extended-command-predicate #'command-completion-default-include-p)
+
+;; Set eldoc mode delay
+(setq eldoc-idle-delay 0)
+(global-eldoc-mode -1)
 
 (provide 'init-sensible)
 

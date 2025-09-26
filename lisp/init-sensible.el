@@ -50,7 +50,7 @@
 (setq ring-bell-function 'ignore)
 
 ;; Font - Do M-x menu-set-font for font
-(set-face-attribute 'default nil :family "JetBrains Mono" :height 144)
+(set-face-attribute 'default nil :family "JetBrains Mono" :height 130)
 
 ;; Line numbers
 ;; (global-display-line-numbers-mode)
@@ -119,6 +119,9 @@
 ;; Set eldoc mode delay
 (setq eldoc-idle-delay 0)
 (global-eldoc-mode -1)
+
+;; Increase the amount of Data Emacs reads from a process (useful for lsp-mode)
+(setq read-process-output-max (* 1024 1024)) ;; 1mb
 
 (provide 'init-sensible)
 

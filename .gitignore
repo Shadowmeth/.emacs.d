@@ -4,6 +4,7 @@ eshell/
 eln-cache/
 elpa/
 transient/
+snippets/
 .emacs.custom.el
 tramp
 projectile-bookmarks.eld

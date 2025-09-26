@@ -31,6 +31,7 @@
 (require 'init-flycheck)
 (require 'init-yasnippet)
 (require 'init-corfu)
+(require 'init-lsp-booster)
 (require 'init-lsp-mode)
 
 (provide 'init)

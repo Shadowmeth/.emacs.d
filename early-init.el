@@ -1,4 +1,5 @@
 (setq pgtk-wait-for-event-timeout 0) ;; Don't delay waiting for GTK events after making changes to GUI
+(setenv "LSP_USE_PLISTS" "false")
 
 (setenv "SHELL" "/usr/bin/zsh")
 (add-to-list 'exec-path "~/.nvm/versions/node/v24.7.0/bin")

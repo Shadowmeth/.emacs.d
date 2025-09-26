@@ -6,6 +6,7 @@ elpa/
 transient/
 snippets/
 .emacs.custom.el
+.lsp-session-v1
 tramp
 projectile-bookmarks.eld
 places

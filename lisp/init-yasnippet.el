@@ -13,6 +13,7 @@
 (use-package yasnippet
   :ensure t
   :config
+  (setq yas-verbosity 0)
   (yas-global-mode 1)
   )
 

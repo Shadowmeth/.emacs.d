@@ -10,8 +10,8 @@
 
   ;; Use orderless-flex is a little to lax for in buffer auto completion
   ;; (orderless-matching-styles '(orderless-flex orderless-literal orderless-regexp))
-  (orderless-matching-styles '(orderless-literal orderless-regexp))
-  (completion-styles '(orderless basic))
+  ;; (orderless-matching-styles '(orderless-literal orderless-regexp))
+  (completion-styles '(orderless partial-completion basic))
   (completion-category-overrides '((file (styles partial-completion))))
   (completion-category-defaults nil) ;; Disable defaults, use our settings
   (completion-pcm-leading-wildcard t) ;; Emacs 31: partial-completion behaves like substring

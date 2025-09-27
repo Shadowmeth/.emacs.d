@@ -10,6 +10,21 @@
   (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter)
   )
 
+;; Cape - capf extensions for Corfu
+(use-package cape
+  :ensure t
+  :config
+  (add-hook 'lsp-completion-mode-hook (lambda ()
+					(setq-local completion-at-point-functions
+						    (list
+						     #'cape-file
+						     (cape-capf-super
+							   #'lsp-completion-at-point
+							   #'yasnippet-capf
+							   #'cape-dabbrev
+							   #'cape-keyword)))))
+  )
+
 (use-package corfu
   :ensure t
   :custom
@@ -29,6 +44,13 @@
   (corfu-history-mode)
   (corfu-popupinfo-mode)
   )
+
+;; Uncomment the following snippet to use <TAB> for selecting candidate
+;; and keeping enter key for newline
+;; (with-eval-after-load 'corfu
+;;   (define-key corfu-map (kbd "<return>") nil)
+;;   (define-key corfu-map (kbd "RET") nil)
+;;   )
 
 (provide 'init-corfu)
 

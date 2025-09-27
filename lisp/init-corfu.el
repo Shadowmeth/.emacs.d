@@ -18,11 +18,12 @@
 					(setq-local completion-at-point-functions
 						    (list
 						     #'cape-file
-						     (cape-capf-super
-							   #'lsp-completion-at-point
-							   #'yasnippet-capf
-							   #'cape-dabbrev
-							   #'cape-keyword)))))
+						     (cape-capf-buster
+						      (cape-capf-super
+						       #'lsp-completion-at-point
+						       #'yasnippet-capf
+						       #'cape-dabbrev
+						       #'cape-keyword))))))
   )
 
 (use-package corfu

@@ -3,6 +3,8 @@
 ;;; Code:
 
 (require 'dired-x)
+(setq dired-omit-files
+  (concat dired-omit-files "\\|^\\..+$")) ;; hide all dotfiles
 (add-hook 'dired-mode-hook #'dired-omit-mode)
 (setq-default dired-dwim-target t)
 (setq dired-listing-switches "-alh")

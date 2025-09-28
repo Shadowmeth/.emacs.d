@@ -8,6 +8,7 @@
   (when (memq window-system '(mac ns x))
     (exec-path-from-shell-initialize))
   (exec-path-from-shell-copy-env "PATH")
+  (exec-path-from-shell-copy-env "OPENROUTER_API_KEY")
   )
 
 (provide 'init-exec-path-from-shell)

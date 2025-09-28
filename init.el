@@ -36,6 +36,7 @@
 (require 'init-web-mode)
 (require 'init-prettier)
 (require 'init-dired)
+(require 'init-aidermacs)
 
 (require 'init-indentation)
 (provide 'init)

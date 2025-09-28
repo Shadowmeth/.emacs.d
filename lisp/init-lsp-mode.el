@@ -26,7 +26,7 @@
 
   (setq lsp-enable-on-type-formatting nil)
   (setq lsp-enable-file-watchers nil)
-  (setq lsp-semantic-tokens-enable nil)
+  (setq lsp-semantic-tokens-enable t)
   
   (setq lsp-enable-symbol-highlighting nil) ;; 1
   (setq lsp-ui-sideline-show-code-actions nil) ;; 5

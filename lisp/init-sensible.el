@@ -123,6 +123,9 @@
 ;; Increase the amount of Data Emacs reads from a process (useful for lsp-mode)
 (setq read-process-output-max (* 1024 1024)) ;; 1mb
 
+;; Delay fontification a little after input
+(setq jit-lock-defer-time 0.001)
+
 (provide 'init-sensible)
 
 ;;; init-sensible.el ends here

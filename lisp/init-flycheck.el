@@ -12,6 +12,7 @@
 (use-package flycheck
   :ensure t
   :config
+  (setq flycheck-idle-change-delay 1)
   (global-flycheck-mode)
   )
 

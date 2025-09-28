@@ -16,7 +16,14 @@
                                  '("\\.jsx?\\'" . prettier-js-mode))
                                (enable-minor-mode
                                  '("\\.tsx?\\'" . prettier-js-mode))
+                               (enable-minor-mode
+                                 '("\\.html\\'" . prettier-js-mode))
                                ))
+  
+  (add-hook 'js-mode-hook 'prettier-js-mode)
+  (add-hook 'typescript-mode-hook 'prettier-js-mode)
+  (add-hook 'css-mode-hook 'prettier-js-mode)
+  (add-hook 'js-json-mode-hook 'prettier-js-mode)
 
   (setq prettier-js-command "prettierd")
   )

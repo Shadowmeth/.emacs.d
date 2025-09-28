@@ -35,6 +35,7 @@
 (require 'init-lsp-mode)
 (require 'init-web-mode)
 (require 'init-prettier)
+(require 'init-dired)
 
 (require 'init-indentation)
 (provide 'init)

@@ -124,7 +124,12 @@
 (setq read-process-output-max (* 1024 1024)) ;; 1mb
 
 ;; Delay fontification a little after input
-(setq jit-lock-defer-time 0.001)
+;; (setq jit-lock-defer-time 0.01)
+
+;; Use spaces in place of tab
+;; This is a buffer local variable so some major modes can still override the values
+;; In that case try to add a hook or use editorconfig
+(setq-default indent-tabs-mode nil)
 
 (provide 'init-sensible)
 

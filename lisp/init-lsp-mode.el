@@ -64,8 +64,18 @@
   :commands lsp-ui-mode
   )
 
+;; See https://github.com/emacs-lsp/dap-mode/pull/837/commits to fix the UI controls bug
 (use-package dap-mode
   :ensure t
+  :config
+  (require 'dap-node)
+  (dap-node-setup)
+
+  (dap-mode 1)
+  (dap-ui-mode 1)
+  (dap-tooltip-mode 1)
+  (tooltip-mode 1)
+  (dap-ui-controls-mode 1)
   )
 
 (provide 'init-lsp-mode)

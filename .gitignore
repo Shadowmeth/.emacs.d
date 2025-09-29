@@ -5,8 +5,10 @@ eln-cache/
 elpa/
 transient/
 snippets/
+.extension/
 .emacs.custom.el
 .lsp-session-v1
+.dap-breakpoints
 tramp
 projectile-bookmarks.eld
 places

@@ -13,6 +13,7 @@
 
 (require 'init-sensible)
 (require 'init-magit)
+(require 'init-git-gutter-fringe)
 (require 'init-gcmh)
 (require 'init-exec-path-from-shell)
 (require 'init-nerd-icons)

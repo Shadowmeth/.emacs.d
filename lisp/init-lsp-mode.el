@@ -12,6 +12,7 @@
   :hook (
           (c-mode . lsp)
 	  (c++-mode . lsp)
+          (cmake-mode . lsp)
           (js-mode . lsp)
           (typescript-mode . lsp)
           (css-mode . lsp)

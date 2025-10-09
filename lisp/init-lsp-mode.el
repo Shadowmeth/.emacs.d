@@ -2,6 +2,11 @@
 ;;; Commentary:
 ;;; Code:
 
+;; Java requires an extra extension
+(use-package lsp-java
+  :ensure t
+  )
+
 (use-package lsp-mode
   :ensure t
   :init
@@ -16,10 +21,12 @@
           (js-mode . lsp)
           (typescript-mode . lsp)
           (css-mode . lsp)
+          (java-mode . lsp)
           
           (lsp-mode . lsp-enable-which-key-integration)
 	  (lsp-completion-mode . my/lsp-mode-setup-completion))
   :config
+
   (setq lsp-log-io nil)
   (setq lsp-completion-provider :none) ;; we use corfu!
   (setq lsp-idle-delay 0.1)
@@ -58,8 +65,26 @@
        "--header-insertion-decorators=0"
        ))
 
+  ;; Java jdtls download URL.
+  ;; Update this in future if this causes issues or lacks features
+  (setq lsp-java-settings-url
+    "https://www.eclipse.org/downloads/download.php?file=/jdtls/milestones/1.50.0/jdt-language-server-1.50.0-202509041425.tar.gz")
+  ;; current VSCode defaults for jdtls
+  (setq lsp-java-vmargs
+    '("-XX:+UseParallelGC"
+       "-XX:GCTimeRatio=4"
+       "-XX:AdaptiveSizePolicyWeight=90"
+       "-Dsun.zip.disableMemoryMapping=true"
+       "-Xmx3G"
+       "-Xms100m"))
+
   :commands (lsp lsp-deferred)
   )
+
+;; Sometimes lsp-mode doesn't correctly load lsp-keymap-prefix.
+;; This permanently fixes that. NOTE: this should be outside use-package after lsp-mode
+;; is done with all the initialization work
+(define-key lsp-mode-map (kbd "C-l") lsp-command-map)
 
 (use-package lsp-ui
   :ensure t
@@ -71,6 +96,7 @@
   :ensure t
   :config
   (require 'dap-node)
+  (require 'dap-java)
   (dap-node-setup)
 
   (dap-mode 1)

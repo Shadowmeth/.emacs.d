@@ -106,6 +106,9 @@
   :config
   (require 'dap-node)
   (require 'dap-java)
+  (require 'dap-python)
+  
+  (setq dap-python-debugger 'debugpy)
   (dap-node-setup)
 
   (dap-mode 1)

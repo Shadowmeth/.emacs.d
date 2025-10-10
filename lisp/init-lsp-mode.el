@@ -2,7 +2,16 @@
 ;;; Commentary:
 ;;; Code:
 
-;; Java requires an extra extension
+;; Python
+(use-package lsp-pyright
+  :ensure t
+  :custom (lsp-pyright-langserver-command "basedpyright") ;; or pyright
+  :hook (python-mode . (lambda ()
+                         (require 'lsp-pyright)
+                         (lsp)))
+  )
+
+;; Java
 (use-package lsp-java
   :ensure t
   )

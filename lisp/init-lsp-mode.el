@@ -31,11 +31,15 @@
           (typescript-mode . lsp)
           (css-mode . lsp)
           (java-mode . lsp)
+          (asm-mode . lsp)
           
           (lsp-mode . lsp-enable-which-key-integration)
 	  (lsp-completion-mode . my/lsp-mode-setup-completion))
   :config
 
+  ;; Sometimes lsp-mode doesn't correctly associate languageIds with correct file types
+  (add-to-list 'lsp-language-id-configuration '(".*\\.s\\'" . "assembly"))
+  
   (setq lsp-log-io nil)
   (setq lsp-completion-provider :none) ;; we use corfu!
   (setq lsp-idle-delay 0.1)

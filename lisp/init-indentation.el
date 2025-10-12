@@ -22,6 +22,15 @@
 ;;   (lambda ()
 ;;     (setq typescript-indent-level 2)))
 
+;; asm-mode
+(require 'asm-mode)
+(add-hook 'asm-mode-hook (lambda ()
+                           (setq indent-tabs-mode nil) ;; use spaces instead of tabs
+                           ;; (electric-indent-mode -1) ;; indentation in asm-mode is annoying
+                           (setq tab-stop-list (number-sequence 2 60 2))))
+
+(define-key asm-mode-map (kbd "<ret>") 'newline-and-indent)
+
 (provide 'init-indentation)
 
 ;;; init-indentation.el ends here

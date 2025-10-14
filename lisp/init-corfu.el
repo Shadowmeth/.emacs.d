@@ -33,10 +33,10 @@
   (corfu-cycle t)
   (corfu-auto-delay 0.05)
   (corfu-popupinfo-delay 0.05)
-  (corfu-auto-prefix 1)
+  (corfu-auto-prefix 2)
   (corfu-preselect nil)
   (corfu-quit-no-match t)
-  (corfu-quit-at-boundary nil)
+  ;; (corfu-quit-at-boundary nil) uncomment this line to use space as seprator in corfu completions
   :config
   (setq corfu-separator ?\s)
   (setq corfu-popupinfo-max-height 20)

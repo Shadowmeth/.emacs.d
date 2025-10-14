@@ -32,6 +32,7 @@
           (css-mode . lsp)
           (java-mode . lsp)
           (asm-mode . lsp)
+          (rust-mode . lsp)
           
           (lsp-mode . lsp-enable-which-key-integration)
 	  (lsp-completion-mode . my/lsp-mode-setup-completion))

@@ -20,7 +20,6 @@
 (require 'init-avy)
 (require 'init-expand-region)
 (require 'init-zzz-to-char)
-(require 'init-rainbow-delimiters)
 (require 'init-multiple-cursors)
 (require 'init-vterm)
 (require 'init-orderless)

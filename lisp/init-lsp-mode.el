@@ -48,7 +48,7 @@
 
   (setq lsp-enable-on-type-formatting nil)
   (setq lsp-enable-file-watchers nil)
-  (setq lsp-semantic-tokens-enable t)
+  (setq lsp-semantic-tokens-enable nil)
   (setq lsp-enable-indentation nil)
   (setq lsp-ui-sideline-enable nil)
   

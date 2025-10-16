@@ -116,12 +116,14 @@
 ;; Hide commands in M-x which do not work in the current mode.
 (setq read-extended-command-predicate #'command-completion-default-include-p)
 
-;; Set eldoc mode delay
-(setq eldoc-idle-delay 0)
-(global-eldoc-mode -1)
-
 ;; Increase the amount of Data Emacs reads from a process (useful for lsp-mode)
 (setq read-process-output-max (* 1024 1024)) ;; 1mb
+
+;; Disable eldoc mode
+(setq eldoc-idle-delay 0.01)
+(global-eldoc-mode -1)
+(add-hook 'prog-mode-hook (lambda () (eldoc-mode -1)))
+(add-hook 'lsp-mode-hook (lambda () (eldoc-mode -1)))
 
 ;; Delay fontification a little after input
 ;; (setq jit-lock-defer-time 0.01)

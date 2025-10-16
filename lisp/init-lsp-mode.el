@@ -37,29 +37,24 @@
           (lsp-mode . lsp-enable-which-key-integration)
 	  (lsp-completion-mode . my/lsp-mode-setup-completion))
   :config
-
-  ;; Sometimes lsp-mode doesn't correctly associate languageIds with correct file types
-  (add-to-list 'lsp-language-id-configuration '(".*\\.s\\'" . "assembly"))
-  
   (setq lsp-log-io nil)
-  (setq lsp-completion-provider :none) ;; we use corfu!
   (setq lsp-idle-delay 0.1)
+  (setq lsp-completion-provider :none) ;; we use corfu!
   (setq lsp-auto-execute-action nil)
-
   (setq lsp-enable-on-type-formatting nil)
   (setq lsp-enable-file-watchers nil)
   (setq lsp-semantic-tokens-enable nil)
   (setq lsp-enable-indentation nil)
-  (setq lsp-ui-sideline-enable nil)
-  
+
+  ;; Some settings are disabled in lsp-ui package config
   (setq lsp-enable-symbol-highlighting nil) ;; 1
-  (setq lsp-ui-sideline-show-code-actions nil) ;; 5
-  (setq lsp-ui-sideline-show-hover nil) ;; 6
   (setq lsp-modeline-code-actions-enable nil) ;; 7
   (setq lsp-eldoc-enable-hover nil) ;; 10
-  (setq lsp-modeline-diagnostics-enable nil) ;; 11
+  (setq lsp-signature-auto-activate nil) ;; 12
   (setq lsp-signature-render-documentation nil) ;; 13
 
+  ;; Assembly
+  (add-to-list 'lsp-language-id-configuration '(".*\\.s\\'" . "assembly"))
   ;; web mode configuration
   ;; HTML
   (add-to-list 'lsp-language-id-configuration '(".*\\.html?\\'" . "html"))
@@ -102,6 +97,16 @@
 
 (use-package lsp-ui
   :ensure t
+  :config
+  ;; Disable sideline entirely
+  (setq lsp-ui-sideline-enable nil)
+  ;; Hide lsp-ui-sideline items
+  (setq lsp-ui-sideline-show-code-actions nil) ;; 5 (code actions)
+  (setq lsp-ui-sideline-show-hover nil) ;; 6 (symbols)
+  
+  (setq lsp-ui-doc-delay 0.05)
+  (setq lsp-ui-sideline-delay 0.05)
+  
   :commands lsp-ui-mode
   )
 

@@ -133,6 +133,9 @@
 ;; In that case try to add a hook or use editorconfig
 (setq-default indent-tabs-mode nil)
 
+;; Repeat mode - useful for a handful of commands
+(repeat-mode 1)
+
 (provide 'init-sensible)
 
 ;;; init-sensible.el ends here

@@ -9,6 +9,8 @@ snippets/
 .extension/
 workspace/
 eclipse.jdt.ls/
+url/
+bookmarks
 .emacs.custom.el
 .lsp-session-v1
 .dap-breakpoints

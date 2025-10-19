@@ -20,8 +20,7 @@
 (use-package gcmh
   :ensure t
   :config
-  (setq gcmh-idle-delay 2)
-  ;;(setq gcmh-high-cons-threshold 2073741824)
+  (setq gcmh-idle-delay 3)
   (gcmh-mode 1)
   )
 

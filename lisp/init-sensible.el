@@ -136,6 +136,18 @@
 ;; Repeat mode - useful for a handful of commands
 (repeat-mode 1)
 
+;; Always switch to *compilation* buffer automatically and jump to the first error
+(defun my/switch-to-compilation-buffer (&rest _)
+  "Switch to *compilation* buffer after compile command."
+  (when-let ((buf (get-buffer "*compilation*")))
+    (switch-to-buffer-other-window buf)))
+
+(advice-add 'compile :after #'my/switch-to-compilation-buffer)
+(advice-add 'recompile :after #'my/switch-to-compilation-buffer)
+
+(setq compilation-always-kill t) ;; Automatically kill previous compilation process before starting new one
+(setq compilation-scroll-output t) ;; Scroll to end of buffer instead of staying at beginning
+
 (provide 'init-sensible)
 
 ;;; init-sensible.el ends here

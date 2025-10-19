@@ -17,13 +17,13 @@
   (add-hook 'lsp-completion-mode-hook (lambda ()
 					(setq-local completion-at-point-functions
 						    (list
-						     #'cape-file
-						     (cape-capf-buster
+						      #'cape-file
 						      (cape-capf-super
-						       #'lsp-completion-at-point
-						       #'yasnippet-capf
-						       #'cape-dabbrev
-						       #'cape-keyword))))))
+                                                        #'lsp-completion-at-point
+						        ;;(cape-capf-buster #'yasnippet-capf)
+                                                        #'yasnippet-capf
+						        #'cape-dabbrev
+						        #'cape-keyword)))))
   )
 
 (use-package corfu

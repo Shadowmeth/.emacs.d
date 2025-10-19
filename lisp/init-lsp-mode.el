@@ -38,7 +38,7 @@
 	  (lsp-completion-mode . my/lsp-mode-setup-completion))
   :config
   (setq lsp-log-io nil)
-  (setq lsp-idle-delay 0.1)
+  (setq lsp-idle-delay 1)
   (setq lsp-completion-provider :none) ;; we use corfu!
   (setq lsp-auto-execute-action nil)
   (setq lsp-enable-on-type-formatting nil)
@@ -74,7 +74,11 @@
        "--header-insertion-decorators=0"
        ))
 
-  ;; Java jdtls download URL.
+  ;; rust-analyzer
+  (setq lsp-rust-analyzer-cargo-watch-enable nil)
+
+  ;; jdtls
+  ;; download URL:
   ;; Update this in future if this causes issues or lacks features
   (setq lsp-java-settings-url
     "https://www.eclipse.org/downloads/download.php?file=/jdtls/milestones/1.50.0/jdt-language-server-1.50.0-202509041425.tar.gz")

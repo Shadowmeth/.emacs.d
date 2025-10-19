@@ -18,12 +18,12 @@
 					(setq-local completion-at-point-functions
 						    (list
 						      #'cape-file
-						      (cape-capf-super
-                                                        #'lsp-completion-at-point
-						        ;;(cape-capf-buster #'yasnippet-capf)
-                                                        #'yasnippet-capf
-						        #'cape-dabbrev
-						        #'cape-keyword)))))
+                                                      (cape-capf-buster
+						        (cape-capf-super
+                                                          #'lsp-completion-at-point
+						          #'yasnippet-capf
+						          #'cape-dabbrev
+						          #'cape-keyword))))))
   )
 
 (use-package corfu
@@ -31,7 +31,7 @@
   :custom
   (corfu-auto t)
   (corfu-cycle t)
-  (corfu-auto-delay 0.05)
+  (corfu-auto-delay 0.2)
   (corfu-popupinfo-delay 0.05)
   (corfu-auto-prefix 2)
   (corfu-preselect nil)
@@ -39,7 +39,7 @@
   ;; (corfu-quit-at-boundary nil) uncomment this line to use space as seprator in corfu completions
   :config
   (setq corfu-separator ?\s)
-  (setq corfu-popupinfo-max-height 20)
+  (setq corfu-popupinfo-max-height 30)
   
   (global-corfu-mode)
   (corfu-history-mode)

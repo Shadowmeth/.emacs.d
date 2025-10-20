@@ -34,7 +34,7 @@
 		'((company-capf company-yasnippet company-keywords company-files company-dabbrev-code))))
   (add-hook 'lsp-completion-mode-hook #'my/setup-lsp-company)
   :config
-  (setq company-idle-delay 0.1)
+  (setq company-idle-delay 0.05)
   (setq company-minimum-prefix-length 2)
   (setq company-tooltip-align-annotations t)
   (setq company-require-match nil)

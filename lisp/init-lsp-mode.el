@@ -20,7 +20,7 @@
   :ensure t
   :init
   (setq lsp-keymap-prefix "C-l")
-  (defun my/lsp-mode-setup-completion ()
+  (defun my/lsp-mode-setup-completion-corfu ()
     (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
       '(orderless)))
   :hook (
@@ -35,7 +35,8 @@
           (rust-mode . lsp)
           
           (lsp-mode . lsp-enable-which-key-integration)
-	  (lsp-completion-mode . my/lsp-mode-setup-completion))
+	  ;; (lsp-completion-mode . my/lsp-mode-setup-completion-corfu) use this only with corfu
+          )
   :config
   (setq lsp-log-io nil)
   (setq lsp-idle-delay 1)

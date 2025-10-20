@@ -24,7 +24,7 @@
   :init
   (defun my/setup-lsp-company()
     (setq-local company-backends
-		'((company-capf company-yasnippet company-files company-dabbrev-code))))
+		'((company-capf company-yasnippet company-keywords company-files company-dabbrev-code))))
   (add-hook 'lsp-completion-mode-hook #'my/setup-lsp-company)
   :config
   (setq company-idle-delay 0.1)

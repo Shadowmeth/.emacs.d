@@ -32,7 +32,7 @@
   (corfu-auto t)
   (corfu-cycle t)
   (corfu-auto-delay 0.1)
-  (corfu-popupinfo-delay 0.05)
+  (corfu-popupinfo-delay 0.1)
   (corfu-auto-prefix 2)
   (corfu-preselect nil)
   (corfu-quit-no-match t)
@@ -45,6 +45,11 @@
   (corfu-history-mode)
   (corfu-popupinfo-mode)
   )
+
+(advice-add #'lsp-completion-at-point :around #'cape-wrap-noninterruptible)
+(advice-add #'yasnippet-capf :around #'cape-wrap-noninterruptible)
+(advice-add #'cape-dabbrev :around #'cape-wrap-noninterruptible)
+(advice-add #'cape-keyword :around #'cape-wrap-noninterruptible)
 
 ;; Uncomment the following snippet to use <TAB> for selecting candidate
 ;; and keeping enter key for newline

@@ -35,7 +35,7 @@
           (rust-mode . lsp)
           
           (lsp-mode . lsp-enable-which-key-integration)
-	  ;; (lsp-completion-mode . my/lsp-mode-setup-completion-corfu) use this only with corfu
+	  (lsp-completion-mode . my/lsp-mode-setup-completion-corfu) ;; use this only with corfu
           )
   :config
   (setq lsp-log-io nil)

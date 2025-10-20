@@ -30,7 +30,7 @@
 (require 'init-consult)
 (require 'init-flycheck)
 (require 'init-yasnippet)
-(require 'init-company)
+(require 'init-corfu)
 (require 'init-lsp-booster)
 (require 'init-lsp-mode)
 (require 'init-web-mode)

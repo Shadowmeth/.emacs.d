@@ -12,6 +12,7 @@ eclipse.jdt.ls/
 url/
 bookmarks
 .emacs.custom.el
+company-statistics-cache.el
 .lsp-session-v1
 .dap-breakpoints
 tramp

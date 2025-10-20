@@ -19,6 +19,13 @@
 ;;   (company-quickhelp-mode 1)
 ;;   )
 
+;; Show candidates based on recency and frequency
+(use-package company-statistics
+  :ensure t
+  :config
+  (add-hook 'after-init-hook 'company-statistics-mode)
+  )
+
 (use-package company
   :ensure t
   :init

@@ -3,32 +3,32 @@
 ;;; Code:
 
 ;; Make company look fancier
-;; (use-package company-box
-;;   :ensure t
-;;   :hook (company-mode . company-box-mode)
-;;   :config
-;;   (setq company-box-doc-delay 0.01)
-;;   )
-
-(use-package company-quickhelp
+(use-package company-box
   :ensure t
-  :after company
-  :custom
-  (company-quickhelp-delay 0.01)
+  :hook (company-mode . company-box-mode)
   :config
-  (company-quickhelp-mode 1)
+  (setq company-box-doc-delay 0.1)
   )
+
+;; (use-package company-quickhelp
+;;   :ensure t
+;;   :after company
+;;   :custom
+;;   (company-quickhelp-delay 0.1)
+;;   :config
+;;   (company-quickhelp-mode 1)
+;;   )
 
 (use-package company
   :ensure t
   :init
   (defun my/setup-lsp-company()
     (setq-local company-backends
-		'((company-capf company-yasnippet company-dabbrev company-dabbrev-code))))
+		'((company-capf company-yasnippet company-files company-dabbrev-code))))
   (add-hook 'lsp-completion-mode-hook #'my/setup-lsp-company)
   :config
-  (setq company-idle-delay 0.01)
-  (setq company-minimum-prefix-length 1)
+  (setq company-idle-delay 0.1)
+  (setq company-minimum-prefix-length 2)
   (setq company-tooltip-align-annotations t)
   (setq company-require-match nil)
   (setq company-selection-wrap-around t)
@@ -37,6 +37,10 @@
   
   (global-company-mode)
   )
+
+(add-hook 'company-completion-started-hook #'redisplay)
+(add-hook 'company-completion-finished-hook #'redisplay)
+(add-hook 'company-completion-cancelled-hook #'redisplay)
 
 (provide 'init-company)
 

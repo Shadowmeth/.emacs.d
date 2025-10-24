@@ -31,7 +31,6 @@
           (typescript-mode . lsp)
           (css-mode . lsp)
           (java-mode . lsp)
-          (asm-mode . lsp)
           (rust-mode . lsp)
           
           (lsp-mode . lsp-enable-which-key-integration)
@@ -122,8 +121,10 @@
   (require 'dap-node)
   (require 'dap-java)
   (require 'dap-python)
+  (require 'dap-lldb)
   
   (setq dap-python-debugger 'debugpy)
+  (setq dap-lldb-debug-program '("/usr/bin/lldb-dap"))
   (dap-node-setup)
 
   (dap-mode 1)

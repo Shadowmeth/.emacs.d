@@ -115,24 +115,24 @@
   )
 
 ;; See https://github.com/emacs-lsp/dap-mode/pull/837/commits to fix the UI controls bug
-(use-package dap-mode
-  :ensure t
-  :config
-  (require 'dap-node)
-  (require 'dap-java)
-  (require 'dap-python)
-  (require 'dap-lldb)
+;; (use-package dap-mode
+;;   :ensure t
+;;   :config
+;;   (require 'dap-node)
+;;   (require 'dap-java)
+;;   (require 'dap-python)
+;;   (require 'dap-lldb)
   
-  (setq dap-python-debugger 'debugpy)
-  (setq dap-lldb-debug-program '("/usr/bin/lldb-dap"))
-  (dap-node-setup)
+;;   (setq dap-python-debugger 'debugpy)
+;;   (setq dap-lldb-debug-program '("/usr/bin/lldb-dap"))
+;;   (dap-node-setup)
 
-  (dap-mode 1)
-  (dap-ui-mode 1)
-  (dap-tooltip-mode 1)
-  (tooltip-mode 1)
-  (dap-ui-controls-mode 1)
-  )
+;;   (dap-mode 1)
+;;   (dap-ui-mode 1)
+;;   (dap-tooltip-mode 1)
+;;   (tooltip-mode 1)
+;;   (dap-ui-controls-mode 1)
+;;   )
 
 (provide 'init-lsp-mode)
 

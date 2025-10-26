@@ -37,6 +37,7 @@
 (require 'init-prettier)
 (require 'init-dired)
 
+(require 'init-modes)
 (require 'init-indentation)
 (provide 'init)
 ;;; init.el ends here

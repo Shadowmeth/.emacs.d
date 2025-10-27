@@ -20,6 +20,7 @@
 (require 'init-doom)
 (require 'init-avy)
 (require 'init-expand-region)
+(require 'init-ace-window)
 (require 'init-zzz-to-char)
 (require 'init-multiple-cursors)
 (require 'init-vterm)

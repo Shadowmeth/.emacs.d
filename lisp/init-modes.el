@@ -3,6 +3,7 @@
 ;;; Code:
 
 (add-to-list 'auto-mode-alist '("\\.asm\\'" . nasm-mode))
+(add-to-list 'auto-mode-alist '("\\.inc\\'" . nasm-mode))
 
 (provide 'init-modes)
 

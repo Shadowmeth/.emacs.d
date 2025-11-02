@@ -16,6 +16,7 @@
 (require 'init-gcmh)
 (require 'init-exec-path-from-shell)
 (require 'init-nerd-icons)
+(require 'init-ligatures)
 (require 'init-pdf-tools)
 (require 'init-doom)
 (require 'init-avy)

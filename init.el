@@ -19,6 +19,7 @@
 (require 'init-ligatures)
 (require 'init-pdf-tools)
 (require 'init-doom)
+(require 'init-paredit)
 (require 'init-avy)
 (require 'init-expand-region)
 (require 'init-ace-window)
@@ -39,6 +40,10 @@
 (require 'init-prettier)
 (require 'init-dired)
 
+;; language specific config
+(require 'init-racket)
+
+;; these packages should be loaded the last
 (require 'init-modes)
 (require 'init-indentation)
 (provide 'init)

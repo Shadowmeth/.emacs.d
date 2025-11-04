@@ -2,6 +2,16 @@
 ;;; Commentary:
 ;;; Code:
 
+(use-package diredfl
+  :ensure t
+  :hook (dired-mode . diredfl-mode)
+  )
+
+(use-package nerd-icons-dired
+  :ensure t
+  :hook (dired-mode . nerd-icons-dired-mode)
+  )
+
 (require 'dired-x)
 (setq dired-omit-files
   (concat dired-omit-files "\\|^\\..+$")) ;; hide all dotfiles

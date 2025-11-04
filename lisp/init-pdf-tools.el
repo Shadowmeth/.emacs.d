@@ -2,6 +2,12 @@
 ;;; Commentary:
 ;;; Code:
 
+(use-package saveplace-pdf-view
+  :ensure t
+  :config
+  (save-place-mode 1)
+  )
+
 (use-package pdf-tools
   :ensure t
   :config

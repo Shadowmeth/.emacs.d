@@ -10,7 +10,10 @@
 
   ;; Use orderless-flex is a little to lax for in buffer auto completion
   ;; (orderless-matching-styles '(orderless-flex orderless-literal orderless-regexp))
+
+  ;; This is the default
   ;; (orderless-matching-styles '(orderless-literal orderless-regexp))
+  
   (completion-styles '(orderless partial-completion basic))
   (completion-category-overrides '((file (styles partial-completion))))
   (completion-category-defaults nil) ;; Disable defaults, use our settings

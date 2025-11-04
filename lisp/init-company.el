@@ -10,15 +10,6 @@
   (setq company-box-doc-delay 0.1)
   )
 
-;; (use-package company-quickhelp
-;;   :ensure t
-;;   :after company
-;;   :custom
-;;   (company-quickhelp-delay 0.1)
-;;   :config
-;;   (company-quickhelp-mode 1)
-;;   )
-
 ;; Show candidates based on recency and frequency
 (use-package company-statistics
   :ensure t
@@ -31,8 +22,15 @@
   :init
   (defun my/setup-lsp-company()
     (setq-local company-backends
-		'((company-capf company-yasnippet company-keywords company-files company-dabbrev-code))))
+      '((company-capf company-yasnippet company-keywords company-files company-dabbrev-code)))
+    (setq-local company-frontends
+      '(company-pseudo-tooltip-unless-just-one-frontend
+         company-preview-if-just-one-frontend)))
+  (defun my/lsp-mode-setup-completion-company ()
+    (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
+      '(orderless)))
   (add-hook 'lsp-completion-mode-hook #'my/setup-lsp-company)
+  (add-hook 'lsp-completion-mode-hook #'my/lsp-mode-setup-completion-company)
   :config
   (setq company-idle-delay 0.05)
   (setq company-minimum-prefix-length 2)

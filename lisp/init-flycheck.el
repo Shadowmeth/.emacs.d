@@ -12,7 +12,7 @@
 (use-package flycheck
   :ensure t
   :config
-  (setq flycheck-idle-change-delay 0.5)
+  (setq flycheck-idle-change-delay 2)
   (setq flycheck-display-errors-delay 0.2)
   (global-flycheck-mode)
   )

@@ -32,6 +32,7 @@
           (css-mode . lsp)
           (java-mode . lsp)
           (rust-mode . lsp)
+          (js-json-mode . lsp)
           
           (lsp-mode . lsp-enable-which-key-integration)
 	  (lsp-completion-mode . my/lsp-mode-setup-completion-corfu) ;; use this only with corfu

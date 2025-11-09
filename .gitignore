@@ -10,6 +10,7 @@ snippets/
 workspace/
 eclipse.jdt.ls/
 url/
+racket-mode/
 bookmarks
 .emacs.custom.el
 company-statistics-cache.el

@@ -60,10 +60,10 @@
 
 ;; Uncomment the following snippet to use <TAB> for selecting candidate
 ;; and keeping enter key for newline
-(with-eval-after-load 'corfu
-  (define-key corfu-map (kbd "<return>") nil)
-  (define-key corfu-map (kbd "RET") nil)
-  )
+;; (with-eval-after-load 'corfu
+;;   (define-key corfu-map (kbd "<return>") nil)
+;;   (define-key corfu-map (kbd "RET") nil)
+;;   )
 
 ;; The following snippet is to make corfu manual (use Tab to trigger corfu and indent)
 (require 'corfu)

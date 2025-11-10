@@ -29,7 +29,8 @@
 (use-package corfu
   :ensure t
   :custom
-  (corfu-auto t)
+  ;; (corfu-auto t)
+  (corfu-auto nil)
   (corfu-cycle t)
   (corfu-auto-delay 0.1)
   (corfu-popupinfo-delay 0.1)
@@ -37,6 +38,13 @@
   (corfu-preselect nil)
   (corfu-quit-no-match t)
   ;; (corfu-quit-at-boundary nil) uncomment this line to use space as seprator in corfu completions
+  :bind
+  (:map corfu-map
+    ("TAB" . corfu-next)
+    ([tab] . corfu-next)
+    ("S-TAB" . corfu-previous)
+    ([backtab] . corfu-previous)
+    )
   :config
   (setq corfu-separator ?\s)
   (setq corfu-popupinfo-max-height 30)
@@ -57,6 +65,28 @@
 ;;   (define-key corfu-map (kbd "<return>") nil)
 ;;   (define-key corfu-map (kbd "RET") nil)
 ;;   )
+
+(require 'corfu)
+(defun my/corfu-popup-visible-p ()
+  "Return non-nil if Corfu popup is currently visible."
+  (and (boundp 'corfu--overlay)
+    corfu--overlay))
+
+(defun my/tab-indent-or-complete ()
+  "Indent or trigger Corfu completion."
+  (interactive)
+  (if (my/corfu-popup-visible-p)
+    ;; Popup visible → don't interfere, just indent normally
+    (indent-for-tab-command)
+
+    ;; Popup not visible → try indent first
+    (let ((pos (point)))
+      (indent-for-tab-command)
+      (when (= pos (point))             ; indentation did nothing
+        (completion-at-point)))))
+
+(global-set-key (kbd "TAB") #'my/tab-indent-or-complete)
+(global-set-key (kbd "<tab>") #'my/tab-indent-or-complete)
 
 (provide 'init-corfu)
 

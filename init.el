@@ -38,6 +38,7 @@
 (require 'init-web-mode)
 (require 'init-prettier)
 (require 'init-dired)
+(require 'init-org)
 
 ;; language specific config
 (require 'init-racket)

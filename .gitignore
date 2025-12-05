@@ -4,7 +4,7 @@ eshell/
 eln-cache/
 tree-sitter/
 elpa/*
-!elpa/yasnippet-snippets/
+!elpa/yasnippet-snippets*/
 transient/
 snippets/
 .extension/

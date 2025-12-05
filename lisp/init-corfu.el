@@ -45,6 +45,7 @@
   ;;   ([backtab] . corfu-previous)
   ;;   )
   :config
+  (setq corfu-on-exact-match nil)
   (setq corfu-separator ?\s)
   (setq corfu-popupinfo-max-height 30)
   

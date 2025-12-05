@@ -3,7 +3,7 @@
 ;;; Code:
 
 (use-package yasnippet-snippets
-  :ensure nil
+  :ensure t
   )
 
 (use-package yasnippet-capf
@@ -15,6 +15,9 @@
   :config
   (setq yas-verbosity 0)
   (yas-global-mode 1)
+
+  (define-key yas-minor-mode-map (kbd "TAB") nil)
+  (define-key yas-minor-mode-map (kbd "<tab>") nil)
   )
 
 (require 'corfu)

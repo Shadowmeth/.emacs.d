@@ -17,6 +17,15 @@
   (yas-global-mode 1)
   )
 
+(require 'corfu)
+(with-eval-after-load 'yasnippet
+  (add-hook 'yas-keymap-disable-hook
+    (lambda ()
+      (and (bound-and-true-p corfu-mode)
+           (boundp 'corfu--frame)
+           (frame-live-p corfu--frame)
+           (frame-visible-p corfu--frame)))))
+
 (provide 'init-yasnippet)
 
 ;;; init-yasnippet.el ends here

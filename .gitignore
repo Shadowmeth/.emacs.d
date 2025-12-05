@@ -3,7 +3,8 @@ auto-save-list/
 eshell/
 eln-cache/
 tree-sitter/
-elpa/
+elpa/*
+!elpa/yasnippet-snippets/
 transient/
 snippets/
 .extension/

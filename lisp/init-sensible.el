@@ -89,6 +89,9 @@
 	))
 (electric-pair-mode 1)
 
+;; Delete items by moving them to trash
+(setq delete-by-moving-to-trash t)
+
 ;; Enable editorconfig support
 (require 'editorconfig)
 (editorconfig-mode 1)

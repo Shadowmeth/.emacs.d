@@ -6,8 +6,8 @@
   "Time when the last garbage collection finished.")
 
 (add-hook 'post-gc-hook
-          (lambda ()
-            (setq my-last-gc-time (current-time))))
+  (lambda ()
+    (setq my-last-gc-time (current-time))))
 
 (defun my/time-since-last-gc ()
   "Show and return seconds since the last garbage collection."

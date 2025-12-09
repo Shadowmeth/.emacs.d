@@ -6,15 +6,15 @@
   :ensure t
   :bind
   (("C-." . embark-act)
-   ("C-;" . embark-dwim))
+    ("C-;" . embark-dwim))
   :init
   ;; Optionally replace the key help with a completing-read interface
   (setq prefix-help-command #'embark-prefix-help-command)
   :config
   (add-to-list 'display-buffer-alist
-               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
-                 nil
-                 (window-parameters (mode-line-format . none))))
+    '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+       nil
+       (window-parameters (mode-line-format . none))))
   )
 
 (use-package embark-consult

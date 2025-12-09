@@ -13,17 +13,22 @@
 ;; Cape - capf extensions for Corfu
 (use-package cape
   :ensure t
+  :init
+  (add-hook 'completion-at-point-functions #'cape-file)
+  (add-hook 'completion-at-point-functions #'cape-dabbrev)
+  (add-hook 'completion-at-point-functions #'cape-keyword)
+  (add-hook 'completion-at-point-functions #'yasnippet-capf)
   :config
   (add-hook 'lsp-completion-mode-hook (lambda ()
-					(setq-local completion-at-point-functions
-						    (list
-						      #'cape-file
-                                                      (cape-capf-buster
-						        (cape-capf-super
-                                                          #'lsp-completion-at-point
-						          #'yasnippet-capf
-						          #'cape-dabbrev
-						          #'cape-keyword))))))
+					                    (setq-local completion-at-point-functions
+					                      (list
+						                    #'cape-file
+                                            (cape-capf-buster
+						                      (cape-capf-super
+                                                #'lsp-completion-at-point
+						                        #'yasnippet-capf
+						                        #'cape-dabbrev
+						                        #'cape-keyword))))))
   )
 
 (use-package corfu

@@ -25,9 +25,9 @@
   (add-hook 'yas-keymap-disable-hook
     (lambda ()
       (and (bound-and-true-p corfu-mode)
-           (boundp 'corfu--frame)
-           (frame-live-p corfu--frame)
-           (frame-visible-p corfu--frame)))))
+        (boundp 'corfu--frame)
+        (frame-live-p corfu--frame)
+        (frame-visible-p corfu--frame)))))
 
 (provide 'init-yasnippet)
 

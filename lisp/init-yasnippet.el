@@ -3,7 +3,7 @@
 ;;; Code:
 
 (use-package yasnippet-snippets
-  :ensure nil
+  :ensure t
   )
 
 (use-package yasnippet-capf

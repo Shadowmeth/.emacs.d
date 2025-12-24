@@ -115,6 +115,33 @@
   :commands lsp-ui-mode
   )
 
+;; Dape (Debug Adapter Protocol for Emacs)
+(use-package dape
+  :ensure t
+  :hook
+  ;; Save breakpoints on quit
+  (kill-emacs . dape-breakpoint-save)
+  ;; Load breakpoints on startup
+  (after-init . dape-breakpoint-load)
+  
+  :custom
+  ;; Turn on global bindings for setting breakpoints with mouse
+  (dape-breakpoint-global-mode +1)
+  
+  ;; Info buffers to the right
+  (dape-buffer-window-arrangement 'right)
+
+  :config
+  ;; Pulse source line (performance hit)
+  (add-hook 'dape-display-source-hook #'pulse-momentary-highlight-one-line)
+
+  ;; Save buffers on startup, useful for interpreted languages
+  (add-hook 'dape-start-hook (lambda () (save-some-buffers t t)))
+
+  ;; Kill compile buffer on build success
+  (add-hook 'dape-compile-hook #'kill-buffer)
+  )
+
 ;; See https://github.com/emacs-lsp/dap-mode/pull/837/commits to fix the UI controls bug
 ;; (use-package dap-mode
 ;;   :ensure t

@@ -11,6 +11,8 @@ workspace/
 eclipse.jdt.ls/
 url/
 racket-mode/
+debug-adapters/
+dape-breakpoints
 bookmarks
 .emacs.custom.el
 company-statistics-cache.el

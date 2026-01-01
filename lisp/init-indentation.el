@@ -31,6 +31,13 @@
 
 (define-key asm-mode-map (kbd "<ret>") 'newline-and-indent)
 
+;; c (use spaces instead of tabs)
+(add-hook 'c-mode-hook (lambda ()
+                         (setq indent-tabs-mode nil)))
+(add-hook 'c++-mode-hook (lambda ()
+                         (setq indent-tabs-mode nil)))
+
+
 (provide 'init-indentation)
 
 ;;; init-indentation.el ends here

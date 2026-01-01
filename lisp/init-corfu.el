@@ -63,7 +63,7 @@
 
   (global-corfu-mode)
   (corfu-history-mode)
-  (corfu-popupinfo-mode)
+  ;; (corfu-popupinfo-mode) ;; using eldoc mode for documentation
   )
 
 (advice-add #'lsp-completion-at-point :around #'cape-wrap-noninterruptible)

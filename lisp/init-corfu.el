@@ -24,11 +24,12 @@
 					                      (list
 						                    #'cape-file
                                             (cape-capf-buster
+                                              (cape-capf-noninterruptible
 						                      (cape-capf-super
                                                 #'lsp-completion-at-point
 						                        #'yasnippet-capf
 						                        #'cape-dabbrev
-						                        #'cape-keyword))))))
+						                        #'cape-keyword)))))))
   )
 
 (use-package corfu

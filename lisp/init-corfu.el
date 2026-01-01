@@ -55,6 +55,12 @@
   (setq corfu-separator ?\s)
   (setq corfu-popupinfo-max-height 30)
   
+  ;; WAYLAND FIX: Force popup redraw on every change
+  (advice-add 'corfu--update :after
+              (lambda (&rest _)
+                (when corfu--frame
+                  (redisplay t))))
+
   (global-corfu-mode)
   (corfu-history-mode)
   (corfu-popupinfo-mode)

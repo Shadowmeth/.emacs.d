@@ -1,4 +1,6 @@
 (setq pgtk-wait-for-event-timeout 0) ;; Don't delay waiting for GTK events after making changes to GUI
+(setq x-gtk-resize-child-frames 'resize-mode) ;; WAYLAND CHILDFRAME FIX - Force more aggressive frame updates
+
 (setenv "LSP_USE_PLISTS" "false")
 
 (setenv "SHELL" "/usr/bin/zsh")

@@ -50,9 +50,9 @@
   ;; Some settings are disabled in lsp-ui package config
   (setq lsp-enable-symbol-highlighting nil) ;; 1
   (setq lsp-modeline-code-actions-enable nil) ;; 7
-  (setq lsp-eldoc-enable-hover t) ;; 10
-  (setq lsp-signature-auto-activate t) ;; 12
-  (setq lsp-signature-render-documentation t) ;; 13
+  (setq lsp-eldoc-enable-hover nil) ;; 10
+  (setq lsp-signature-auto-activate nil) ;; 12
+  (setq lsp-signature-render-documentation nil) ;; 13
 
   ;; Assembly
   (add-to-list 'lsp-language-id-configuration '(".*\\.s\\'" . "assembly"))

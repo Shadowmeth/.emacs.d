@@ -122,11 +122,11 @@
 ;; Increase the amount of Data Emacs reads from a process (useful for lsp-mode)
 (setq read-process-output-max (* 1024 1024)) ;; 1mb
 
-;; Enable global eldoc mode
+;; Disable global eldoc mode
 (setq eldoc-idle-delay 0.1)
-(global-eldoc-mode 1)
-;; (add-hook 'prog-mode-hook (lambda () (eldoc-mode -1)))
-;; (add-hook 'lsp-mode-hook (lambda () (eldoc-mode -1)))
+(global-eldoc-mode -1)
+(add-hook 'prog-mode-hook (lambda () (eldoc-mode -1)))
+(add-hook 'lsp-mode-hook (lambda () (eldoc-mode -1)))
 
 ;; Delay fontification a little after input
 ;; (setq jit-lock-defer-time 0.01)

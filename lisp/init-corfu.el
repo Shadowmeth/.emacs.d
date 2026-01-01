@@ -55,15 +55,23 @@
   (setq corfu-separator ?\s)
   (setq corfu-popupinfo-max-height 30)
   
-  ;; WAYLAND FIX: Force popup redraw on every change
-  (advice-add 'corfu--update :after
-              (lambda (&rest _)
-                (when corfu--frame
-                  (redisplay t))))
+  ;; WAYLAND CHILDFRAME FIX - Force redisplay after every popup update
+  (defun my/corfu-force-redisplay (&rest _)
+    "Force redisplay of Corfu frames on Wayland."
+    (when (and corfu--frame (frame-live-p corfu--frame))
+      (redisplay t)))
+  
+  (advice-add 'corfu--update :after #'my/corfu-force-redisplay)
+  (advice-add 'corfu--popup-hide :after #'my/corfu-force-redisplay)
+  
+  ;; Also force redisplay for popupinfo
+  (with-eval-after-load 'corfu-popupinfo
+    (advice-add 'corfu-popupinfo--show :after #'my/corfu-force-redisplay)
+    (advice-add 'corfu-popupinfo--hide :after #'my/corfu-force-redisplay))
 
   (global-corfu-mode)
   (corfu-history-mode)
-  ;; (corfu-popupinfo-mode) ;; using eldoc mode for documentation
+  (corfu-popupinfo-mode)
   )
 
 (advice-add #'lsp-completion-at-point :around #'cape-wrap-noninterruptible)

@@ -54,20 +54,6 @@
   (setq corfu-on-exact-match nil)
   (setq corfu-separator ?\s)
   (setq corfu-popupinfo-max-height 30)
-  
-  ;; WAYLAND CHILDFRAME FIX - Force redisplay after every popup update
-  (defun my/corfu-force-redisplay (&rest _)
-    "Force redisplay of Corfu frames on Wayland."
-    (when (and corfu--frame (frame-live-p corfu--frame))
-      (redisplay t)))
-  
-  (advice-add 'corfu--update :after #'my/corfu-force-redisplay)
-  (advice-add 'corfu--popup-hide :after #'my/corfu-force-redisplay)
-  
-  ;; Also force redisplay for popupinfo
-  (with-eval-after-load 'corfu-popupinfo
-    (advice-add 'corfu-popupinfo--show :after #'my/corfu-force-redisplay)
-    (advice-add 'corfu-popupinfo--hide :after #'my/corfu-force-redisplay))
 
   (global-corfu-mode)
   (corfu-history-mode)

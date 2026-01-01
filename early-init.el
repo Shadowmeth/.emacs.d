@@ -1,5 +1,5 @@
 (setq pgtk-wait-for-event-timeout 0) ;; Don't delay waiting for GTK events after making changes to GUI
-(setq x-gtk-resize-child-frames 'resize-mode) ;; WAYLAND CHILDFRAME FIX - Force more aggressive frame updates
+(setenv "GDK_BACKEND" "x11")
 
 (setenv "LSP_USE_PLISTS" "false")
 
@@ -9,4 +9,4 @@
 (toggle-frame-maximized)
 ;; and hide title bar
 (add-hook 'window-size-change-functions
-	  #'frame-hide-title-bar-when-maximized)
+  #'frame-hide-title-bar-when-maximized)

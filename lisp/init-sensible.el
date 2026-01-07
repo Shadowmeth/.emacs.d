@@ -135,7 +135,7 @@
 ;; This is a buffer local variable so some major modes can still override the values
 ;; In that case try to add a hook or use editorconfig
 (setq-default indent-tabs-mode nil)
-(setq-default tab-width 4)
+(setq-default tab-width 8)
 
 ;; Repeat mode - useful for a handful of commands
 (repeat-mode 1)

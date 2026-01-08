@@ -18,6 +18,9 @@
 
   (define-key yas-minor-mode-map (kbd "TAB") nil)
   (define-key yas-minor-mode-map (kbd "<tab>") nil)
+  (define-key yas-minor-mode-map (kbd "SPC") nil)
+  (define-key yas-keymap (kbd "C-j") 'yas-next-field-or-maybe-expand)
+  (define-key yas-keymap (kbd "C-k") 'yas-prev-field)
   )
 
 (require 'corfu)

@@ -35,21 +35,26 @@
 (use-package corfu
   :ensure t
   :custom
-  (corfu-auto t)
+  (corfu-auto nil)
   (corfu-cycle t)
   (corfu-auto-delay 0.1)
   (corfu-popupinfo-delay 0.1)
   (corfu-auto-prefix 2)
   (corfu-preselect nil)
   (corfu-quit-no-match t)
-  ;; (corfu-quit-at-boundary nil) uncomment this line to use space as seprator in corfu completions
+  (corfu-quit-at-boundary nil) ;; uncomment this line to use space as seprator in corfu completions
   :bind
-  ;; (:map corfu-map
-  ;;   ("TAB" . corfu-next)
-  ;;   ([tab] . corfu-next)
-  ;;   ("S-TAB" . corfu-previous)
-  ;;   ([backtab] . corfu-previous)
-  ;;   )
+  (:map corfu-map
+    ("TAB" . corfu-next)
+    ("<tab>" . corfu-next)
+    ("S-TAB" . corfu-previous)
+    ("<backtab>" . corfu-previous)
+    ("C-n" . corfu-next)
+    ("C-p" . corfu-previous)
+    ("<return>" . corfu-insert)
+    ("RET" . corfu-insert)
+    ("<escape>" . corfu-quit)
+  )
   :config
   (setq corfu-on-exact-match nil)
   (setq corfu-separator ?\s)
@@ -67,33 +72,61 @@
 
 ;; Uncomment the following snippet to use <TAB> for selecting candidate
 ;; and keeping enter key for newline
-(with-eval-after-load 'corfu
-  (define-key corfu-map (kbd "<return>") nil)
-  (define-key corfu-map (kbd "RET") nil)
-  )
+;; (with-eval-after-load 'corfu
+;;   (define-key corfu-map (kbd "<return>") nil)
+;;   (define-key corfu-map (kbd "RET") nil)
+;;   )
 
-;; The following snippet is to make corfu manual (use Tab to trigger corfu and indent)
 (require 'corfu)
-(defun my/corfu-popup-visible-p ()
-  "Return non-nil if Corfu popup is currently visible."
-  (and (boundp 'corfu--overlay)
-    corfu--overlay))
+(require 'yasnippet)
+;; Helper function to check if Corfu popup is visible
+(defun my/corfu-visible-p ()
+  "Check if Corfu popup is currently visible."
+  (and (featurep 'corfu)
+       (boundp 'corfu--frame)
+       corfu--frame
+       (frame-visible-p corfu--frame)))
 
-(defun my/tab-indent-or-complete ()
-  "Indent or trigger Corfu completion."
+;; Simple TAB: trigger completion or indent
+(defun my/tab-dwim ()
+  "Smart TAB: trigger corfu or indent."
   (interactive)
-  (if (my/corfu-popup-visible-p)
-    ;; Popup visible → don't interfere, just indent normally
-    (indent-for-tab-command)
+  (cond
+   ;; Don't interfere with minibuffer
+   ((minibufferp)
+    (call-interactively #'completion-at-point))
+   
+   ;; If Corfu popup is visible, navigate it
+   ((my/corfu-visible-p)
+    (call-interactively #'corfu-next))
+   
+   ;; Otherwise: indent, and if no change, trigger completion
+   (t
+    (let ((old-point (point))
+          (old-tick (buffer-chars-modified-tick)))
+      (call-interactively #'indent-for-tab-command)
+      ;; If nothing changed, trigger completion
+      (when (and (= old-point (point))
+                 (= old-tick (buffer-chars-modified-tick)))
+        (completion-at-point))))))
 
-    ;; Popup not visible → try indent first
-    (let ((pos (point)))
-      (indent-for-tab-command)
-      (when (= pos (point))             ; indentation did nothing
-        (completion-at-point)))))
+;; Shift-TAB for Corfu navigation
+(defun my/shift-tab-dwim ()
+  "Smart Shift-TAB: navigate corfu backward."
+  (interactive)
+  (when (my/corfu-visible-p)
+    (call-interactively #'corfu-previous)))
 
-;; (global-set-key (kbd "TAB") #'my/tab-indent-or-complete)
-;; (global-set-key (kbd "<tab>") #'my/tab-indent-or-complete)
+;; Only bind in prog-mode and text-mode to avoid minibuffer issues
+(defun my/setup-tab-for-completion ()
+  "Setup TAB for completion in programming and text modes."
+  (local-set-key (kbd "TAB") #'my/tab-dwim)
+  (local-set-key (kbd "<tab>") #'my/tab-dwim)
+  (local-set-key (kbd "S-TAB") #'my/shift-tab-dwim)
+  (local-set-key (kbd "<backtab>") #'my/shift-tab-dwim))
+
+(add-hook 'prog-mode-hook #'my/setup-tab-for-completion)
+(add-hook 'text-mode-hook #'my/setup-tab-for-completion)
 
 (provide 'init-corfu)
 

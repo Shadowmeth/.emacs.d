@@ -32,7 +32,6 @@
         (frame-live-p corfu--frame)
         (frame-visible-p corfu--frame)))))
 
-(require 'company)
 ;; Integration with company
 (with-eval-after-load 'company
   ;; Abort company when expanding a snippet

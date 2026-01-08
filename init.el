@@ -12,6 +12,7 @@
 (load-file custom-file)
 
 (require 'init-sensible)
+(require 'init-buffer-zoom)
 (require 'init-magit)
 (require 'init-gcmh)
 (require 'init-exec-path-from-shell)

@@ -20,16 +20,16 @@
   (add-hook 'completion-at-point-functions #'yasnippet-capf)
   :config
   (add-hook 'lsp-completion-mode-hook (lambda ()
-					                    (setq-local completion-at-point-functions
-					                      (list
-						                    #'cape-file
+					(setq-local completion-at-point-functions
+					  (list
+					    #'cape-file
                                             (cape-capf-buster
                                               (cape-capf-noninterruptible
-						                      (cape-capf-super
-                                                #'lsp-completion-at-point
-						                        #'yasnippet-capf
-						                        #'cape-dabbrev
-						                        #'cape-keyword)))))))
+						(cape-capf-super
+                                                  #'lsp-completion-at-point
+						  #'yasnippet-capf
+						  #'cape-dabbrev
+						  #'cape-keyword)))))))
   )
 
 (use-package corfu
@@ -45,10 +45,8 @@
   (corfu-quit-at-boundary nil) ;; uncomment this line to use space as seprator in corfu completions
   :bind
   (:map corfu-map
-    ("TAB" . corfu-next)
-    ("<tab>" . corfu-next)
-    ("S-TAB" . corfu-previous)
-    ("<backtab>" . corfu-previous)
+    ("TAB" . corfu-insert)
+    ("<tab>" . corfu-insert)
     ("C-n" . corfu-next)
     ("C-p" . corfu-previous)
     ("<return>" . corfu-insert)

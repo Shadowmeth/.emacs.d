@@ -25,7 +25,7 @@
       '(orderless)))
   :hook (
           (c-mode . lsp)
-	  	  (c++-mode . lsp)
+	  (c++-mode . lsp)
           (cmake-mode . lsp)
           (js-mode . lsp)
           (typescript-mode . lsp)
@@ -35,12 +35,13 @@
           (js-json-mode . lsp)
           
           (lsp-mode . lsp-enable-which-key-integration)
-	      (lsp-completion-mode . my/lsp-mode-setup-completion-corfu) ;; use this only with corfu
+	  (lsp-completion-mode . my/lsp-mode-setup-completion-corfu) ;; use this only with corfu
+          ;; for company mode configuration with lsp-mode, check init-company.el
           )
   :config
   (setq lsp-log-io nil)
   (setq lsp-idle-delay 1)
-  (setq lsp-completion-provider :none) ;; we use corfu!
+  (setq lsp-completion-provider :none) ;; we use corfu or company!
   (setq lsp-auto-execute-action nil)
   (setq lsp-enable-on-type-formatting nil)
   (setq lsp-enable-file-watchers nil)

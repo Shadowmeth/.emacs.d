@@ -9,6 +9,9 @@
   :hook (python-mode . (lambda ()
                          (require 'lsp-pyright)
                          (lsp)))
+          (python-ts-mode . (lambda ()
+                              (require 'lsp-pyright)
+                              (lsp)))
   )
 
 ;; Java
@@ -24,6 +27,7 @@
     (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
       '(orderless)))
   :hook (
+          ;; normal modes
           (c-mode . lsp)
 	  (c++-mode . lsp)
           (cmake-mode . lsp)
@@ -34,6 +38,18 @@
           (rust-mode . lsp)
           (js-json-mode . lsp)
           
+          ;; ts modes
+          (c-ts-mode . lsp)
+          (c++-ts-mode . lsp)
+          (rust-ts-mode . lsp)
+          (cmake-ts-mode . lsp)
+          (java-ts-mode . lsp)
+          (css-ts-mode . lsp)
+          (typescript-ts-mode . lsp)
+          (html-ts-mode . lsp)
+          (js-ts-mode . lsp)
+          (tsx-ts-mode . lsp)
+
           (lsp-mode . lsp-enable-which-key-integration)
 	  (lsp-completion-mode . my/lsp-mode-setup-completion-corfu) ;; use this only with corfu
           ;; for company mode configuration with lsp-mode, check init-company.el
@@ -55,15 +71,16 @@
   (setq lsp-signature-auto-activate nil) ;; 12
   (setq lsp-signature-render-documentation nil) ;; 13
 
-  ;; Assembly
-  (add-to-list 'lsp-language-id-configuration '(".*\\.s\\'" . "assembly"))
-  ;; web mode configuration
-  ;; HTML
-  (add-to-list 'lsp-language-id-configuration '(".*\\.html?\\'" . "html"))
-  ;; TypeScript React
-  (add-to-list 'lsp-language-id-configuration '(".*\\.tsx\\'" . "typescriptreact"))
-  ;; JavaScript React
-  (add-to-list 'lsp-language-id-configuration '(".*\\.jsx\\'" . "javascriptreact"))
+  ;; Uncomment this when not using treesitter
+  ;; ;; Assembly
+  ;; (add-to-list 'lsp-language-id-configuration '(".*\\.s\\'" . "assembly"))
+  ;; ;; web mode configuration
+  ;; ;; HTML
+  ;; (add-to-list 'lsp-language-id-configuration '(".*\\.html?\\'" . "html"))
+  ;; ;; TypeScript React
+  ;; (add-to-list 'lsp-language-id-configuration '(".*\\.tsx\\'" . "typescriptreact"))
+  ;; ;; JavaScript React
+  ;; (add-to-list 'lsp-language-id-configuration '(".*\\.jsx\\'" . "javascriptreact"))
 
   ;; clangd
   (setq lsp-clients-clangd-args

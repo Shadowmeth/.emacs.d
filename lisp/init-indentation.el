@@ -31,12 +31,19 @@
 
 (define-key asm-mode-map (kbd "<ret>") 'newline-and-indent)
 
-;; c (use spaces instead of tabs)
+;; c and c++ (use spaces instead of tabs)
 (add-hook 'c-mode-hook (lambda ()
                          (setq indent-tabs-mode nil)))
 (add-hook 'c++-mode-hook (lambda ()
                          (setq indent-tabs-mode nil)))
 
+;; c-ts and c++-ts (use spaces instead of tabs)
+(add-hook 'c-ts-mode-hook (lambda ()
+                         (setq indent-tabs-mode nil)))
+(add-hook 'c++-ts-mode-hook (lambda ()
+                         (setq indent-tabs-mode nil)))
+
+(setq-default c-ts-mode-indent-offset 4)
 
 (provide 'init-indentation)
 

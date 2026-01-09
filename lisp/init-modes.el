@@ -1,4 +1,4 @@
-;;; init-modes.el --- Map major modes to files -*- lexical-binding: t; -*-
+;;; init-modes.el --- Map major modes to files (Custom modes) -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
 

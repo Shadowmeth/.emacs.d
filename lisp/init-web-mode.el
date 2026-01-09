@@ -24,9 +24,6 @@
   :ensure t
   :mode
   (
-    ("\\.jsx\\'" . web-mode)
-    ("\\.tsx\\'" . web-mode)
-    ("\\.html\\'" . web-mode)
     ("\\.ejs\\'" . web-mode)
     )
   :config

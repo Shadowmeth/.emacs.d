@@ -45,6 +45,7 @@
 (require 'init-racket)
 
 ;; these packages should be loaded the last
+(require 'init-treesitter)
 (require 'init-modes)
 (require 'init-indentation)
 (provide 'init)

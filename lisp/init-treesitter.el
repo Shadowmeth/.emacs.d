@@ -23,6 +23,7 @@
   '((c-mode . c-ts-mode)
      (bash-mode . bash-ts-mode)
      (js-mode . js-ts-mode)
+     (javascript-mode . js-ts-mode)
      (c++-mode . c++-ts-mode)
      (rust-mode . rust-ts-mode)
      (typescript-mode . typescript-ts-mode)

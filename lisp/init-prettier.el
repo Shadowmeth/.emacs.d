@@ -25,9 +25,9 @@
   (add-hook 'css-mode-hook 'prettier-js-mode)
   (add-hook 'js-json-mode-hook 'prettier-js-mode)
   (add-hook 'js-ts-mode-hook 'prettier-js-mode)
-  (add-hook 'json-ts-mode 'prettier-js-mode)
-  (add-hook 'typescript-ts-mode 'prettier-js-mode)
-  (add-hook 'tsx-ts-mode 'prettier-js-mode)
+  (add-hook 'html-ts-mode-hook 'prettier-js-mode)
+  (add-hook 'typescript-ts-mode-hook #'prettier-js-mode)
+  (add-hook 'tsx-ts-mode-hook 'prettier-js-mode)
 
   (setq prettier-js-command "prettierd")
   )

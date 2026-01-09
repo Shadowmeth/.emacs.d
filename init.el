@@ -36,7 +36,6 @@
 (require 'init-yasnippet)
 (require 'init-lsp-booster)
 (require 'init-lsp-mode)
-(require 'init-web-mode)
 (require 'init-prettier)
 (require 'init-dired)
 (require 'init-org)

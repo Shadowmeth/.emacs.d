@@ -126,6 +126,7 @@
   ;; Hide lsp-ui-sideline items
   (setq lsp-ui-sideline-show-code-actions nil) ;; 5 (code actions)
   (setq lsp-ui-sideline-show-hover nil) ;; 6 (symbols)
+  (setq lsp-ui-doc-enable nil) ;; 2
   
   (setq lsp-ui-doc-delay 0.05)
   (setq lsp-ui-sideline-delay 0.05)

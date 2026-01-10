@@ -14,8 +14,8 @@
 (use-package flycheck
   :ensure t
   :config
-  (setq flycheck-idle-change-delay 0.5)
-  (setq flycheck-display-errors-delay 0.4)
+  (setq flycheck-idle-change-delay 0.2)
+  (setq flycheck-display-errors-delay 0.2)
   (setq flycheck-highlighting-mode nil)
   (global-flycheck-mode)
   )

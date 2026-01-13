@@ -52,11 +52,12 @@
 ;; Font - Do M-x menu-set-font for font
 (set-face-attribute 'default nil :family "JetBrains Mono" :height 131)
 
-;; Line numbers
-;; (global-display-line-numbers-mode)
-(add-hook 'prog-mode-hook 'display-line-numbers-mode)
-(add-hook 'conf-mode-hook 'display-line-numbers-mode)
-(add-hook 'text-mode-hook 'display-line-numbers-mode)
+;; Relative line numbers
+(setq display-line-numbers-type 'relative)
+(global-display-line-numbers-mode)
+;; (add-hook 'prog-mode-hook 'display-line-numbers-mode)
+;; (add-hook 'conf-mode-hook 'display-line-numbers-mode)
+;; (add-hook 'text-mode-hook 'display-line-numbers-mode)
 
 ;; Disable #auto-save# backup
 (setq auto-save-default nil)

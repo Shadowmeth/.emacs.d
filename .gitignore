@@ -27,3 +27,4 @@ history
 projects
 .aider*
 session.*
+flycheck_init-lsp-mode.el

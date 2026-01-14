@@ -65,13 +65,14 @@
           )
   :config
   (setq lsp-log-io nil)
-  (setq lsp-idle-delay 1)
+  (setq lsp-idle-delay 0.2)
   (setq lsp-completion-provider :none) ;; we use corfu or company!
   (setq lsp-auto-execute-action nil)
   (setq lsp-enable-on-type-formatting nil)
   (setq lsp-enable-file-watchers nil)
   (setq lsp-semantic-tokens-enable nil)
   (setq lsp-enable-indentation nil)
+  (setq lsp-inlay-hint-enable nil)
 
   ;; Some settings are disabled in lsp-ui package config
   (setq lsp-enable-symbol-highlighting nil) ;; 1
@@ -91,6 +92,9 @@
   ;; (add-to-list 'lsp-language-id-configuration '(".*\\.tsx\\'" . "typescriptreact"))
   ;; ;; JavaScript React
   ;; (add-to-list 'lsp-language-id-configuration '(".*\\.jsx\\'" . "javascriptreact"))
+
+  ;; typescript-language-server
+  (setq lsp-javascript-display-parameter-name-hints "all")
 
   ;; clangd
   (setq lsp-clients-clangd-args
@@ -119,6 +123,7 @@
        "-Dsun.zip.disableMemoryMapping=true"
        "-Xmx3G"
        "-Xms100m"))
+  (setq lsp-java-inlay-hints-parameter-names-enabled "all")
 
   :commands (lsp lsp-deferred)
   )

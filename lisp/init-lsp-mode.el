@@ -19,6 +19,15 @@
   :ensure t
   )
 
+;; Haskell
+(use-package lsp-haskell
+  :ensure t
+  :config
+  (add-hook 'haskell-mode-hook #'lsp)
+  (add-hook 'haskell-literate-mode-hook #'lsp)
+  (add-hook 'haskell-ts-mode #'lsp)
+  )
+
 (use-package lsp-mode
   :ensure t
   :init

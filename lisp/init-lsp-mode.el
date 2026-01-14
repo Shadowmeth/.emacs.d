@@ -75,6 +75,7 @@
 
   ;; Some settings are disabled in lsp-ui package config
   (setq lsp-enable-symbol-highlighting nil) ;; 1
+  (setq lsp-headerline-breadcrumb-enable nil) ;; 4
   (setq lsp-modeline-code-actions-enable nil) ;; 7
   (setq lsp-eldoc-enable-hover nil) ;; 10
   (setq lsp-signature-auto-activate nil) ;; 12

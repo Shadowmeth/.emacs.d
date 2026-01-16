@@ -54,10 +54,11 @@
 
 ;; Relative line numbers
 (setq display-line-numbers-type 'relative)
-(global-display-line-numbers-mode)
-;; (add-hook 'prog-mode-hook 'display-line-numbers-mode)
-;; (add-hook 'conf-mode-hook 'display-line-numbers-mode)
-;; (add-hook 'text-mode-hook 'display-line-numbers-mode)
+;; (global-display-line-numbers-mode)
+(add-hook 'prog-mode-hook 'display-line-numbers-mode)
+(add-hook 'conf-mode-hook 'display-line-numbers-mode)
+(add-hook 'text-mode-hook 'display-line-numbers-mode)
+(add-hook 'dired-mode-hook 'display-line-numbers-mode)
 
 ;; Disable #auto-save# backup
 (setq auto-save-default nil)

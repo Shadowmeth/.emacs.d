@@ -10,6 +10,14 @@
   (eglot-booster-mode)
   )
 
+(defun project-find-subroot-for-eglot (dir)
+  (when eglot-lsp-context
+    (let ((root (locate-dominating-file dir ".eglot")))
+      (when root
+        (cons 'transient root)))))
+
+(add-hook 'project-find-functions #'project-find-subroot-for-eglot)
+
 (use-package eglot
   :ensure nil ;; eglot comes built-in
   :hook (

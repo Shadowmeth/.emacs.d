@@ -43,7 +43,8 @@
           ;; Disable flymake
           (eglot-managed-mode . (lambda ()
                                   (flymake-mode -1)
-                                  (flycheck-mode 1)))
+                                  (flycheck-mode 1)
+                                  (eglot-inlay-hints-mode -1)))
           )
   :config
   (require 'eglot)

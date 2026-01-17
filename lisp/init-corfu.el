@@ -26,7 +26,8 @@
                                             (cape-capf-buster
                                               (cape-capf-noninterruptible
 						(cape-capf-super
-                                                  #'lsp-completion-at-point
+                                                  ;; #'lsp-completion-at-point ;; lsp-mode
+                                                  #'eglot-completion-at-point
 						  #'yasnippet-capf
 						  #'cape-dabbrev
 						  #'cape-keyword)))))))
@@ -63,12 +64,13 @@
   (corfu-popupinfo-mode)
   )
 
+(advice-add #'eglot-completion-at-point :around #'cape-wrap-noninterruptible)
 (advice-add #'lsp-completion-at-point :around #'cape-wrap-noninterruptible)
 (advice-add #'yasnippet-capf :around #'cape-wrap-noninterruptible)
 (advice-add #'cape-dabbrev :around #'cape-wrap-noninterruptible)
 (advice-add #'cape-keyword :around #'cape-wrap-noninterruptible)
 
-;; Uncomment the following snippet to use <TAB> for selecting candidate
+;; Uncomment the following snippet to use <TAB> for moving btween candidates
 ;; and keeping enter key for newline
 ;; (with-eval-after-load 'corfu
 ;;   (define-key corfu-map (kbd "<return>") nil)

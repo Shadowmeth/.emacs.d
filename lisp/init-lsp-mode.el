@@ -28,6 +28,7 @@
   (add-hook 'haskell-ts-mode #'lsp)
   )
 
+;; Make sure to seprately include init-lsp-booster when using lsp-mode
 (use-package lsp-mode
   :ensure t
   :init

@@ -91,6 +91,9 @@
 	))
 (electric-pair-mode 1)
 
+;; Respect directory local variables (.dir-locals.el file) over TRAMP too
+(setq enable-remote-dir-locals t)
+
 ;; Delete items by moving them to trash
 (setq delete-by-moving-to-trash t)
 

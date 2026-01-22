@@ -94,6 +94,12 @@
 ;; Respect directory local variables (.dir-locals.el file) over TRAMP too
 (setq enable-remote-dir-locals t)
 
+;; Speed up TRAMP
+(setq remote-file-name-inhibit-locks t
+  tramp-use-scp-direct-remote-copying t
+  remote-file-name-inhibit-auto-save-visited t)
+
+
 ;; Delete items by moving them to trash
 (setq delete-by-moving-to-trash t)
 

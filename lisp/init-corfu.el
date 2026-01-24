@@ -58,6 +58,7 @@
   (setq corfu-on-exact-match nil)
   (setq corfu-separator ?\s)
   (setq corfu-popupinfo-max-height 30)
+  (setq tab-always-indent 'complete) ;; Use tab for both indentation and triggering Corfu
 
   (global-corfu-mode)
   (corfu-history-mode)
@@ -76,57 +77,6 @@
 ;;   (define-key corfu-map (kbd "<return>") nil)
 ;;   (define-key corfu-map (kbd "RET") nil)
 ;;   )
-
-(require 'corfu)
-(require 'yasnippet)
-;; Helper function to check if Corfu popup is visible
-(defun my/corfu-visible-p ()
-  "Check if Corfu popup is currently visible."
-  (and (featurep 'corfu)
-       (boundp 'corfu--frame)
-       corfu--frame
-       (frame-visible-p corfu--frame)))
-
-;; Simple TAB: trigger completion or indent
-(defun my/tab-dwim ()
-  "Smart TAB: trigger corfu or indent."
-  (interactive)
-  (cond
-   ;; Don't interfere with minibuffer
-   ((minibufferp)
-    (call-interactively #'completion-at-point))
-   
-   ;; If Corfu popup is visible, navigate it
-   ((my/corfu-visible-p)
-    (call-interactively #'corfu-next))
-   
-   ;; Otherwise: indent, and if no change, trigger completion
-   (t
-    (let ((old-point (point))
-          (old-tick (buffer-chars-modified-tick)))
-      (call-interactively #'indent-for-tab-command)
-      ;; If nothing changed, trigger completion
-      (when (and (= old-point (point))
-                 (= old-tick (buffer-chars-modified-tick)))
-        (completion-at-point))))))
-
-;; Shift-TAB for Corfu navigation
-(defun my/shift-tab-dwim ()
-  "Smart Shift-TAB: navigate corfu backward."
-  (interactive)
-  (when (my/corfu-visible-p)
-    (call-interactively #'corfu-previous)))
-
-;; Only bind in prog-mode and text-mode to avoid minibuffer issues
-(defun my/setup-tab-for-completion ()
-  "Setup TAB for completion in programming and text modes."
-  (local-set-key (kbd "TAB") #'my/tab-dwim)
-  (local-set-key (kbd "<tab>") #'my/tab-dwim)
-  (local-set-key (kbd "S-TAB") #'my/shift-tab-dwim)
-  (local-set-key (kbd "<backtab>") #'my/shift-tab-dwim))
-
-(add-hook 'prog-mode-hook #'my/setup-tab-for-completion)
-(add-hook 'text-mode-hook #'my/setup-tab-for-completion)
 
 (provide 'init-corfu)
 

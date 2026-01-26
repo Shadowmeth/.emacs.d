@@ -28,3 +28,4 @@ projects
 .aider*
 session.*
 flycheck_init-lsp-mode.el
+network-security.data

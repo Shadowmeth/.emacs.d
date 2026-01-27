@@ -85,13 +85,13 @@
 
 ;; Auto close brackets
 (setq electric-pair-pairs
-      '(
-	(?\" . ?\")
-	(?\{ . ?\})
-	(?\[ . ?\])
-	(?\` . ?\`)
-	(?\' . ?\')
-	))
+  '(
+     (?\" . ?\")
+     (?\{ . ?\})
+     (?\[ . ?\])
+     (?\` . ?\`)
+     (?\' . ?\')
+     ))
 (electric-pair-mode 1)
 
 ;; Respect directory local variables (.dir-locals.el file) over TRAMP too

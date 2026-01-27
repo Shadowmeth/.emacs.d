@@ -5,13 +5,13 @@
 (use-package consult
   :ensure t
   :bind (
-	      ("C-c M-x" . consult-mode-command)
-	      ("C-c h" . consult-history)
-	      ("C-c k" . consult-kmacro)
+	  ("C-c M-x" . consult-mode-command)
+	  ("C-c h" . consult-history)
+	  ("C-c k" . consult-kmacro)
           ("C-c m" . consult-man)
           ("C-c i" . consult-info)
           ([remap Info-search] . consult-info)
-	      ;; C-x bindings in `ctl-x-map'
+	  ;; C-x bindings in `ctl-x-map'
           ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
           ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
           ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
@@ -81,10 +81,10 @@
     consult-bookmark
     consult-recent-file
     consult-xref
-    consult--source-bookmark
-    consult--source-file-register
-    consult--source-recent-file
-    consult--source-project-recent-file
+    consult-source-bookmark
+    consult-source-file-register
+    consult-source-recent-file
+    consult-source-project-recent-file
     :preview-key '(:debounce 0.1 any))
 
   ;; Optionally configure the narrowing key.
@@ -95,3 +95,4 @@
 (provide 'init-consult)
 
 ;;; init-consult.el ends here
+

@@ -53,7 +53,7 @@
     ("<return>" . corfu-insert)
     ("RET" . corfu-insert)
     ("<escape>" . corfu-quit)
-  )
+    )
   :config
   (setq corfu-on-exact-match nil)
   (setq corfu-separator ?\s)

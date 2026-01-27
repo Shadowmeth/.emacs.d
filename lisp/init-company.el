@@ -61,30 +61,30 @@
 (defun my/company-visible-p ()
   "Check if Company popup is currently visible."
   (and (bound-and-true-p company-mode)
-       company-candidates))
+    company-candidates))
 
 ;; Smart TAB: indent first, then trigger company if nothing changed
 (defun my/tab-dwim-company ()
   "Smart TAB: indent or trigger company completion."
   (interactive)
   (cond
-   ;; Don't interfere with minibuffer
-   ((minibufferp)
-    (completion-at-point))
-   
-   ;; If Company popup is visible, company-active-map handles it
-   ((my/company-visible-p)
-    (call-interactively #'company-complete-selection))
-   
-   ;; Otherwise: indent, and if no change, trigger completion
-   (t
-    (let ((old-point (point))
-          (old-tick (buffer-chars-modified-tick)))
-      (call-interactively #'indent-for-tab-command)
-      ;; If nothing changed, trigger completion
-      (when (and (= old-point (point))
-                 (= old-tick (buffer-chars-modified-tick)))
-        (company-complete))))))
+    ;; Don't interfere with minibuffer
+    ((minibufferp)
+      (completion-at-point))
+    
+    ;; If Company popup is visible, company-active-map handles it
+    ((my/company-visible-p)
+      (call-interactively #'company-complete-selection))
+    
+    ;; Otherwise: indent, and if no change, trigger completion
+    (t
+      (let ((old-point (point))
+             (old-tick (buffer-chars-modified-tick)))
+        (call-interactively #'indent-for-tab-command)
+        ;; If nothing changed, trigger completion
+        (when (and (= old-point (point))
+                (= old-tick (buffer-chars-modified-tick)))
+          (company-complete))))))
 
 ;; Shift-TAB for Company navigation
 (defun my/shift-tab-dwim-company ()
@@ -108,3 +108,4 @@
 (provide 'init-company)
 
 ;;; init-company.el ends here
+

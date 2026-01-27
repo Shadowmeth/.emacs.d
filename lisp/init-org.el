@@ -6,7 +6,6 @@
 
 (use-package org
   :config
-
   )
 
 (provide 'init-org)

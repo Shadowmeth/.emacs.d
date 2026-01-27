@@ -35,13 +35,13 @@
 (add-hook 'c-mode-hook (lambda ()
                          (setq indent-tabs-mode nil)))
 (add-hook 'c++-mode-hook (lambda ()
-                         (setq indent-tabs-mode nil)))
+                           (setq indent-tabs-mode nil)))
 
 ;; c-ts and c++-ts (use spaces instead of tabs)
 (add-hook 'c-ts-mode-hook (lambda ()
-                         (setq indent-tabs-mode nil)))
+                            (setq indent-tabs-mode nil)))
 (add-hook 'c++-ts-mode-hook (lambda ()
-                         (setq indent-tabs-mode nil)))
+                              (setq indent-tabs-mode nil)))
 
 (setq-default c-ts-mode-indent-offset 4)
 

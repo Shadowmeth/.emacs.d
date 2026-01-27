@@ -9,9 +9,9 @@
   :hook (python-mode . (lambda ()
                          (require 'lsp-pyright)
                          (lsp)))
-          (python-ts-mode . (lambda ()
-                              (require 'lsp-pyright)
-                              (lsp)))
+  (python-ts-mode . (lambda ()
+                      (require 'lsp-pyright)
+                      (lsp)))
   )
 
 ;; Java

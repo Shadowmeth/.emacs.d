@@ -47,7 +47,7 @@
 ;; Disable startup screen and display a custom message
 (setq inhibit-splash-screen t)
 (setq inhibit-startup-message t)
-(setq initial-scratch-message ";;; Welcome Syed Kumail Hussain Sherazi\n;;; Happy hacking\n")
+(setq initial-scratch-message ";;; Welcome back Syed Kumail Hussain Sherazi\n")
 
 ;; Disable the bell (both audio and visual)
 (setq ring-bell-function 'ignore)

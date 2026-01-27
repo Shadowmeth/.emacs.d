@@ -11,6 +11,7 @@ workspace/
 eclipse.jdt.ls/
 url/
 racket-mode/
+gnus/
 debug-adapters/
 dape-breakpoints
 bookmarks

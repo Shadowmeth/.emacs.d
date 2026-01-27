@@ -15,7 +15,7 @@
 (require 'init-buffer-zoom)
 (require 'init-magit)
 (require 'init-gcmh)
-(require 'init-mu4e)
+(require 'init-gnus)
 (require 'init-exec-path-from-shell)
 (require 'init-nerd-icons)
 (require 'init-pdf-tools)

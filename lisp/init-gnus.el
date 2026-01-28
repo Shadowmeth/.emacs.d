@@ -23,6 +23,12 @@
     smtpmail-smtp-service 587
     smtpmail-stream-type 'starttls
     smtpmail-smtp-user "s.kumailshirazi@gmail.com")
+
+  ;; Configuration optimized for mailing lists
+  ;; Plain text only (no HTML)
+  (setq mm-discouraged-alternatives '("text/html" "text/richtext"))
+  (setq message-fill-column 72)
+  (add-hook 'message-mode-hook 'turn-on-auto-fill)
   )
 
 (provide 'init-gnus)

@@ -71,13 +71,6 @@
 (advice-add #'cape-dabbrev :around #'cape-wrap-noninterruptible)
 (advice-add #'cape-keyword :around #'cape-wrap-noninterruptible)
 
-;; Uncomment the following snippet to use <TAB> for moving btween candidates
-;; and keeping enter key for newline
-;; (with-eval-after-load 'corfu
-;;   (define-key corfu-map (kbd "<return>") nil)
-;;   (define-key corfu-map (kbd "RET") nil)
-;;   )
-
 (provide 'init-corfu)
 
 ;;; init-corfu.el ends here

@@ -80,7 +80,8 @@
 (delete-selection-mode 1)
 
 ;; Which-key
-(setq which-key-idle-delay 0.01)
+;; (setq which-key-idle-delay 0.01)
+(setq which-key-idle-delay 0.5)
 (which-key-mode)
 
 ;; Auto close brackets

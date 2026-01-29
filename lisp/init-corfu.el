@@ -35,6 +35,7 @@
 
 (use-package corfu
   :ensure t
+  :demand t
   :custom
   (corfu-auto nil)
   (corfu-cycle t)
@@ -43,6 +44,7 @@
   (corfu-auto-prefix 2)
   (corfu-preselect nil)
   (corfu-quit-no-match t)
+  (tab-always-indent 'complete)
   (corfu-quit-at-boundary nil) ;; uncomment this line to use space as seprator in corfu completions
   :bind
   (:map corfu-map
@@ -58,7 +60,6 @@
   (setq corfu-on-exact-match nil)
   (setq corfu-separator ?\s)
   (setq corfu-popupinfo-max-height 30)
-  (setq tab-always-indent 'complete) ;; Use tab for both indentation and triggering Corfu
 
   (global-corfu-mode)
   (corfu-history-mode)

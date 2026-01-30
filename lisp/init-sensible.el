@@ -24,7 +24,7 @@
   )
 
 ;; make C-n insert newlines if the point is at the end of the buffer
-(setq next-line-add-newlines t)
+;; (setq next-line-add-newlines t)
 
 ;; Clean up ui clutter
 (tool-bar-mode 0)

@@ -30,3 +30,4 @@ projects
 session.*
 flycheck_init-lsp-mode.el
 network-security.data
+.emacs_workgroups

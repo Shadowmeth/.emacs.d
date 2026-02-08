@@ -5,7 +5,7 @@
 (use-package workgroups2
   :ensure t
   :config
-  (setq wg-workspace-file "~/.emacs.d/.emacs_workgroups")
+  (setq wg-session-file "~/.emacs.d/.emacs_workgroups")
   (setq wg-prefix-key "C-c z")
   (workgroups-mode 1)
   )

@@ -23,6 +23,7 @@
 (require 'init-paredit)
 (require 'init-avy)
 (require 'init-workgroups2)
+(require 'init-dashboard)
 (require 'init-move-text)
 (require 'init-expand-region)
 (require 'init-ace-window)

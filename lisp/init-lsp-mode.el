@@ -47,6 +47,7 @@
           (java-mode . lsp)
           (rust-mode . lsp)
           (js-json-mode . lsp)
+          (lua-mode . lsp)
           
           ;; ts modes
           (c-ts-mode . lsp)
@@ -59,6 +60,7 @@
           (html-ts-mode . lsp)
           (js-ts-mode . lsp)
           (tsx-ts-mode . lsp)
+          (lua-ts-mode . lsp)
 
           (lsp-mode . lsp-enable-which-key-integration)
 	  (lsp-completion-mode . my/lsp-mode-setup-completion-corfu) ;; use this only with corfu

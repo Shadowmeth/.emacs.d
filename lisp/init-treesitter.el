@@ -18,6 +18,7 @@
      (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
      (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
      (java "https://github.com/tree-sitter/tree-sitter-java")
+     (lua "https://github.com/tree-sitter-grammars/tree-sitter-lua")
      ))
 
 (setq major-mode-remap-alist
@@ -31,6 +32,7 @@
      (typescript-mode . typescript-ts-mode)
      (json-mode . json-ts-mode)
      (css-mode . css-ts-mode)
+     (lua-mode . lua-ts-mode)
      (python-mode . python-ts-mode)))
 
 (add-to-list 'auto-mode-alist '("\\.jsx\\'" . js-ts-mode))

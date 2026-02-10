@@ -85,16 +85,7 @@
   (setq lsp-signature-auto-activate nil) ;; 12
   (setq lsp-signature-render-documentation nil) ;; 13
 
-  ;; Uncomment this when not using treesitter
-  ;; ;; Assembly
-  ;; (add-to-list 'lsp-language-id-configuration '(".*\\.s\\'" . "assembly"))
-  ;; ;; web mode configuration
-  ;; ;; HTML
-  ;; (add-to-list 'lsp-language-id-configuration '(".*\\.html?\\'" . "html"))
-  ;; ;; TypeScript React
-  ;; (add-to-list 'lsp-language-id-configuration '(".*\\.tsx\\'" . "typescriptreact"))
-  ;; ;; JavaScript React
-  ;; (add-to-list 'lsp-language-id-configuration '(".*\\.jsx\\'" . "javascriptreact"))
+  ;; LANGUAGE SERVERS CONFIG
 
   ;; typescript-language-server
   (setq lsp-javascript-display-parameter-name-hints "all")

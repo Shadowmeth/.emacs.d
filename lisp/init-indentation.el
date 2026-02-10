@@ -45,6 +45,9 @@
 
 (setq-default c-ts-mode-indent-offset 4)
 
+;; lua
+(setq lua-ts-indent-offset 2)
+
 (provide 'init-indentation)
 
 ;;; init-indentation.el ends here

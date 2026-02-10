@@ -23,7 +23,7 @@
                                     (registers . "e")))
   (setq dashboard-display-icons-p t) ; display icons on both GUI and terminal
   (setq dashboard-icon-type 'nerd-icons) ; use `nerd-icons' package
-  (setq dashboard-banner-logo-title "Welcome back Syed Kumail Hussain Sherazi")
+  (setq dashboard-banner-logo-title "Welcome back Syed Kumail Hussain Sherazi!")
   )
 
 (provide 'init-dashboard)

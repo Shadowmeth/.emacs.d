@@ -22,6 +22,7 @@
 (require 'init-doom)
 (require 'init-paredit)
 (require 'init-avy)
+(require 'init-x86-lookup)
 (require 'init-workgroups2)
 (require 'init-dashboard)
 (require 'init-move-text)

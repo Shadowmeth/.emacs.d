@@ -103,7 +103,6 @@
   tramp-use-scp-direct-remote-copying t
   remote-file-name-inhibit-auto-save-visited t)
 
-
 ;; Delete items by moving them to trash
 (setq delete-by-moving-to-trash t)
 
@@ -143,7 +142,7 @@
 (add-hook 'prog-mode-hook (lambda () (eldoc-mode -1)))
 (add-hook 'lsp-mode-hook (lambda () (eldoc-mode -1)))
 
-;; Delay fontification a little after input
+;; Delay fontification a little after change
 ;; (setq jit-lock-defer-time 0.01)
 
 ;; Use spaces in place of tab
@@ -166,11 +165,18 @@
 (advice-add 'compile :after #'my/switch-to-compilation-buffer)
 (advice-add 'recompile :after #'my/switch-to-compilation-buffer)
 
-(setq compilation-always-kill t) ;; Automatically kill previous compilation process before starting new one
-(setq compilation-scroll-output t) ;; Scroll to end of buffer instead of staying at beginning
+;; Automatically kill previous compilation process before starting new one
+(setq compilation-always-kill t)
+
+;; Scroll to end of buffer instead of staying at beginning
+(setq compilation-scroll-output t) 
 
 (global-set-key (kbd "<f5>") #'compile)
 (global-set-key (kbd "<f6>") #'recompile)
+
+;; sudo-edit is a must have package
+(use-package sudo-edit
+  :ensure t)
 
 (provide 'init-sensible)
 

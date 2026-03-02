@@ -110,9 +110,6 @@
 (require 'editorconfig)
 (editorconfig-mode 1)
 
-;; Display time
-(display-time-mode 1)
-
 ;; Disable case-sensitivity and buffer matching when built-in completion styles are used
 (setq read-file-name-completion-ignore-case t)
 (setq read-buffer-completion-ignore-case t)

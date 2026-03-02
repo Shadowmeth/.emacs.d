@@ -110,9 +110,6 @@
 (require 'editorconfig)
 (editorconfig-mode 1)
 
-;; Display battery percentage
-(display-battery-mode 1)
-
 ;; Display time
 (display-time-mode 1)
 
@@ -169,7 +166,7 @@
 (setq compilation-always-kill t)
 
 ;; Scroll to end of buffer instead of staying at beginning
-(setq compilation-scroll-output t) 
+(setq compilation-scroll-output t)
 
 (global-set-key (kbd "<f5>") #'compile)
 (global-set-key (kbd "<f6>") #'recompile)

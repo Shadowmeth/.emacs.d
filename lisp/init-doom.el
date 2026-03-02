@@ -6,7 +6,6 @@
   :ensure t
   :init (doom-modeline-mode 1)
   :config
-  (setq doom-modeline-battery t)
   (setq doom-modeline-time t)
   )
 

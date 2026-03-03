@@ -99,9 +99,17 @@
 (setq enable-remote-dir-locals t)
 
 ;; Speed up TRAMP
-(setq remote-file-name-inhibit-locks t
-  tramp-use-scp-direct-remote-copying t
-  remote-file-name-inhibit-auto-save-visited t)
+(setq remote-file-name-inhibit-locks t)
+(setq remote-file-name-inhibit-cache nil)
+;; Disable version control to avoid delays
+(setq vc-ignore-dir-regexp
+  (format "\\(%s\\)\\|\\(%s\\)"
+    vc-ignore-dir-regexp
+    tramp-file-name-regexp))
+;; Supress reading remote history
+(setq shell-history-file-name t)
+;; Disable all traces
+(setq tramp-verbose 0)
 
 ;; Delete items by moving them to trash
 (setq delete-by-moving-to-trash t)

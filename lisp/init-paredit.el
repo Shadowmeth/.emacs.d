@@ -6,6 +6,7 @@
   :ensure t
   :hook (
           racket-mode
+          emacs-lisp-mode
           )
   )
 

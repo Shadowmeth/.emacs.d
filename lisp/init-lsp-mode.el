@@ -170,10 +170,65 @@
   (add-hook 'dape-compile-hook #'kill-buffer)
   )
 
+(use-package eglot
+  :config
+  (add-to-list 'eglot-server-programs
+    '((java-mode java-ts-mode) .
+       ("/home/syedkhs/.emacs.d/.cache/lsp/eclipse.jdt.ls/bin/jdtls"
+         :initializationOptions
+         (:bundles ["/home/syedkhs/.local/bin/com.microsoft.java.debug.plugin-0.53.2.jar"]))))
+  (setq eglot-stay-out-of '(corfu company eldoc flymake imenu xref flycheck))
+  (setq eglot-autoshutdown t))
+
+(defvar my/java-debug-buffer nil)
+
+(defun my/java-restore-lsp ()
+  (interactive)
+  ;; Only restore if we actually started a debug session
+  (when (and my/java-debug-buffer
+          (buffer-live-p my/java-debug-buffer))
+    (with-current-buffer my/java-debug-buffer
+      (lsp)))
+  (setq my/java-debug-buffer nil)
+  (remove-hook 'dape-active-mode-hook #'my/java-on-active-mode-change))
+
+(defun my/java-on-active-mode-change ()
+  "Called when dape-active-mode changes. Restore lsp when session ends."
+  ;; dape-active-mode is nil when session ends
+  (unless dape-active-mode
+    (my/java-restore-lsp)))
+
+(defun my/java-debug-with-eglot ()
+  "Start eglot minimally for Java debugging via dape, restoring lsp-mode after."
+  (interactive)
+  (unless (derived-mode-p 'java-mode 'java-ts-mode)
+    (user-error "Not in a Java buffer"))
+  (setq my/java-debug-buffer (current-buffer))
+  (lsp-disconnect)
+  (let ((eglot-stay-out-of '(corfu eldoc flymake imenu xref flycheck completion capf)))
+    (eglot-ensure))
+  ;; Hook into dape-active-mode-hook to detect session end
+  (add-hook 'dape-active-mode-hook #'my/java-on-active-mode-change)
+  (letrec ((attempts 0)
+            (check-and-launch
+              (lambda ()
+                (cond
+                  ((and (eglot-current-server)
+                     (seq-contains-p
+                       (eglot--server-capable :executeCommandProvider :commands)
+                       "vscode.java.resolveClasspath"))
+                    (call-interactively #'dape))
+                  ((> attempts 30)
+                    (message "Timed out waiting for jdtls")
+                    (my/java-restore-lsp))
+                  (t
+                    (setq attempts (1+ attempts))
+                    (run-with-timer 0.5 nil check-and-launch))))))
+    (funcall check-and-launch)))
+
 ;; see https://github.com/emacs-lsp/dap-mode/pull/837/commits to fix the ui controls bug
 (use-package dap-mode
   :ensure t
-  :config
   )
 
 (provide 'init-lsp-mode)

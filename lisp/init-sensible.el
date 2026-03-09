@@ -122,6 +122,10 @@
 (setq read-file-name-completion-ignore-case t)
 (setq read-buffer-completion-ignore-case t)
 (setq completion-ignore-case t)
+;; But disable completion ignore-case for lsp-mode
+(add-hook 'prog-mode-hook
+  (lambda ()
+    (setq-local completion-ignore-case nil)))
 
 ;; Enable minibuffer history
 (savehist-mode t)

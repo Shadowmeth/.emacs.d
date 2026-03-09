@@ -22,7 +22,7 @@
   (add-hook 'lsp-completion-mode-hook (lambda ()
 					(setq-local completion-at-point-functions
 					  (list
-					    #'cape-file
+                                            #'cape-file
                                             (cape-capf-buster
                                               (cape-capf-noninterruptible
 						(cape-capf-super

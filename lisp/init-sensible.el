@@ -57,6 +57,7 @@
 
 ;; Relative line numbers
 (setq display-line-numbers-type 'relative)
+(setq display-line-numbers-width-start t)
 ;; (global-display-line-numbers-mode)
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 (add-hook 'conf-mode-hook 'display-line-numbers-mode)

@@ -2,7 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 
-(defvar my/buffer-zoom-level 2
+(defvar my/buffer-zoom-level 0
   "Default zoom level for buffers. 1 = +1 step, 2 = +2 steps, etc.")
 
 (defun my/buffer-text-scale-increase ()

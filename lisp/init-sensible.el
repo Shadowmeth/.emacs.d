@@ -100,8 +100,12 @@
 (setq enable-remote-dir-locals t)
 
 ;; Speed up TRAMP
+(setq tramp-use-ssh-controlmaster-options t)
 (setq remote-file-name-inhibit-locks t)
+(setq tramp-use-scp-direct-remote-copying t)
+(setq remote-file-name-inhibit-auto-save-visited t)
 (setq remote-file-name-inhibit-cache nil)
+(setq auto-revert-remote-files nil)
 ;; Disable version control to avoid delays
 (setq vc-ignore-dir-regexp
   (format "\\(%s\\)\\|\\(%s\\)"

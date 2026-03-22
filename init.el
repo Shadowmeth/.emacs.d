@@ -21,7 +21,6 @@
 (require 'init-doom)
 (require 'init-paredit)
 (require 'init-avy)
-(require 'init-workgroups2)
 (require 'init-surround)
 (require 'init-move-text)
 (require 'init-expand-region)

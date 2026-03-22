@@ -37,8 +37,6 @@
 (require 'init-flycheck)
 (require 'init-corfu)
 (require 'init-yasnippet)
-(require 'init-lsp-mode)
-(require 'init-lsp-booster)
 (require 'init-prettier)
 (require 'init-dired)
 (require 'init-org)
@@ -47,7 +45,6 @@
 (require 'init-racket)
 
 ;; these packages should be loaded the last
-(require 'init-treesitter)
 (require 'init-modes)
 (require 'init-indentation)
 (provide 'init)

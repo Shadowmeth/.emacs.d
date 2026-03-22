@@ -11,14 +11,6 @@
     (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
   )
 
-;; Only use with Eglot
-;; (use-package flycheck-eglot
-;;   :ensure t
-;;   :after (flycheck eglot)
-;;   :config
-;;   (global-flycheck-eglot-mode 1)
-;;   )
-
 (use-package flycheck
   :ensure t
   :config

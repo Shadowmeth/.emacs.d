@@ -26,8 +26,7 @@
                                             (cape-capf-buster
                                               (cape-capf-noninterruptible
 						(cape-capf-super
-                                                  #'lsp-completion-at-point ;; lsp-mode
-                                                  ;; #'eglot-completion-at-point
+                                                  #'cape-history
 						  #'yasnippet-capf
 						  #'cape-dabbrev
 						  #'cape-keyword)))))))
@@ -66,8 +65,6 @@
   (corfu-popupinfo-mode)
   )
 
-;; (advice-add #'eglot-completion-at-point :around #'cape-wrap-noninterruptible)
-(advice-add #'lsp-completion-at-point :around #'cape-wrap-noninterruptible)
 (advice-add #'yasnippet-capf :around #'cape-wrap-noninterruptible)
 (advice-add #'cape-dabbrev :around #'cape-wrap-noninterruptible)
 (advice-add #'cape-keyword :around #'cape-wrap-noninterruptible)

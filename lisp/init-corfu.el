@@ -10,6 +10,10 @@
   (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter)
   )
 
+(use-package kkp
+  :ensure t
+  )
+
 (use-package corfu-terminal
   :ensure t
   :after corfu
@@ -17,7 +21,8 @@
   ;; Enable terminal support when not in GUI
   (unless (display-graphic-p)
     (require 'corfu-terminal)
-    (corfu-terminal-mode +1))
+    (corfu-terminal-mode +1)
+    (global-kkp-mode +1))
 )
 
 ;; Cape - capf extensions for Corfu

@@ -31,7 +31,3 @@ session.*
 flycheck_init-lsp-mode.el
 network-security.data
 .emacs_workgroups
-# only track tags file in minimal branch
-**/init-tags.el
-
-

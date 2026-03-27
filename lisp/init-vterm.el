@@ -15,8 +15,6 @@
       (let ((buf (generate-new-buffer-name "*vterm*")))
         (vterm buf))))
   :ensure t
-  :config
-  (setq vterm-buffer-name-string "VTERM %s")
   )
 
 (provide 'init-vterm)

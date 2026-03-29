@@ -20,8 +20,8 @@
   (put 'downcase-region 'disabled nil)
   (put 'erase-buffer 'disabled nil)
   (put 'scroll-left 'disabled nil)
-  (put 'dired-find-alternate-file 'disabled nil)
-  )
+  (put 'dired-find-alternate-file 'disabled nil))
+
 
 ;; make C-n insert newlines if the point is at the end of the buffer
 ;; (setq next-line-add-newlines t)
@@ -92,9 +92,9 @@
      (?\{ . ?\})
      (?\[ . ?\])
      (?\` . ?\`)
-     (?\' . ?\')
-     ))
-(electric-pair-mode 1)
+     (?\' . ?\')))
+
+;; (electric-pair-mode 1)
 
 ;; Respect directory local variables (.dir-locals.el file) over TRAMP too
 (setq enable-remote-dir-locals t)

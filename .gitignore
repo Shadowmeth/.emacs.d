@@ -13,6 +13,9 @@ url/
 racket-mode/
 gnus/
 debug-adapters/
+desktops/
+games/
+tutorial/
 dape-breakpoints
 bookmarks
 .emacs.custom.el

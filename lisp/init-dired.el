@@ -9,7 +9,7 @@
 
 (use-package nerd-icons-dired
   :ensure t
-  :hook (dired-mode . nerd-icons-dired-mode)
+  ;; :hook (dired-mode . nerd-icons-dired-mode)
   )
 
 (require 'dired-x)

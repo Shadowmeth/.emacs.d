@@ -82,7 +82,6 @@
   (setq lsp-headerline-breadcrumb-enable nil) ;; 4
   (setq lsp-modeline-code-actions-enable nil) ;; 7
   (setq lsp-eldoc-enable-hover nil) ;; 10
-  (setq lsp-signature-auto-activate nil) ;; 12
   (setq lsp-signature-render-documentation nil) ;; 13
 
   ;; LANGUAGE SERVERS CONFIG

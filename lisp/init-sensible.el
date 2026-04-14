@@ -53,7 +53,7 @@
 (setq ring-bell-function 'ignore)
 
 ;; Font - Do M-x menu-set-font for font
-(set-face-attribute 'default nil :family "JetBrains Mono" :height 131)
+(set-face-attribute 'default nil :family "IosevkaNFM" :height 131)
 
 ;; Relative line numbers
 (setq display-line-numbers-type 'relative)

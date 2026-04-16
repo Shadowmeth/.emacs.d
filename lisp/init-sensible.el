@@ -189,6 +189,11 @@
 (use-package sudo-edit
   :ensure t)
 
+;; Display count with isearch that shows the number of matches
+(setq isearch-lazy-count t)
+(setq lazy-count-prefix-format "(%s/%s) ")
+(setq lazy-count-suffix-format nil)
+
 (provide 'init-sensible)
 
 ;;; init-sensible.el ends here

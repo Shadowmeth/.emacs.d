@@ -49,5 +49,6 @@
 (require 'init-treesitter)
 (require 'init-modes)
 (require 'init-indentation)
+(require 'init-dtrt-indent)
 (provide 'init)
 ;;; init.el ends here

@@ -194,6 +194,16 @@
 (setq lazy-count-prefix-format "(%s/%s) ")
 (setq lazy-count-suffix-format nil)
 
+(use-package whitespace
+  :ensure nil
+  :config
+  (setq whitespace-style '(face tabs spaces space-mark tab-mark))
+  (set-face-attribute 'whitespace-space nil
+    :foreground "#282828"
+    :background "#181818")
+  (add-hook 'prog-mode-hook #'whitespace-mode)
+  (add-hook 'conf-mode-hook #'whitespace-mode))
+
 (provide 'init-sensible)
 
 ;;; init-sensible.el ends here

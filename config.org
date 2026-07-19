@@ -1,0 +1,1329 @@
+#+title: SyedKHS's Emacs Configuration
+#+AUTHOR: SyedKHS
+#+PROPERTY: header-args:emacs-lisp :tangle yes :results silent
+
+* Package Management
+Setup package management. Note that *use-package-always-ensure* is set to t, so we don't need to add
+*:ensure t* to every use-package package specification.
+
+#+begin_src emacs-lisp
+(require 'package)
+(setq package-archives
+      '(("gnu"    . "https://elpa.gnu.org/packages/")
+  	("nongnu" . "https://elpa.nongnu.org/nongnu/")
+  	("melpa"  . "https://melpa.org/packages/")))
+(package-initialize)
+
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+
+(require 'use-package)
+(setq use-package-always-ensure t)
+#+end_src
+
+* Magit
+Best git interface.
+
+#+begin_src emacs-lisp
+(use-package magit)
+#+end_src
+
+* Sane Defaults
+
+** Custom / Single File Packages
+Single file packages and my custom packages will go in *~/.emacs.d/user-lisp/*. Include the folder in load-path.
+
+#+begin_src emacs-lisp
+(add-to-list 'load-path (expand-file-name "user-lisp/" user-emacs-directory))
+#+end_src
+
+** Whitespace Mode
+Clearly show the whitespaces.
+
+#+begin_src emacs-lisp :tangle no
+(use-package whitespace
+  :ensure nil
+  :config
+  (setq whitespace-style '(face tabs spaces space-mark tab-mark))
+  (add-hook 'prog-mode-hook #'whitespace-mode)
+  (add-hook 'prog-mode-hook #'whitespace-mode))
+#+end_src
+
+** Context Menu Mode
+Built-in mode that shows context based options when right click on mouse is pressed.
+
+#+begin_src emacs-lisp
+(context-menu-mode +1)
+#+end_src
+
+** Pdf Tools
+View PDFs in Emacs.
+
+#+begin_src emacs-lisp
+(use-package saveplace-pdf-view
+  :config
+  (save-place-mode 1))
+
+(use-package org-pdftools)
+(use-package pdf-tools
+  :config
+  (pdf-loader-install)
+  (add-hook 'pdf-view-mode-hook #'pdf-view-roll-minor-mode))
+#+end_src
+
+** Count with Isearch Results
+Show number of matches found when using *isearch* and *isearch-backward*. Like (5/9).
+
+#+begin_src emacs-lisp
+(setq isearch-lazy-count t)
+(setq lazy-count-prefix-format "(%s/%s) ")
+(setq lazy-count-suffix-format nil)
+#+end_src
+
+** Dired Configuration
+Configuration and enhancements for Dired.
+
+#+begin_src emacs-lisp
+(use-package diredfl
+  :hook (dired-mode . diredfl-mode))
+
+(require 'dired-x)
+(setq-default dired-dwim-target t)
+(setq dired-listing-switches "-alh")
+(setq dired-kill-when-opening-new-dired-buffer t) ;; Reduce number of dired buffers open.
+;; Hide dot files automatically on opening Dired buffers, use C-x M-o to toggle.
+(setq dired-omit-files
+      (concat dired-omit-files "\\|^\\..+$"))
+(add-hook 'dired-mode-hook #'dired-omit-mode)
+#+end_src
+
+** Disable Backup and Temp Files
+Stop creating those #auto-save# and backup~ files.
+
+#+begin_src emacs-lisp
+(setq auto-save-default nil)
+(setq create-lockfiles nil)
+(setq make-backup-files nil)
+#+end_src
+
+** Custom File
+Prevent init.el from getting cluttered. Automatically create custom file if it doesn't exist.
+
+#+begin_src emacs-lisp
+(setq custom-file (expand-file-name ".emacs.custom.el" user-emacs-directory))
+(unless (file-exists-p custom-file)
+  (with-temp-buffer (write-file custom-file)))
+(load-file custom-file)
+#+end_src
+
+** Font Settings
+Use Iosevka nerd font if it exists.
+
+#+begin_src emacs-lisp
+(when (find-font (font-spec :name "JetBrains Mono"))
+  (set-face-attribute 'default nil
+  		      :family "JetBrains Mono"
+  		      :height 140))
+#+end_src
+
+** Theme Settings
+Set the default theme.
+
+#+begin_src emacs-lisp
+(use-package doom-themes)
+(load-theme 'doom-dracula t)
+#+end_src
+
+** Disable Native Compilation Warnings
+Disables native compilation warnings and prune the cache at startup.
+
+#+begin_src emacs-lisp
+(when (native-comp-available-p)
+  (setq native-comp-async-report-warnings-errors 'silent)
+  (native-compile-prune-cache))
+#+end_src
+
+** Disable UI clutter
+Disable some built-in modes that we don't use.
+
+#+begin_src emacs-lisp
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+#+end_src
+
+** Mouse Options
+Scroll the window which has cursor instead of focused one.
+
+#+begin_src emacs-lisp
+(setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
+#+end_src
+
+** Highlight Current Line
+Highlights the line which has cursor. This is not great for normal editing but for special-purpose selection buffers it works
+great. This is a built-in mode.
+
+#+begin_src emacs-lisp
+(add-hook 'dired-mode-hook 'hl-line-mode)
+(add-hook 'package-menu-mode-hook 'hl-line-mode)
+#+end_src
+
+** Modern org look
+Make org buffers fancy. We globally enable org-modern for all org buffers. org-modern-indent requires org-indent to be enabled.
+Setting org-startup-idented to *t* makes all org-mode buffers start org-indent mode automatically at start.
+
+#+begin_src emacs-lisp
+(use-package org-modern)
+(setq
+ ;; Edit settings
+ org-auto-align-tags nil
+ org-tags-column 0
+ org-catch-invisible-edits 'show-and-error
+ org-special-ctrl-a/e t
+ org-insert-heading-respect-content t
+ ;; Org styling, hide markup etc.
+ org-hide-emphasis-markers t
+ org-pretty-entities t
+ org-agenda-tags-column 0
+ org-ellipsis "...")
+(with-eval-after-load 'org (global-org-modern-mode))
+
+(use-package org-modern-indent
+  :straight (:host github :repo "jdtsmith/org-modern-indent"))
+
+(setq org-edit-src-content-indentation 0)
+(setq org-src-preserve-indentation t)
+(setq org-startup-indented t)
+(add-hook 'org-mode-hook #'org-modern-indent-mode 90)
+
+(use-package org-bullets-mode
+  :ensure org-bullets
+  :config
+  :hook org-mode)
+#+end_src
+
+** Quick Prompts
+Use 'y' or 'n' instead of 'yes' or 'no' for prompts.
+
+#+begin_src emacs-lisp
+(setq use-short-answers t)
+#+end_src
+
+** Show Column Numbers
+Show the column numbers (character position in line) in the modeline. This is a built-in global minor mode.
+
+#+begin_src emacs-lisp
+(column-number-mode +1) 
+#+end_src
+
+** Show Matching Brackets
+Always show the matching brackets. This is a built-in global minor mode.
+
+#+begin_src emacs-lisp
+(setq show-paren-delay 0)
+(show-paren-mode +1)
+#+end_src
+
+** Disable Startup Screen
+Don't show the startup screen. We jump directly to the *scratch* buffer.
+
+#+begin_src emacs-lisp
+(setq inhibit-splash-screen t)
+#+end_src
+
+** Disable Bell Sound
+Disable the annoying bell sound, this also disables the visual bell.
+
+#+begin_src emacs-lisp
+(setq ring-bell-function 'ignore)
+#+end_src
+
+** Line Numbers Mode
+Display relative line numbers for certain buffers. Also preallocate the space for numbers on the left so we don't
+have weird behaviour when scrolling or moving point through the file. This is a built-in global minor mode.
+
+#+begin_src emacs-lisp
+(setq
+ display-line-numbers-type 'relative
+ display-line-numbers-width-start t)
+
+(add-hook 'prog-mode-hook 'display-line-numbers-mode)
+(add-hook 'conf-mode-hook 'display-line-numbers-mode)
+(add-hook 'text-mode-hook 'display-line-numbers-mode)
+(add-hook 'dired-mode-hook 'display-line-numbers-mode)
+#+end_src
+
+** Save Cursor Position
+Save the point position in the buffer. If we reopen the buffer the point would be at the location where we last closed
+the buffer. Saves cursor position in ~/.emacs.d/places by default. This is a built-in global minor mode.
+
+#+begin_src emacs-lisp
+(save-place-mode +1)
+#+end_src
+
+** Replace Highlighted Text
+By default if you have a region and you start typing Emacs won't replace that region. Instead it will type the text at
+the location of the point. This mode makes it so if you select a region and type something, the entire region will be replaced.
+This is a built-in global minor mode.
+
+#+begin_src emacs-lisp
+(delete-selection-mode +1)
+#+end_src
+
+** Which Key
+Helpful package to show keybinds. This a built-in global minor mode.
+
+#+begin_src emacs-lisp
+(setq which-key-idle-delay 0.5)
+(which-key-mode +1)
+#+end_src
+
+** Save Minibuffer History
+Saves the minibuffer history. This is useful after restarts if we don't remember a command, we can just scroll up in history.
+This is built-in global minor mode.
+
+#+begin_src emacs-lisp
+(savehist-mode +1)
+(add-to-list 'savehist-additional-variables 'corfu-history)
+#+end_src
+
+** Delete Items by Moving to Trash
+This makes Emacs delete stuff by moving it to trash instead of permanently deleting. We can recover file if a mistake was made.
+
+#+begin_src emacs-lisp
+(setq delete-by-moving-to-trash t)
+#+end_src
+
+** Editorconfig Support
+Respect .editorconfig files. Editorconfig files specify indentation and formatting settings for various languages. This a built-in
+global minor mode.
+
+#+begin_src emacs-lisp
+(require 'editorconfig)
+(editorconfig-mode +1)
+#+end_src
+
+** Eldoc Mode Configuration
+Configuration for Eldoc Mode. This is a built-in mode. Displays information about variables / functions in mninibuffer.
+
+#+begin_src emacs-lisp
+(setq eldoc-idle-delay 0.3)
+(setq eldoc-documentation-strategy #'eldoc-documentation-compose)
+(setq eldoc-echo-area-use-multiline-p nil)
+(add-hook 'prog-mode-hook #'eldoc-mode)
+#+end_src
+
+** Repeat Mode
+Useful for repeating keybinds without prefix keys. This a built-in mode.
+
+#+begin_src emacs-lisp
+(repeat-mode +1)
+#+end_src
+
+** Dabbrev
+Fine tune the dabbrev engine options.
+
+#+begin_src emacs-lisp
+;; Prevent dabbrev from automatically upcasing words
+(setq dabbrev-case-replace nil
+      dabbrev-case-distinction nil
+      dabbrev-case-fold-search nil)
+#+end_src
+
+** Indentation Settings
+All the indentation settings for every mode goes here.
+
+#+begin_src emacs-lisp
+(setq-default indent-tabs-mode nil) ;; Use spaces instead of tabs.
+(setq-default tab-width 8) ;; Tab are 8 spaces long.
+
+(setq-default c-default-style "linux")
+(setq-default c-basic-offset 4) ;; Set to 4 spaces.
+
+;; Forcefully disable indent-tabs-mode for C/C++ files since "linux" style enables them.
+(add-hook 'c-mode-hook
+          (lambda ()
+            (setq indent-tabs-mode nil)))
+(add-hook 'c++-mode-hook
+          (lambda ()
+            (setq indent-tabs-mode nil)
+            (c-set-offset 'inline-open 0)))
+
+;; Java
+(add-hook 'java-mode-hook
+          (lambda ()
+            (setq c-basic-offset 4
+                  tab-width 4
+                  indent-tabs-mode nil)
+            (c-set-style "linux")))
+
+;; Device Tree Source
+(add-hook 'dts-mode-hook
+          (lambda ()
+            (setq-local tab-width 4)))
+
+;; Bitbake Files
+(add-hook 'bb-mode-hook (lambda ()
+                          (display-line-numbers-mode +1)
+                          (setq indent-tabs-mode nil)
+                          (setq tab-width 4)))
+#+end_src
+
+** Compilation Mode
+Configuration for the compile commands.
+
+#+begin_src emacs-lisp
+(require 'compile)
+(setq compilation-always-kill t) ;; Kill previous compilation process before starting new one.
+(setq compilation-scroll-output t) ;; Automatically go to end of the compilation buffer.
+(global-set-key (kbd "<f5>") #'compile)
+(global-set-key (kbd "<f6>") #'recompile)
+
+(defun my/switch-to-compilation-buffer (&rest _)
+  "Switch to *compilation* buffer after compile command."
+  (when-let ((buf (get-buffer "*compilation*")))
+    (switch-to-buffer-other-window buf)))
+
+(advice-add 'compile :after #'my/switch-to-compilation-buffer)
+(advice-add 'recompile :after #'my/switch-to-compilation-buffer)
+#+end_src
+
+** Performance Tweaks
+Adjustments to make Emacs faster.
+
+#+begin_src emacs-lisp
+(setq read-process-output-max (* 4 1024 1024)) ;; Increase amount of data Emacs reads from a process (4 MB).
+#+end_src
+
+** GNUs
+Built-in Emacs email client.
+
+#+begin_src emacs-lisp
+(setq user-full-name "Syed Kumail Hussain Sherazi"
+      user-mail-address "skhsherazi@teresol.com")
+
+;; Reading: IMAP
+(setq gnus-select-method
+      '(nnimap "work"
+               (nnimap-address "mail.teresol.com")
+               (nnimap-server-port 993)
+               (nnimap-stream ssl)))
+
+;; Sending: SMTP
+(setq message-send-mail-function 'smtpmail-send-it
+      smtpmail-smtp-server "mail.teresol.com"
+      smtpmail-smtp-service 465
+      smtpmail-stream-type 'ssl)
+
+;;; IMPORTANT: save sent mail. Gnus does NOT copy sent messages to your
+;;; IMAP Sent folder by default — without this, your side of every list
+;;; thread exists only in recipients' mailboxes.
+(setq gnus-message-archive-method '(nnimap "work")
+      gnus-message-archive-group "INBOX.Sent")   ; check exact name: ls in webmail
+                                        ; (often "Sent" or "INBOX.Sent")
+
+;; Mailing-list hygiene
+(setq message-fill-column nil) ;; never wrap what I type
+(setq message-dont-reply-to-names ;; don't cc myself on reply-all
+      (regexp-quote "skhsherazi@teresol.com"))
+(setq message-kill-buffer-on-quit t) ;; no dead *sent-mail* buffer
+(setq message-citation-line-function ;; standard list-style attribution
+      #'message-insert-formatted-citation-line
+      message-citation-line-format "On %a, %d %b %Y %R, %N wrote:\n")
+
+;;; Development: render patches as patches.
+;; Gnus can recognize diffs inside message bodies and fontify them with
+;; diff-mode faces. Enable it for every group, not just ones named *diff*.
+(setq mm-uu-diff-groups-regexp ".")
+
+;;; Prefer plain text over HTML when both are offered; render HTML sanely
+(setq mm-discouraged-alternatives '("text/html" "text/richtext")
+      mm-text-html-renderer 'shr)
+
+;;; Threading: the heart of reading a mailing list
+(setq gnus-fetch-old-headers 'some         ; pull parents to complete threads
+      gnus-thread-sort-functions
+      '(gnus-thread-sort-by-number
+        gnus-thread-sort-by-most-recent-date)  ; active threads bubble up
+      gnus-thread-hide-subtree nil         ; show threads expanded
+      gnus-use-cache t)
+
+;; Summary line: date, author, thread tree, subject
+(setq gnus-summary-line-format "%U%R %&user-date; %-22,22f %B%s\n"
+      gnus-user-date-format-alist '((t . "%Y-%m-%d %H:%M")))
+
+;; Ergonomics
+(setq gnus-large-newsgroup 2000) ; don't nag below 2000 articles
+(add-hook 'gnus-group-mode-hook #'gnus-topic-mode) ; organize groups by topic
+#+end_src
+
+** Project.el
+Built-in project management package.
+
+#+begin_src emacs-lisp
+(use-package project
+  :ensure nil
+  :config
+  (setq project-vc-extra-root-markers
+        '(
+          ".project"
+          ".jj"                       ; jujutsu repos
+
+          ;; C/C++
+          "compile_commands.json"
+          ".clangd"
+          "CMakePresets.json"
+          "CMakeUserPresets.json"
+
+          ;; Kernel / embedded / tags-based trees
+          "MAINTAINERS"               ; kernel source without .git
+          "GTAGS"                     ; gtags DB lives at index root
+          "cscope.out"
+          "TAGS"                      ; etags table, root in practice
+          ".repo"                     ; repo-tool workspaces (AOSP/Yocto)
+          "oe-init-build-env"         ; poky / openembedded root
+          ".west"                     ; Zephyr west workspace topdir
+          "west.yml"                  ; Zephyr manifest repo
+          "platformio.ini"
+          "sdkconfig.defaults"        ; ESP-IDF project root
+
+          ;; Rust / Zig / Go
+          "Cargo.lock"                ; workspace root; Cargo.toml recurs
+          "build.zig"
+          "go.work"
+          "go.mod"
+
+          ;; Python (lockfiles are workspace-root-only; note pyproject.toml
+          ;; recurs in uv/poetry monorepos -- lockfiles listed first win
+          ;; nothing, nearest wins, but in those repos you likely WANT the
+          ;; sub-package root anyway for basedpyright/ty)
+          "uv.lock"
+          "poetry.lock"
+          "Pipfile.lock"
+          "pyproject.toml"
+          "setup.py"
+          "requirements.txt"
+
+          ;; JS/TS: lockfiles + monorepo orchestrators; never package.json
+          "package-lock.json"
+          "yarn.lock"
+          "pnpm-lock.yaml"
+          "pnpm-workspace.yaml"
+          "bun.lock" "bun.lockb"
+          "deno.lock"
+          "turbo.json"
+          "nx.json"
+          "lerna.json"
+
+          ;; JVM
+          "settings.gradle" "settings.gradle.kts"
+          "gradlew"
+          "mvnw"
+
+          ;; Haskell / OCaml / Erlang / Elixir / Gleam
+          "cabal.project"
+          "stack.yaml"
+          "*.cabal"
+          "dune-project"
+          "rebar.lock"
+          "mix.lock"                  ; mix.exs recurs in umbrellas
+          "gleam.toml"
+
+          ;; .NET / Swift / Dart / Julia / Ruby / PHP / Lua / Elm
+          "*.sln" "global.json"
+          "Package.resolved"
+          "pubspec.lock"
+          "Manifest.toml"
+          "Gemfile.lock"
+          "composer.lock"
+          ".luarc.json"
+          "elm.json"
+
+          ;; Build systems / meta
+          "WORKSPACE" "WORKSPACE.bazel" "MODULE.bazel"
+          ".buckconfig"
+          "pants.toml"
+          "flake.lock"
+          "meson.options" "meson_options.txt"
+          "vcpkg.json"
+          "conanfile.txt"))
+
+  ;; Consider submodules part of the parent project
+  (setq project-vc-merge-submodules t))
+#+end_src
+
+* Packages
+
+** Must Have Modes
+All the modes that are needed and don't come pre-installed go here.
+
+#+begin_src emacs-lisp
+(use-package markdown-mode)
+(use-package dotenv-mode)
+(use-package rust-mode)
+(use-package typescript-mode)
+(use-package jtsx)
+(use-package git-modes)
+(use-package racket-mode)
+(use-package cmake-mode)
+(use-package haskell-mode)
+(use-package dockerfile-mode)
+(use-package zig-mode)
+(use-package bitbake)
+(use-package dts-mode)
+(use-package yaml-mode)
+(use-package glsl-mode)
+(use-package riscv-mode)
+(use-package nasm-mode)
+#+end_src
+
+** Treesitter Configuration
+Install treesitter grammars for certain languages and use ts-modes.
+
+#+begin_src emacs-lisp
+(setq treesit-language-source-alist
+      '((tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
+        (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
+        (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")))
+
+;; To actually install the grammars, run this once:
+;; (mapc #'treesit-install-language-grammar (mapcar #'car treesit-language-source-alist))
+#+end_src
+
+** Sudo Edit
+Edit files as root user. Do *M-x sudo-edit*
+
+#+begin_src emacs-lisp
+(use-package sudo-edit)
+#+end_src
+
+** Garbage Collector Magic Hack (gcmh)
+Try to defer GC as much as possible. We try to do GC when idle and increase the maximum memory that can be allocated before
+requiring GC trigger. An interactive helper function *my/time-since-last-gc* is also defined that shows the time since the last
+GC trigger.
+
+#+begin_src emacs-lisp
+(defvar my-last-gc-time (current-time)
+  "Time when the last garbage collection finished")
+
+(add-hook 'post-gc-hook
+  	  (lambda ()
+  	    (setq my-last-gc-time (current-time))))
+
+(defun my/time-since-last-gc ()
+  "Show and return seconds since the last garbage collection."
+  (interactive)
+  (let ((secs (float-time (time-subtract (current-time) my-last-gc-time))))
+    (when (called-interactively-p 'any)
+      (message "Time since last GC: %.2f seconds" secs))
+    secs))
+
+(use-package gcmh
+  :config
+  (setq gcmh-idle-delay 3)
+  (gcmh-mode +1))
+#+end_src
+
+** Whitespace Butler Mode
+Remove trailing whitespace.
+
+#+begin_src emacs-lisp :tangle no
+(use-package ws-butler
+  :config
+  (setq ws-butler-keep-whitespace-before-point nil)
+  (add-hook 'prog-mode-hook #'ws-butler-mode))
+#+end_src
+
+** Exec Path From Shell
+Get shell environment variables.
+
+#+begin_src emacs-lisp
+
+(use-package exec-path-from-shell
+  :config
+  (exec-path-from-shell-initialize))
+#+end_src
+
+** Move Text
+Move line/region up and down while maintaining the indentation.
+
+#+begin_src emacs-lisp
+(use-package move-text
+  :config
+  (move-text-default-bindings)) ;; M-<up> M-<down> are the default bindings.
+
+(defun indent-region-advice (&rest ignored)
+  "Re-indent the text in-and-around a text move."
+  (let ((deactivate deactivate-mark))
+    (if (region-active-p)
+        (indent-region (region-beginning) (region-end))
+      (indent-region (line-beginning-position) (line-end-position)))
+    (setq deactivate-mark deactivate)))
+
+(advice-add 'move-text-up :after 'indent-region-advice)
+(advice-add 'move-text-down :after 'indent-region-advice)
+#+end_src
+
+** Expand Region
+Incremental selection of syntactic elements.
+
+#+begin_src emacs-lisp
+(use-package expand-region
+  :config
+  (global-set-key (kbd "C-=") 'er/expand-region))
+#+end_src
+
+** Ace Window
+Quickly switch windows.
+
+#+begin_src emacs-lisp
+(use-package ace-window
+  :config
+  (global-set-key (kbd "M-o") 'ace-window))
+#+end_src
+
+** ZZZ To Char
+Delete everything upto a specific char (zappping).
+
+#+begin_src emacs-lisp
+(use-package zzz-to-char
+  :config
+  (global-set-key (kbd "M-z") #'zzz-to-char))
+#+end_src
+
+** Multiple Cursors
+Multiple cursors. Most useful package to exist!
+
+#+begin_src emacs-lisp
+(use-package multiple-cursors
+  :config
+  (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+  (global-set-key (kbd "C->") 'mc/mark-next-like-this)
+  (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+  (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+  (setq mc/always-run-for-all t)) ;; Disable confirmations for running certain commands with mc.
+#+end_src
+
+** Ghostel
+Terminal emulator for Emacs powered by libghostty-vt, the VT engine behind the Ghostty terminal.
+
+#+begin_src emacs-lisp
+(use-package ghostel
+  :bind (("C-x m" . ghostel)
+         :map ghostel-semi-char-mode-map
+         ("C-s"  . consult-line)
+         ("C-k"  . my/ghostel-send-C-k-and-kill)
+         ;; ;; I'm used to go up/down the shell history with M-n/p from eshell
+         ;; ;; Simulate this behavior in ghostel by sending C-p and C-n
+         ("M-p" . (lambda () (interactive) (ghostel-send-key "p" "ctrl")))
+         ("M-n" . (lambda () (interactive) (ghostel-send-key "n" "ctrl")))
+         :map project-prefix-map
+         ("m" . ghostel-project)
+         ("M" . ghostel-project-list-buffers))
+  :config
+  (defun my/ghostel-send-C-k-and-kill ()
+    "Send `C-k' to ghostel.
+    Like normal Emacs `C-k'.  Kill to end of line and put content in kill-ring."
+    (interactive)
+    (kill-ring-save (point) (line-end-position))
+    (ghostel-send-key "k" "ctrl")))
+#+end_src
+
+** Do the Right Thing Indent (dtrt-indent)
+Try to guess indentation settings from existing code and set the appropriate variables.
+
+#+begin_src emacs-lisp
+(use-package dtrt-indent
+  :config
+  (dtrt-indent-global-mode +1))
+#+end_src
+
+** Orderless
+Fuzzy matching in Emacs.
+
+#+begin_src emacs-lisp
+(use-package orderless
+  :custom
+  (completion-styles '(orderless partial-completion basic))
+  (completion-category-overrides '((file (styles partial-completion))))
+  (completion-category-defaults nil) ;; Disable defaults, use our settings.
+  (completion-pcm-leading-wildcard t)) ;; Emacs 31: partial-completion behaves like substring.
+#+end_src
+
+** Vertico
+Enhanced minibuffer completions. We also enable recursive minibuffers and turn on mode aware commands only.
+
+#+begin_src emacs-lisp
+(setq enable-recursive-minibuffers t)
+(setq read-extended-command-predicate #'command-completion-default-include-p)
+
+(use-package vertico
+  :custom
+  (vertico-cycle t)
+  :config
+  (vertico-mode))
+#+end_src
+
+** Marginalia
+Help strings and documentation in minibuffer.
+
+#+begin_src emacs-lisp
+(use-package marginalia
+  :init
+  (marginalia-mode))
+#+end_src
+
+** Consult
+Enhanced search and navigation.
+
+#+begin_src emacs-lisp
+(use-package consult-flycheck)
+(use-package consult
+  ;; Replace bindings. Lazily loaded by `use-package'.
+  :bind (;; C-c bindings in `mode-specific-map'
+         ("C-c M-x" . consult-mode-command)
+         ("C-c h" . consult-history)
+         ("C-c k" . consult-kmacro)
+         ("C-c m" . consult-man)
+         ("C-c i" . consult-info)
+         ([remap Info-search] . consult-info)
+         ;; C-x bindings in `ctl-x-map'
+         ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
+         ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
+         ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
+         ("C-x 5 b" . consult-buffer-other-frame)  ;; orig. switch-to-buffer-other-frame
+         ("C-x t b" . consult-buffer-other-tab)    ;; orig. switch-to-buffer-other-tab
+         ("C-x r b" . consult-bookmark)            ;; orig. bookmark-jump
+         ("C-x p b" . consult-project-buffer)      ;; orig. project-switch-to-buffer
+         ;; Custom M-# bindings for fast register access
+         ("M-#" . consult-register-load)
+         ("M-'" . consult-register-store)          ;; orig. abbrev-prefix-mark (unrelated)
+         ("C-M-#" . consult-register)
+         ;; Other custom bindings
+         ("M-y" . consult-yank-pop)                ;; orig. yank-pop
+         ;; M-g bindings in `goto-map'
+         ("M-g e" . consult-compile-error)
+         ("M-g r" . consult-grep-match)
+         ("M-g f" . consult-flycheck)
+         ("M-g g" . consult-goto-line)             ;; orig. goto-line
+         ("M-g M-g" . consult-goto-line)           ;; orig. goto-line
+         ("M-g o" . consult-outline)               ;; Alternative: consult-org-heading
+         ("M-g m" . consult-mark)
+         ("M-g k" . consult-global-mark)
+         ("M-g i" . consult-imenu)
+         ("M-g I" . consult-imenu-multi)
+         ;; M-s bindings in `search-map'
+         ("M-s d" . consult-find)                  ;; Alternative: consult-fd
+         ("M-s c" . consult-locate)
+         ("M-s g" . consult-grep)
+         ("M-s G" . consult-git-grep)
+         ("M-s r" . consult-ripgrep)
+         ("M-s l" . consult-line)
+         ("M-s L" . consult-line-multi)
+         ("M-s k" . consult-keep-lines)
+         ("M-s u" . consult-focus-lines)
+         ;; Isearch integration
+         ("M-s e" . consult-isearch-history)
+         :map isearch-mode-map
+         ("M-e" . consult-isearch-history)         ;; orig. isearch-edit-string
+         ("M-s e" . consult-isearch-history)       ;; orig. isearch-edit-string
+         ("M-s l" . consult-line)                  ;; needed by consult-line to detect isearch
+         ("M-s L" . consult-line-multi)            ;; needed by consult-line to detect isearch
+         ;; Minibuffer history
+         :map minibuffer-local-map
+         ("M-s" . consult-history)                 ;; orig. next-matching-history-element
+         ("M-r" . consult-history))                ;; orig. previous-matching-history-element
+
+  ;; The :init configuration is always executed (Not lazy)
+  :init
+
+  ;; Tweak the register preview for `consult-register-load',
+  ;; `consult-register-store' and the built-in commands.  This improves the
+  ;; register formatting, adds thin separator lines, register sorting and hides
+  ;; the window mode line.
+  (advice-add #'register-preview :override #'consult-register-window)
+  (setq register-preview-delay 0.1)
+
+  ;; Use Consult to select xref locations with preview
+  (setq xref-show-xrefs-function #'consult-xref
+        xref-show-definitions-function #'consult-xref)
+
+  ;; Configure other variables and modes in the :config section,
+  ;; after lazily loading the package.
+  :config
+
+  ;; Optionally configure preview. The default value
+  ;; is 'any, such that any key triggers the preview.
+  ;; (setq consult-preview-key 'any)
+  ;; (setq consult-preview-key "M-.")
+  ;; (setq consult-preview-key '("S-<down>" "S-<up>"))
+  ;; For some commands and buffer sources it is useful to configure the
+  ;; :preview-key on a per-command basis using the `consult-customize' macro.
+  (consult-customize
+   consult-theme :preview-key '(:debounce 0.2 any)
+   consult-ripgrep consult-git-grep consult-grep consult-man
+   consult-bookmark consult-recent-file consult-xref
+   consult-source-bookmark consult-source-file-register
+   consult-source-recent-file consult-source-project-recent-file
+   ;; :preview-key "M-."
+   :preview-key '(:debounce 0.1 any))
+
+  ;; Optionally configure the narrowing key.
+  ;; Both < and C-+ work reasonably well.
+  (setq consult-narrow-key "<")) ;; "C-+"
+#+end_src
+
+** Embark
+Context aware actions.
+
+#+begin_src emacs-lisp
+(use-package embark
+  :bind
+  (("C-." . embark-act)         ;; pick some comfortable binding
+   ("C-;" . embark-dwim)        ;; good alternative: M-.
+   ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
+
+  :init
+  
+  ;; Optionally replace the key help with a completing-read interface
+  (setq prefix-help-command #'embark-prefix-help-command)
+  
+  ;; Show the Embark target at point via Eldoc. You may adjust the
+  ;; Eldoc strategy, if you want to see the documentation from
+  ;; multiple providers. Beware that using this can be a little
+  ;; jarring since the message shown in the minibuffer can be more
+  ;; than one line, causing the modeline to move up and down:
+  
+  ;; (add-hook 'eldoc-documentation-functions #'embark-eldoc-first-target)
+  ;; (setq eldoc-documentation-strategy #'eldoc-documentation-compose-eagerly)
+
+  ;; Add Embark to the mouse context menu. Also enable `context-menu-mode'.
+  ;; (context-menu-mode 1)
+  ;; (add-hook 'context-menu-functions #'embark-context-menu 100)
+
+  :config
+
+  ;; Hide the mode line of the Embark live/completions buffers
+  (add-to-list 'display-buffer-alist
+               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                 nil
+                 (window-parameters (mode-line-format . none)))))
+
+;; Consult users will also want the embark-consult package.
+(use-package embark-consult) ; only need to install it, embark loads it after consult if found
+#+end_src
+
+** Paredit
+Structural editing of LISP-like languages.
+
+#+begin_src emacs-lisp
+(use-package paredit
+  :config
+  (add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)
+  (add-hook 'lisp-mode-hook 'enable-paredit-mode)
+  (add-hook 'lisp-interaction-mode-hook 'enable-paredit-mode)
+  (add-hook 'scheme-mode-hook 'enable-paredit-mode)
+  (add-hook 'racket-mode-hook 'enable-paredit-mode))
+#+end_src
+
+** Corfu
+Corfu enhances in-buffer completion with a small completion popup. The current candidates are shown in a popup below or
+above the point, and can be selected by moving up and down. Corfu is the minimalistic in-buffer completion counterpart
+of the Vertico minibuffer UI.
+
+#+begin_src emacs-lisp
+(use-package corfu
+  :demand t ;; Don't lazy load
+  :custom
+  (corfu-auto nil)
+  (corfu-cycle t)
+  (corfu-popupinfo-delay 0.1)
+  (corfu-preselect 'first)
+  (corfu-quit-no-match t)
+  (corfu-on-exact-match 'show)
+  (tab-always-indent 'complete) ;; Emacs thing, not Corfu. TAB tries to indent first and then auto-complete.
+  (corfu-quit-at-boundary nil) ;; Use the separator in Corfu completions.
+  :bind
+  (:map corfu-map
+        ("TAB" . corfu-insert)
+        ("<tab>" . corfu-insert)
+        ("RET" . corfu-insert)
+        ("<return>" . corfu-insert)
+        ("C-n" . corfu-next)
+        ("C-p" . corfu-previous))
+  :config
+  (setq
+   corfu-separator ?\s
+   corfu-popupinfo-max-height 20)
+
+  (global-corfu-mode)
+  (corfu-history-mode))
+#+end_src
+
+** Flycheck
+This is the modern replacement for Flymake. It supports a lot more features and a lot more languages than flymake. Sadly
+Flycheck doesn't work out of the box with Eglot and some modes so we will need to do some work to get the integration right.
+
+#+begin_src emacs-lisp
+(use-package flycheck
+  :config
+  (setq
+   flycheck-idle-change-delay 0.3
+   flycheck-idle-buffer-switch-delay 0.3
+   flycheck-display-errors-delay 99999
+   flycheck-highlighting-mode nil)
+  (global-flycheck-mode +1))
+
+(use-package flycheck-eglot
+  :after (flycheck eglot)
+  :config
+  (global-flycheck-eglot-mode +1))
+#+end_src
+
+** Yasnippets
+Snippets support in Emacs.
+
+#+begin_src emacs-lisp
+(use-package yasnippet
+  :ensure t
+  :config
+  (setq yas-verbosity 0)
+  (yas-global-mode 1)
+
+  ;; Disable TAB key for snippet navigation
+  (define-key yas-keymap (kbd "TAB") nil)
+  (define-key yas-keymap (kbd "<tab>") nil)
+  (define-key yas-keymap (kbd "SPC") nil)
+
+  ;; This is key: bind TAB to nothing, allowing it to fall through
+  (define-key yas-minor-mode-map (kbd "TAB") nil)
+  (define-key yas-minor-mode-map (kbd "<tab>") nil)
+
+  ;; Use C-j and C-k for navigation
+  (define-key yas-keymap (kbd "C-j") 'yas-next-field-or-maybe-expand)
+  (define-key yas-keymap (kbd "C-k") 'yas-prev-field))
+
+(use-package yasnippet-snippets)
+(use-package yasnippet-capf)
+#+end_src
+
+** Cape
+capf extensions for corfu.
+
+#+begin_src emacs-lisp
+(use-package cape
+  :demand t
+  :init
+  ;; Global fallback capfs (non-Eglot buffers)
+  (add-hook 'completion-at-point-functions #'cape-file)
+  (add-hook 'completion-at-point-functions #'cape-dabbrev)
+  (add-hook 'completion-at-point-functions #'cape-keyword)
+  (add-hook 'completion-at-point-functions #'yasnippet-capf)
+  :config
+  (advice-add #'yasnippet-capf                    :around #'cape-wrap-noninterruptible)
+  (advice-add #'cape-dabbrev                      :around #'cape-wrap-noninterruptible)
+  (advice-add #'cape-keyword                      :around #'cape-wrap-noninterruptible)
+  (advice-add #'cape-file                         :around #'cape-wrap-noninterruptible)
+
+  ;; Cache buster (corfu wiki): Corfu fetches the candidate table once per
+  ;; completion session, and Eglot's capf never refreshes it -- servers cap
+  ;; how many candidates they send, so typing further into a session can
+  ;; miss valid candidates. The buster re-queries the server as you type.
+  (advice-add 'eglot-completion-at-point :around #'cape-wrap-buster)
+
+  (defun my/eglot-capf ()
+    (if (eglot-managed-p)
+        (setq-local completion-at-point-functions
+                    (list #'cape-file
+                          (cape-capf-super
+                           #'eglot-completion-at-point
+                           #'yasnippet-capf)))
+      (kill-local-variable 'completion-at-point-functions)))
+  (add-hook 'eglot-managed-mode-hook #'my/eglot-capf))
+#+end_src
+
+** Eglot
+Built-in LSP client for Emacs.
+
+#+begin_src emacs-lisp
+(use-package eglot
+  :ensure nil
+  :hook (((python-mode
+           python-ts-mode
+           c-mode
+           c-ts-mode
+           c++-mode
+           c++-ts-mode
+           cmake-mode
+           cmake-ts-mode
+           rust-mode
+           rust-ts-mode
+           java-mode
+           java-ts-mode) . eglot-ensure))
+
+  :custom
+  (eglot-autoshutdown t)                               ;; Shut down server when last buffer closes
+  (eglot-sync-connect nil)                             ;; Don't block on slow connections
+  (eglot-confirm-server-edits nil)                     ;; Don't preview edits before applying them
+  (eglot-send-changes-idle-time 0.5)                   ;; Debounce didChange notifications a bit
+  (eglot-extend-to-xref t)                             ;; Manage files jumped to outside project (system headers)
+  (eglot-events-buffer-config '(:size 0 :format full)) ;; Performance
+  (eglot-code-action-indications nil)
+  (eglot-ignored-server-capabilities
+   '(:documentHighlightProvider
+     :documentOnTypeFormattingProvider))
+
+  :config
+  (fset #'jsonrpc--log-event #'ignore) ;; Performance
+  (setq eglot-stay-out-of '(flymake flycheck))
+
+  (add-hook 'eglot-managed-mode-hook (lambda ()
+                                       (eglot-inlay-hints-mode -1)
+                                       (eglot-semantic-tokens-mode -1))))
+
+(with-eval-after-load 'eglot
+  (add-to-list 'completion-category-overrides '(eglot (styles orderless)))
+  (add-to-list 'completion-category-overrides '(eglot-capf (styles orderless))))
+#+end_src
+
+** Eglot Extensions
+Packages to enhance Eglot.
+
+#+begin_src emacs-lisp
+(use-package consult-eglot)
+(use-package consult-eglot-embark)
+
+(with-eval-after-load 'embark
+  (with-eval-after-load 'consult-eglot
+    (require 'consult-eglot-embark)
+    (consult-eglot-embark-mode)))
+#+end_src
+
+** Symbols Outline
+Show LSP symbols.
+
+#+begin_src emacs-lisp
+(use-package symbols-outline
+  :init
+  (add-hook 'eglot-managed-mode-hook
+            (lambda ()
+              (setq-local symbols-outline-fetch-fn #'symbols-outline-lsp-fetch)))
+  :config
+  (setq symbols-outline-window-position 'left)
+  (symbols-outline-follow-mode))
+#+end_src
+
+** Eglot Keybinds
+Custom keybinds to use when working with Eglot. Unlike LSP Mode, eglot doesn't provide these so we have to
+manually set them up.
+
+#+begin_src emacs-lisp
+(with-eval-after-load 'eglot
+  (defvar-keymap my/eglot-map
+    :doc "Keymap for Eglot commands."
+    "a" #'eglot-code-actions
+    "r" #'eglot-rename
+    "f" #'eglot-format ;; region if active, else whole buffer
+    "o" #'eglot-code-action-organize-imports
+    "q" #'eglot-code-action-quickfix
+    "d" #'eglot-find-declaration
+    "i" #'eglot-find-implementation
+    "t" #'eglot-find-typeDefinition
+    "c" #'eglot-show-call-hierarchy
+    "h" #'eldoc-doc-buffer
+    "n" #'flycheck-next-error
+    "p" #'flycheck-previous-error
+    "l" #'flycheck-list-errors
+    "s" #'consult-eglot-symbols
+    "S" #'symbols-outline-show
+    "R" #'eglot-reconnect
+    "K" #'eglot-shutdown)
+  (define-key eglot-mode-map (kbd "C-l") my/eglot-map))
+#+end_src
+
+** LSP Server Configurations
+LSP configurations for all the servers I use.
+
+#+begin_src emacs-lisp
+(with-eval-after-load 'eglot
+  ;; C/C++
+  ;; sudo apt install clangd clang-format
+  (add-to-list 'eglot-server-programs
+               '((c-mode c-ts-mode c++-mode c++-ts-mode)
+                 . ("clangd"
+                    "-j=4"
+                    "--background-index"
+                    "--clang-tidy"
+                    "--completion-style=detailed"
+                    "--all-scopes-completion=true"
+                    "--header-insertion=never"
+                    "--limit-results=600"
+                    "--header-insertion-decorators=0")))
+  
+  ;; Python
+  ;; pipx install basedpyright ruff
+  (add-to-list 'eglot-server-programs
+               '((python-mode python-ts-mode)
+                 . ("rass" "--"
+                    "basedpyright-langserver" "--stdio" "--"
+                    "ruff" "server")))
+
+  ;; CMake
+  ;; cargo install neocmakelsp
+  (add-to-list 'eglot-server-programs
+               '((cmake-mode cmake-ts-mode) . ("neocmakelsp" "stdio")))
+
+  ;; Java
+  ;; JDK: sudo apt install openjdk-21-jdk (jdtls needs 21+ to run)
+  ;; jdtls: tarball in ~/.local/opt/jdtls, launcher on PATH
+  ;; debug: com.microsoft.java.debug.plugin.jar for dape
+  (add-to-list 'eglot-server-programs
+               `((java-mode java-ts-mode)
+                 . ("jdtls"
+                    "--jvm-arg=-XX:+UseParallelGC"
+                    "--jvm-arg=-XX:GCTimeRatio=4"
+                    "--jvm-arg=-XX:AdaptiveSizePolicyWeight=90"
+                    "--jvm-arg=-Dsun.zip.disableMemoryMapping=true"
+                    "--jvm-arg=-Xmx4G"
+                    "--jvm-arg=-Xms100m"
+                    :initializationOptions
+                    (:bundles [,(expand-file-name
+                                 "~/.local/opt/java-debug/com.microsoft.java.debug.plugin.jar")]))))
+
+  (setq-default eglot-workspace-configuration
+                '(:rust-analyzer
+                  (:checkOnSave :json-false))))
+#+end_src
+
+** DAPE Mode
+Debug Adapter Protocol (DAP) Emacs. This is smiliar to DAP mode but way better defaults and less configuration required.
+Note that Java DAPE requires Eglot instead of LSP mode. There's always VSCode for debugging too if you are feeling lazy!
+
+#+begin_src emacs-lisp
+(use-package dape
+  :custom
+  ;; Turn on global bindings for setting breakpoints with mouse
+  (dape-breakpoint-global-mode +1)
+  ;; Info buffers to the right
+  (dape-buffer-window-arrangement 'right)
+  :config
+  ;; Pulse source line (performance hit)
+  (add-hook 'dape-display-source-hook #'pulse-momentary-highlight-one-line)
+  ;; Save buffers on startup, useful for interpreted languages
+  (add-hook 'dape-start-hook (lambda () (save-some-buffers t t)))
+  ;; Kill compile buffer on build success
+  (add-hook 'dape-compile-hook #'kill-buffer))
+#+end_src
+
+* Modes Configuration
+Language specific modes configuration goes here.
+
+** CC Mode
+C/C++ modes configuration.
+
+#+begin_src emacs-lisp
+;; Better C++ syntax highlighting
+(use-package modern-cpp-font-lock
+  :config
+  (add-hook 'c++-mode-hook #'modern-c++-font-lock-mode))
+
+;; Make C and C++ modes respect the `tab-always-indent` variable.
+(with-eval-after-load 'cc-mode
+  (define-key c-mode-map   (kbd "TAB") #'indent-for-tab-command)
+  (define-key c-mode-map   (kbd "<tab>") #'indent-for-tab-command)
+  (define-key c++-mode-map (kbd "TAB") #'indent-for-tab-command)
+  (define-key c++-mode-map (kbd "<tab>") #'indent-for-tab-command))
+
+;; By default .h files are opened using C mode.
+;; We want to determine intelligently what mode to use.
+(add-to-list 'auto-mode-alist '("\\.h\\'" . c-or-c++-mode))
+#+end_src
+
+** Java Mode
+Configuration for Java mode.
+
+#+begin_src emacs-lisp
+(use-package jarchive
+  :after eglot
+  :config
+  (jarchive-setup))
+
+(with-eval-after-load 'cc-mode
+  (define-key java-mode-map (kbd "TAB") #'indent-for-tab-command)
+  (define-key java-mode-map (kbd "<tab>") #'indent-for-tab-command))
+
+;; Make jdtls decompiled sources use java mode
+(add-to-list 'auto-mode-alist '("\\.java(.*\\.class)\\'" . java-mode))
+#+end_src
+
+** JS/TS and JSX/TSX
+Configure jsx and tsx files to use the jtsx modes.
+
+#+begin_src emacs-lisp
+(add-to-list 'auto-mode-alist '("\\.tsx\\'" . jtsx-tsx-mode))
+(add-to-list 'auto-mode-alist '("\\.d\\.mts\\'" . jtsx-tsx-mode))
+(add-to-list 'auto-mode-alist '("\\.jsx\\'" . jtsx-jsx-mode))
+#+end_src
+
+** YAML Mode
+Bind certain filetypes to yaml mode.
+
+#+begin_src emacs-lisp
+(add-to-list 'auto-mode-alist '("\\.clangd\\'" . yaml-mode))
+#+end_src
+
+** GLSL Mode
+Bind certain filetypes to glsl mode.
+
+#+begin_src emacs-lisp
+(dolist (pattern '("\\.tesc\\'" "\\.tese\\'" "\\.comp\\'"
+                   "\\.mesh\\'" "\\.task\\'"
+                   "\\.rgen\\'" "\\.rint\\'" "\\.rahit\\'"
+                   "\\.rchit\\'" "\\.rmiss\\'" "\\.rcall\\'"))
+  (add-to-list 'auto-mode-alist (cons pattern 'glsl-mode)))
+#+end_src
+
+* My Configuration
+All the useful snippets of codes that I have written over the years go here. This should be the last
+thing in the config obviously.
+
+** Reload Emacs Config
+Interactive function to reload config changes. This is additive so most things work fine but
+stuff like *setq-default* and *defvar* and pushing into lists might cause weird behaviour. Restart
+Emacs to confirm whether it's a reload artifact or a real bug in the config.
+
+#+begin_src emacs-lisp
+(defun my/reload-init ()
+  "Eval init.el, using the open buffer if it exists, else loading from disk."
+  (interactive)
+  (let ((buf (find-buffer-visiting user-init-file)))
+    (if buf
+         (with-current-buffer buf
+           (eval-buffer)
+           (message "Eval'd buffer %s" (buffer-name)))
+         (load-file user-init-file)
+         (message "Loaded %s from disk" user-init-file))))
+#+end_src
+
+** Render ASCII Color Codes Properly
+By default Compilation Mode and Comint Modes don't render ASCII escape sequences (specially colors). Fix that.
+
+#+begin_src emacs-lisp
+(with-eval-after-load 'compile
+  (add-hook 'compilation-filter-hook #'ansi-color-compilation-filter))
+(with-eval-after-load 'shell
+  (add-hook 'comint-output-filter-functions #'ansi-color-process-output))
+#+end_src
+
+** BB-Mode to work with Yoco bitbake files
+This package is not available on any package repos so we have to manage it manually. This package lives in
+lisp/ directory.
+
+#+begin_src emacs-lisp
+(require 'bb-mode)
+(setq auto-mode-alist (cons '("\\.bb$" . bb-mode) auto-mode-alist))
+(setq auto-mode-alist (cons '("\\.inc$" . bb-mode) auto-mode-alist))
+(setq auto-mode-alist (cons '("\\.bbappend$" . bb-mode) auto-mode-alist))
+(setq auto-mode-alist (cons '("\\.bbclass$" . bb-mode) auto-mode-alist))
+#+end_src

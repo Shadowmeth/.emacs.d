@@ -665,6 +665,18 @@ Move line/region up and down while maintaining the indentation.
 (advice-add 'move-text-down :after 'indent-region-advice)
 #+end_src
 
+** Minions
+Collapse all minor-mode lighters into a single menu button.
+
+#+begin_src emacs-lisp
+(use-package minions
+  :custom
+  (minions-mode-line-lighter " ≡")
+  :config
+  (setq minions-prominent-modes '(flycheck-mode flymake-mode))
+  (minions-mode +1))
+#+end_src
+
 ** Expand Region
 Incremental selection of syntactic elements.
 

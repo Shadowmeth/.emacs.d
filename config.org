@@ -285,7 +285,10 @@ This is built-in global minor mode.
 
 #+begin_src emacs-lisp
 (savehist-mode +1)
+(setq history-length 1000)
 (add-to-list 'savehist-additional-variables 'corfu-history)
+(add-to-list 'savehist-additional-variables 'compile-command)
+(add-to-list 'savehist-additional-variables 'compile-history)
 #+end_src
 
 ** Delete Items by Moving to Trash

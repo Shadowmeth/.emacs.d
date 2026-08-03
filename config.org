@@ -962,6 +962,7 @@ capf extensions for corfu.
 #+begin_src emacs-lisp
 (use-package cape
   :demand t
+  :init
   ;; Global fallback capfs (non-Eglot buffers)
   ;; Force tags capf into a useful position (remove-hook first, since add-hook won't move it)
   (remove-hook 'completion-at-point-functions #'tags-completion-at-point-function)

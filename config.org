@@ -515,6 +515,7 @@ All the modes that are needed and don't come pre-installed go here.
 (use-package glsl-mode)
 (use-package riscv-mode)
 (use-package nasm-mode)
+(use-package typst-ts-mode)
 #+end_src
 
 ** Treesitter Configuration
@@ -524,7 +525,8 @@ Install treesitter grammars for certain languages and use ts-modes.
 (setq treesit-language-source-alist
       '((tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
         (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
-        (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")))
+        (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
+        (typst "https://github.com/uben0/tree-sitter-typst" "master" "src")))
 
 ;; To actually install the grammars, run this once:
 ;; (mapc #'treesit-install-language-grammar (mapcar #'car treesit-language-source-alist))
@@ -973,7 +975,7 @@ capf extensions for corfu.
   (add-hook 'completion-at-point-functions #'cape-keyword 10)
   (add-hook 'completion-at-point-functions #'cape-dabbrev 20)
   :config
-  (advice-add #'tags-completion-at-point-function   :around #'cape-wrap-noninterruptible)
+  (advice-add #'tags-completion-at-point-function :around #'cape-wrap-noninterruptible)
   (advice-add #'yasnippet-capf                    :around #'cape-wrap-noninterruptible)
   (advice-add #'cape-dabbrev                      :around #'cape-wrap-noninterruptible)
   (advice-add #'cape-keyword                      :around #'cape-wrap-noninterruptible)

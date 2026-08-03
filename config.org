@@ -966,16 +966,11 @@ capf extensions for corfu.
   :demand t
   :init
   ;; Global fallback capfs (non-Eglot buffers)
-  ;; Force tags capf into a useful position (remove-hook first, since add-hook won't move it)
-  (remove-hook 'completion-at-point-functions #'tags-completion-at-point-function)
-  ;; The numbers are depth, lower depth means closer to the front of the list, so it runs earlier
-  (add-hook 'completion-at-point-functions #'cape-file -20)
-  (add-hook 'completion-at-point-functions #'yasnippet-capf -10)
-  (add-hook 'completion-at-point-functions #'tags-completion-at-point-function 0)
-  (add-hook 'completion-at-point-functions #'cape-keyword 10)
-  (add-hook 'completion-at-point-functions #'cape-dabbrev 20)
+  (add-hook 'completion-at-point-functions #'cape-file)
+  (add-hook 'completion-at-point-functions #'cape-dabbrev)
+  (add-hook 'completion-at-point-functions #'yasnippet-capf)
+  (add-hook 'completion-at-point-functions #'cape-keyword)
   :config
-  (advice-add #'tags-completion-at-point-function :around #'cape-wrap-noninterruptible)
   (advice-add #'yasnippet-capf                    :around #'cape-wrap-noninterruptible)
   (advice-add #'cape-dabbrev                      :around #'cape-wrap-noninterruptible)
   (advice-add #'cape-keyword                      :around #'cape-wrap-noninterruptible)

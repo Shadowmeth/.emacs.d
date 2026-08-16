@@ -20,6 +20,7 @@ emms/
 eaf/
 request/
 racket-mode/
+devdocs/
 
 .dap-breakpoints
 .lsp-session-*

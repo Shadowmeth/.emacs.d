@@ -1185,7 +1185,8 @@ C/C++ modes configuration.
   (define-key c-mode-map   (kbd "TAB") #'indent-for-tab-command)
   (define-key c-mode-map   (kbd "<tab>") #'indent-for-tab-command)
   (define-key c++-mode-map (kbd "TAB") #'indent-for-tab-command)
-  (define-key c++-mode-map (kbd "<tab>") #'indent-for-tab-command))
+  (define-key c++-mode-map (kbd "<tab>") #'indent-for-tab-command)
+  (define-key c++-mode-map (kbd "C-c C-w") #'subword-mode))
 
 ;; By default .h files are opened using C mode.
 ;; We want to determine intelligently what mode to use.

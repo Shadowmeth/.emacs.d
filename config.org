@@ -1248,6 +1248,14 @@ so we manage it manually.
 (setq auto-mode-alist (cons '("\\.bbclass$" . bb-mode) auto-mode-alist))
 #+end_src
 
+** Racket Mode
+Disable flycheck mode in Racket mode. It causes too much input lag.
+
+#+begin_src emacs-lisp
+(add-hook 'racket-mode-hook (lambda ()
+                                (flycheck-mode -1)))
+#+end_src
+
 * My Configuration
 All the useful snippets of codes that I have written over the years go here.
 This should be the last thing in the config obviously.

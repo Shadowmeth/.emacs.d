@@ -395,7 +395,6 @@ Configuration for the compile commands.
 #+begin_src emacs-lisp
 (require 'compile)
 (setq compilation-always-kill t) ;; Kill previous compilation process before starting new one.
-(setq compilation-scroll-output t) ;; Automatically go to end of the compilation buffer.
 (global-set-key (kbd "<f5>") #'compile)
 (global-set-key (kbd "<f6>") #'recompile)
 

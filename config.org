@@ -1225,6 +1225,13 @@ Bind certain filetypes to yaml mode.
 (add-to-list 'auto-mode-alist '("\\.clangd\\'" . yaml-mode))
 #+end_src
 
+** NASM Mode
+Bind certain filetypes to nasm mode.
+
+#+begin_src emacs-lisp
+(add-to-list 'auto-mode-alist '("\\.asm\\'" . nasm-mode))
+#+end_src
+
 ** GLSL Mode
 Bind certain filetypes to glsl mode.
 

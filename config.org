@@ -400,7 +400,7 @@ Configuration for the compile commands.
 
 (defun my/switch-to-compilation-buffer (&rest _)
   "Switch to *compilation* buffer after compile command."
-  (when-let ((buf (get-buffer "*compilation*")))
+  (when-let* ((buf (get-buffer "*compilation*")))
     (switch-to-buffer-other-window buf)))
 
 (advice-add 'compile :after #'my/switch-to-compilation-buffer)

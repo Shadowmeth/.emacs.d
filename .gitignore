@@ -31,7 +31,11 @@ bookmarks
 tramp
 history
 places
+places.eld
 config.el
 config.html
 config.odt
 .emacs.custom.el
+user-lisp/.user-lisp-autoloads.el
+user-lisp/bb-mode.elc
+

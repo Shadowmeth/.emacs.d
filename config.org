@@ -1192,6 +1192,15 @@ C/C++ modes configuration.
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c-or-c++-mode))
 #+end_src
 
+** Markdown Mode
+Configuration to render Markdown mode and some other configuration.
+
+#+begin_src emacs-lisp
+;; sudo apt install pandoc
+
+(setq markdown-command "pandoc -f markdown -t html5 --standalone")
+#+end_src
+
 ** Java Mode
 Configuration for Java mode.
 

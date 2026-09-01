@@ -1193,12 +1193,22 @@ C/C++ modes configuration.
 #+end_src
 
 ** Markdown Mode
-Configuration to render Markdown mode and some other configuration.
+Configuration for Markdown mode.
 
 #+begin_src emacs-lisp
 ;; sudo apt install pandoc
 
 (setq markdown-command "pandoc -f markdown -t html5 --standalone")
+#+end_src
+
+** GNUMakefile Mode
+Configuration for Makefile mode.
+
+#+begin_src emacs-lisp
+(add-hook 'makefile-mode-hook
+          (lambda ()
+            (remove-hook 'write-file-functions
+                         'makefile-warn-suspicious-lines t)))
 #+end_src
 
 ** Java Mode

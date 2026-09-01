@@ -38,4 +38,4 @@ config.odt
 .emacs.custom.el
 user-lisp/.user-lisp-autoloads.el
 user-lisp/bb-mode.elc
-
+projects.eld

@@ -322,12 +322,12 @@ Configuration for Eldoc Mode. This is a built-in mode. Displays information
 about variables / functions in mninibuffer.
 
 #+begin_src emacs-lisp
-(defun my/eldoc-display-in-buffer-quietly (docs _interactive)
+(defun my-eldoc-display-in-buffer-quietly (docs _interactive)
   "Refresh the ElDoc buffer without ever popping up a window."
   (eldoc--format-doc-buffer docs))
 
 (setq eldoc-idle-delay 0.3)
-(setq eldoc-display-functions '(my/eldoc-display-in-buffer-quietly))
+(setq eldoc-display-functions '(my-eldoc-display-in-buffer-quietly))
 (setq eldoc-documentation-strategy #'eldoc-documentation-compose)
 (setq eldoc-echo-area-use-multiline-p nil)
 (add-hook 'prog-mode-hook #'eldoc-mode)
@@ -398,13 +398,13 @@ Configuration for the compile commands.
 (global-set-key (kbd "<f5>") #'compile)
 (global-set-key (kbd "<f6>") #'recompile)
 
-(defun my/switch-to-compilation-buffer (&rest _)
+(defun my-switch-to-compilation-buffer (&rest _)
   "Switch to *compilation* buffer after compile command."
   (when-let* ((buf (get-buffer "*compilation*")))
     (switch-to-buffer-other-window buf)))
 
-(advice-add 'compile :after #'my/switch-to-compilation-buffer)
-(advice-add 'recompile :after #'my/switch-to-compilation-buffer)
+(advice-add 'compile :after #'my-switch-to-compilation-buffer)
+(advice-add 'recompile :after #'my-switch-to-compilation-buffer)
 #+end_src
 
 ** Performance Tweaks
@@ -815,6 +815,11 @@ Enhanced search and navigation.
    ;; :preview-key "M-."
    :preview-key '(:debounce 0.1 any))
 
+  ;; Speed up async searching.
+  (setq consult-async-input-debounce 0.05)
+  (setq consult-async-input-throttle 0.1)
+  (setq consult-async-refresh-delay 0.05)
+
   ;; Optionally configure the narrowing key.
   ;; Both < and C-+ work reasonably well.
   (setq consult-narrow-key "<")) ;; "C-+"
@@ -981,7 +986,7 @@ capf extensions for corfu.
   ;; miss valid candidates. The buster re-queries the server as you type.
   (advice-add 'eglot-completion-at-point :around #'cape-wrap-buster)
 
-  (defun my/eglot-capf ()
+  (defun my-eglot-capf ()
     (if (eglot-managed-p)
         (setq-local completion-at-point-functions
                     (list #'cape-file
@@ -989,7 +994,7 @@ capf extensions for corfu.
                            #'eglot-completion-at-point
                            #'yasnippet-capf)))
       (kill-local-variable 'completion-at-point-functions)))
-  (add-hook 'eglot-managed-mode-hook #'my/eglot-capf))
+  (add-hook 'eglot-managed-mode-hook #'my-eglot-capf))
 #+end_src
 
 ** Eglot
@@ -1280,6 +1285,25 @@ Disable flycheck mode in Racket mode. It causes too much input lag.
 #+begin_src emacs-lisp
 (add-hook 'racket-mode-hook (lambda ()
                                 (flycheck-mode -1)))
+#+end_src
+
+** Verilog Mode
+Built-in Verilog mode configuration.
+
+#+begin_src emacs-lisp
+(defun my-verilog-style-hook ()
+  (setq verilog-indent-level 4)
+  (setq verilog-indent-level-module 4)
+  (setq verilog-indent-level-declaration 4)
+  (setq verilog-indent-level-behavioral 4)
+  (setq verilog-indent-level-directive 4)
+
+  (setq verilog-indent-lists nil)
+
+  (setq indent-tabs-mode nil)
+  (setq tab-width 4))
+
+(add-hook 'verilog-mode-hook #'my-verilog-style-hook)
 #+end_src
 
 * My Configuration

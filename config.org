@@ -337,12 +337,15 @@ about variables / functions in mninibuffer.
      docs)
    interactive))
 
-(setq eldoc-idle-delay 0.2)
+(setq eldoc-idle-delay 0.001)
 (setq eldoc-display-functions '(my-eldoc-echo-signature-only
                                 my-eldoc-display-in-buffer-quietly))
 (setq eldoc-documentation-strategy #'eldoc-documentation-compose)
 (setq eldoc-echo-area-use-multiline-p nil)
 (add-hook 'prog-mode-hook #'eldoc-mode)
+
+(with-eval-after-load 'eldoc
+  (eldoc-add-command 'mouse-drag-region 'mouse-set-point))
 #+end_src
 
 ** Repeat Mode
@@ -1032,7 +1035,7 @@ Built-in LSP client for Emacs.
   (eglot-autoshutdown t)                               ;; Shut down server when last buffer closes
   (eglot-sync-connect nil)                             ;; Don't block on slow connections
   (eglot-confirm-server-edits nil)                     ;; Don't preview edits before applying them
-  (eglot-send-changes-idle-time 0.2)                   ;; Debounce didChange notifications a bit
+  (eglot-send-changes-idle-time 0.5)                   ;; Debounce didChange notifications a bit
   (eglot-extend-to-xref t)                             ;; Manage files jumped to outside project (system headers)
   (eglot-events-buffer-config '(:size 0 :format full)) ;; Performance
   (eglot-code-action-indications nil)

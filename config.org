@@ -1294,6 +1294,15 @@ so we manage it manually.
 (setq auto-mode-alist (cons '("\\.bbclass$" . bb-mode) auto-mode-alist))
 #+end_src
 
+** UCF Mode
+Major mode to work with Xilinx UCF (User Constraint File) files. Not available
+on package repos.
+
+#+begin_src emacs-lisp
+(autoload 'ucf-mode "ucf-mode" "Xilinx UCF mode" t)
+(add-to-list 'auto-mode-alist '("\\.ucf\\'" . ucf-mode))
+#+end_src
+
 ** Racket Mode
 Disable flycheck mode in Racket mode. It causes too much input lag.
 

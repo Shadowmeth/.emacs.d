@@ -37,5 +37,5 @@ config.html
 config.odt
 .emacs.custom.el
 user-lisp/.user-lisp-autoloads.el
-user-lisp/bb-mode.elc
+user-lisp/*.elc
 projects.eld

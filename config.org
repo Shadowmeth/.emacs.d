@@ -948,6 +948,12 @@ right.
   :after (flycheck eglot)
   :config
   (global-flycheck-eglot-mode +1))
+
+(use-package flycheck-rust)
+(with-eval-after-load 'rust-mode
+  (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
+(with-eval-after-load 'rust-ts-mode
+  (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
 #+end_src
 
 ** Yasnippets
@@ -1143,6 +1149,11 @@ LSP configurations for all the servers I use.
   (add-to-list 'eglot-server-programs
                '((cmake-mode cmake-ts-mode) . ("neocmakelsp" "stdio")))
 
+  ;; Rust
+  ;; rustup component add rust-analyzer
+  (add-to-list 'eglot-server-programs
+               '(rust-mode rust-ts-mode) . ("rust-analyzer"))
+
   ;; Java
   ;; JDK: sudo apt install openjdk-21-jdk (jdtls needs 21+ to run)
   ;; jdtls: tarball in ~/.local/opt/jdtls, launcher on PATH
@@ -1162,7 +1173,9 @@ LSP configurations for all the servers I use.
 
   (setq-default eglot-workspace-configuration
                 '(:rust-analyzer
-                  (:checkOnSave :json-false))))
+                  (:checkOnSave t
+                                :cargo (:allFeatures t)
+                                :procMacro (:enable t)))))
 #+end_src
 
 ** DAPE Mode

@@ -1173,7 +1173,7 @@ LSP configurations for all the servers I use.
 
   (setq-default eglot-workspace-configuration
                 '(:rust-analyzer
-                  (:checkOnSave t
+                  (:checkOnSave :json-false
                                 :cargo (:allFeatures t)
                                 :procMacro (:enable t)))))
 #+end_src

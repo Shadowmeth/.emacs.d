@@ -7,6 +7,7 @@ Setup package management. Note that *use-package-always-ensure* is set to t, so 
 don't need to add *:ensure t* to every use-package package specification.
 
 #+begin_src emacs-lisp
+;; -*- lexical-binding: t; -*-
 (require 'package)
 (setq package-archives
       '(("gnu"    . "https://elpa.gnu.org/packages/")
@@ -1198,6 +1199,25 @@ lazy!
   (add-hook 'dape-start-hook (lambda () (save-some-buffers t t)))
   ;; Kill compile buffer on build success
   (add-hook 'dape-compile-hook #'kill-buffer))
+
+
+(with-eval-after-load 'dape
+  ;; lldb
+  ;; sudo apt install lldb
+  (add-to-list 'dape-configs
+               `(lldb-dap-rust-term
+                 modes (rust-mode rust-ts-mode)
+                 ensure dape-ensure-command
+                 command "lldb-dap"
+                 :type "lldb-dap"
+                 :request "launch"
+                 :cwd dape-cwd
+                 :program (lambda ()
+                            (file-name-concat
+                             (dape-cwd) "target" "debug"
+                             (file-name-nondirectory
+                              (directory-file-name (dape-cwd)))))
+                 :console "integratedTerminal")))
 #+end_src
 
 * Modes Configuration

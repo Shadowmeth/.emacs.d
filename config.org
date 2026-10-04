@@ -1200,16 +1200,18 @@ lazy!
   ;; Kill compile buffer on build success
   (add-hook 'dape-compile-hook #'kill-buffer))
 
-
 (with-eval-after-load 'dape
-  ;; lldb
-  ;; sudo apt install lldb
-  (add-to-list 'dape-configs
-               `(lldb-dap-rust-term
+  ;; codelldb
+  ;; Look at the codelldb vsix extension
+  (ADD-to-list 'dape-configs
+               `(codelldb-rust-mine
                  modes (rust-mode rust-ts-mode)
                  ensure dape-ensure-command
-                 command "lldb-dap"
-                 :type "lldb-dap"
+                 command ,(expand-file-name
+                           "~/.emacs.d/debug-adapters/codelldb/extension/adapter/codelldb")
+                 command-args ("--port" :autoport)
+                 port :autoport
+                 :type "lldb"
                  :request "launch"
                  :cwd dape-cwd
                  :program (lambda ()
@@ -1217,7 +1219,9 @@ lazy!
                              (dape-cwd) "target" "debug"
                              (file-name-nondirectory
                               (directory-file-name (dape-cwd)))))
-                 :console "integratedTerminal")))
+                 :args []
+                 :stopOnEntry nil
+                 :sourceLanguages ["rust"])))
 #+end_src
 
 * Modes Configuration

@@ -1203,7 +1203,7 @@ lazy!
 (with-eval-after-load 'dape
   ;; codelldb
   ;; Look at the codelldb vsix extension
-  (ADD-to-list 'dape-configs
+  (add-to-list 'dape-configs
                `(codelldb-rust-mine
                  modes (rust-mode rust-ts-mode)
                  ensure dape-ensure-command

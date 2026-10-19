@@ -923,7 +923,8 @@ of the Vertico minibuffer UI.
   :config
   (setq
    corfu-separator ?\s
-   corfu-popupinfo-max-height 20)
+   corfu-popupinfo-max-height 20
+   corfu-left-margin-width 0)
 
   (global-corfu-mode)
   (corfu-history-mode))

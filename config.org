@@ -710,6 +710,16 @@ Fuzzy matching in Emacs.
   (completion-category-overrides '((file (styles partial-completion))))
   (completion-category-defaults nil) ;; Disable defaults, use our settings.
   (completion-pcm-leading-wildcard t)) ;; Emacs 31: partial-completion behaves like substring.
+
+(defun my-orderless-basename (component)
+  "Match COMPONENT only in the filename, not in the folders before it."
+  (concat (regexp-quote component) "[^/]*\\'"))
+
+(orderless-define-completion-style my-orderless-file-name
+  (orderless-matching-styles '(my-orderless-basename)))
+
+(add-to-list 'completion-category-overrides
+             '(project-file (styles my-orderless-file-name)))
 #+end_src
 
 ** Vertico

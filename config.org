@@ -1013,8 +1013,9 @@ capf extensions for corfu.
   :init
   ;; Global fallback capfs (non-Eglot buffers)
   (add-hook 'completion-at-point-functions #'cape-file)
-  (add-hook 'completion-at-point-functions
-            (cape-capf-super #'cape-dabbrev #'yasnippet-capf #'cape-keyword))
+  (add-hook 'completion-at-point-functions #'cape-dabbrev)
+  (add-hook 'completion-at-point-functions #'yasnippet-capf)
+  (add-hook 'completion-at-point-functions #'cape-keyword)
   :config
   (advice-add #'yasnippet-capf                    :around #'cape-wrap-noninterruptible)
   (advice-add #'cape-dabbrev                      :around #'cape-wrap-noninterruptible)

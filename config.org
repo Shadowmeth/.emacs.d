@@ -385,6 +385,9 @@ All the indentation settings for every mode goes here.
             (setq indent-tabs-mode nil)
             (c-set-offset 'inline-open 0)))
 
+(setopt c-ts-mode-indent-style 'linux
+        c-ts-indent-offset 4)
+
 ;; Java
 (add-hook 'java-mode-hook
           (lambda ()
@@ -942,7 +945,8 @@ of the Vertico minibuffer UI.
    corfu-left-margin-width 0)
 
   (global-corfu-mode)
-  (corfu-history-mode))
+  (corfu-history-mode)
+  (corfu-popupinfo-mode))
 #+end_src
 
 ** Flycheck
@@ -1009,9 +1013,8 @@ capf extensions for corfu.
   :init
   ;; Global fallback capfs (non-Eglot buffers)
   (add-hook 'completion-at-point-functions #'cape-file)
-  (add-hook 'completion-at-point-functions #'cape-dabbrev)
-  (add-hook 'completion-at-point-functions #'yasnippet-capf)
-  (add-hook 'completion-at-point-functions #'cape-keyword)
+  (add-hook 'completion-at-point-functions
+            (cape-capf-super #'cape-dabbrev #'yasnippet-capf #'cape-keyword))
   :config
   (advice-add #'yasnippet-capf                    :around #'cape-wrap-noninterruptible)
   (advice-add #'cape-dabbrev                      :around #'cape-wrap-noninterruptible)
@@ -1032,7 +1035,22 @@ capf extensions for corfu.
                            #'eglot-completion-at-point
                            #'yasnippet-capf)))
       (kill-local-variable 'completion-at-point-functions)))
-  (add-hook 'eglot-managed-mode-hook #'my-eglot-capf))
+  (add-hook 'eglot-managed-mode-hook #'my-eglot-capf)
+
+  (defun my-merge-dabbrev ()
+    "Combine the mode's own completion function with dabbrev."
+    (when (and (local-variable-p 'completion-at-point-functions)
+               (not (and (fboundp 'eglot-managed-p) (eglot-managed-p))))
+      (let ((first (car completion-at-point-functions)))
+        (when (and (functionp first)
+                   (not (memq first '(cape-file cape-dabbrev))))
+          (setq-local completion-at-point-functions
+                      (cons (cape-capf-super first #'cape-dabbrev)
+                            (cdr completion-at-point-functions)))))))
+
+  ;; Depth 90 runs this after the mode has added its own function.
+  (add-hook 'prog-mode-hook #'my-merge-dabbrev 90)
+  (add-hook 'text-mode-hook #'my-merge-dabbrev 90))
 #+end_src
 
 ** Eglot
@@ -1377,6 +1395,9 @@ Built-in Verilog mode configuration.
 
   (setq verilog-indent-lists nil)
 
+  ;; Disable automatic new line on semicolon
+  (setq verilog-auto-newline nil)
+
   (setq indent-tabs-mode nil)
   (setq tab-width 4))
 
@@ -1415,4 +1436,32 @@ By default Compilation Mode and Comint Modes don't render ASCII escape sequences
   (add-hook 'compilation-filter-hook #'ansi-color-compilation-filter))
 (with-eval-after-load 'shell
   (add-hook 'comint-output-filter-functions #'ansi-color-process-output))
+#+end_src
+
+** Force Kill All Buffers
+Forcefully kill all the buffers. Unsaved changes are ignored and buffers running
+any processes will also kill the processes. Use with *caution*!
+
+#+begin_src emacs-lisp
+(defun my/kill-all-buffers ()
+  "Kill every buffer without asking for confirmation.
+Unsaved changes are discarded and running processes are killed.
+Internal buffers (names starting with a space) are left alone."
+  (interactive)
+  ;; Shut down LSP servers cleanly first.
+  (when (fboundp 'eglot-shutdown-all)
+    (ignore-errors (eglot-shutdown-all)))
+  ;; Turn off the "buffer has a running process, kill it?" style questions.
+  (let ((kill-buffer-query-functions nil))
+    (dolist (buf (buffer-list))
+      (when (and (buffer-live-p buf)
+                 (not (string-prefix-p " " (buffer-name buf))))
+        (with-current-buffer buf
+          ;; Skip "buffer modified; kill anyway?"
+          (set-buffer-modified-p nil)
+          ;; Skip "process is running; kill it?"
+          (when-let* ((proc (get-buffer-process buf)))
+            (set-process-query-on-exit-flag proc nil)))
+        (kill-buffer buf))))
+  (delete-other-windows))
 #+end_src

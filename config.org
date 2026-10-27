@@ -1168,7 +1168,6 @@ LSP configurations for all the servers I use.
                     "--completion-style=detailed"
                     "--all-scopes-completion=true"
                     "--header-insertion=never"
-                    "--limit-results=600"
                     "--header-insertion-decorators=0")))
   
   ;; Python

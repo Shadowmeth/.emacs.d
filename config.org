@@ -945,8 +945,7 @@ of the Vertico minibuffer UI.
    corfu-left-margin-width 0)
 
   (global-corfu-mode)
-  (corfu-history-mode)
-  (corfu-popupinfo-mode))
+  (corfu-history-mode))
 #+end_src
 
 ** Flycheck

@@ -385,8 +385,9 @@ All the indentation settings for every mode goes here.
             (setq indent-tabs-mode nil)
             (c-set-offset 'inline-open 0)))
 
-(setopt c-ts-mode-indent-style 'linux
-        c-ts-indent-offset 4)
+(with-eval-after-load 'c-ts-mode
+  (setopt c-ts-mode-indent-style 'bsd
+          c-ts-indent-offset 4))
 
 ;; Java
 (add-hook 'java-mode-hook

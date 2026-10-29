@@ -545,9 +545,7 @@ Install treesitter grammars for certain languages and use ts-modes.
       treesit-enabled-modes '(rust-ts-mode
                               typescript-ts-mode
                               tsx-ts-mode
-                              js-ts-mode
-                              c++-ts-mode
-                              c-ts-mode))
+                              js-ts-mode))
 
 ;; Grammars Emacs doesn't know about still need a source
 (add-to-list 'treesit-language-source-alist

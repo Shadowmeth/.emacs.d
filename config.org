@@ -338,7 +338,7 @@ about variables / functions in mninibuffer.
      docs)
    interactive))
 
-(setq eldoc-idle-delay 0.001)
+(setq eldoc-idle-delay 0.3)
 (setq eldoc-display-functions '(my-eldoc-echo-signature-only
                                 my-eldoc-display-in-buffer-quietly))
 (setq eldoc-documentation-strategy #'eldoc-documentation-compose)
@@ -924,6 +924,9 @@ of the Vertico minibuffer UI.
   (corfu-auto nil)
   (corfu-cycle t)
   (corfu-popupinfo-delay 0.1)
+  (corfu-auto-delay 0.1)
+  (corfu-auto-trigger ".") ;; popup right after "foo."
+  (corfu-auto-prefix 1)
   (corfu-preselect 'first)
   (corfu-quit-no-match t)
   (corfu-on-exact-match 'show)
@@ -933,8 +936,6 @@ of the Vertico minibuffer UI.
   (:map corfu-map
         ("TAB" . corfu-insert)
         ("<tab>" . corfu-insert)
-        ("RET" . corfu-insert)
-        ("<return>" . corfu-insert)
         ("C-n" . corfu-next)
         ("C-p" . corfu-previous))
   :config
@@ -942,8 +943,12 @@ of the Vertico minibuffer UI.
    corfu-separator ?\s
    corfu-popupinfo-max-height 20
    corfu-left-margin-width 0)
+  
+  (keymap-unset corfu-map "RET")
+  (keymap-unset corfu-map "<return>")
 
   (global-corfu-mode)
+  (corfu-popupinfo-mode)
   (corfu-history-mode))
 #+end_src
 
@@ -1089,7 +1094,9 @@ Built-in LSP client for Emacs.
 
   (add-hook 'eglot-managed-mode-hook (lambda ()
                                        (eglot-inlay-hints-mode -1)
-                                       (eglot-semantic-tokens-mode -1))))
+                                       (eglot-semantic-tokens-mode -1)
+                                       (setq-local eldoc-documentation-strategy
+                                                   #'eldoc-documentation-compose-eagerly))))
 
 (with-eval-after-load 'eglot
   (add-to-list 'completion-category-overrides '(eglot (styles orderless)))
@@ -1185,7 +1192,7 @@ LSP configurations for all the servers I use.
   ;; Rust
   ;; rustup component add rust-analyzer
   (add-to-list 'eglot-server-programs
-               '(rust-mode rust-ts-mode) . ("rust-analyzer"))
+               '((rust-mode rust-ts-mode) . ("rust-analyzer")))
 
   ;; Java
   ;; JDK: sudo apt install openjdk-21-jdk (jdtls needs 21+ to run)

@@ -1165,9 +1165,7 @@ LSP configurations for all the servers I use.
   ;; pipx install basedpyright ruff
   (add-to-list 'eglot-server-programs
                '((python-mode python-ts-mode)
-                 . ("rass" "--"
-                    "basedpyright-langserver" "--stdio" "--"
-                    "ruff" "server")))
+                 . ("basedpyright-langserver" "--stdio")))
 
   ;; CMake
   ;; cargo install neocmakelsp

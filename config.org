@@ -60,21 +60,6 @@ pressed.
 (context-menu-mode +1)
 #+end_src
 
-** Pdf Tools
-View PDFs in Emacs.
-
-#+begin_src emacs-lisp
-(use-package saveplace-pdf-view
-  :config
-  (save-place-mode 1))
-
-(use-package org-pdftools)
-(use-package pdf-tools
-  :config
-  (pdf-loader-install)
-  (add-hook 'pdf-view-mode-hook #'pdf-view-roll-minor-mode))
-#+end_src
-
 ** Count with Isearch Results
 Show number of matches found when using *isearch* and *isearch-backward*.
 Like (5/9).

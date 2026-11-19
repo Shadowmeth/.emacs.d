@@ -1451,7 +1451,7 @@ their documentation strings. Use mm-url to decode those before rendering.
 (require 'mm-url)
 
 (defun my-decode-html-entities (s)
-  "Decode HTML entities in S, turning &nsbp into a normal space."
+  "Decode HTML entities in S, turning &nbsp into a normal space."
   (with-temp-buffer
     (insert s)
     (mm-url-decode-entities-nbsp)
@@ -1460,7 +1460,7 @@ their documentation strings. Use mm-url to decode those before rendering.
 (defun my-eglot-decode-entities (args)
   "Decode HTML entities in LSP docs before Eglot shows them."
   (let ((markup (car args)))
-    (cons (cond ((stringp markup) (my-decode-html-entities))
+    (cons (cond ((stringp markup) (my-decode-html-entities markup))
                 ((plist-get markup :value)
                  (plist-put (copy-sequence markup) :value
                             (my-decode-html-entities (plist-get markup :value))))

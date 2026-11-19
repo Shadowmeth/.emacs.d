@@ -933,7 +933,6 @@ of the Vertico minibuffer UI.
   (keymap-unset corfu-map "<return>")
 
   (global-corfu-mode)
-  (corfu-popupinfo-mode)
   (corfu-history-mode))
 #+end_src
 
@@ -1452,4 +1451,32 @@ Internal buffers (names starting with a space) are left alone."
             (set-process-query-on-exit-flag proc nil)))
         (kill-buffer buf))))
   (delete-other-windows))
+#+end_src
+
+** Proper Rendering of Markdown in Eglot
+Some servers (ex., basedpyright) return HTML entities such *&nsbp* and *&gt* in
+their documentation strings. Use mm-url to decode those before rendering.
+
+#+begin_src emacs-lisp
+(require 'mm-url)
+
+(defun my-decode-html-entities (s)
+  "Decode HTML entities in S, turning &nsbp into a normal space."
+  (with-temp-buffer
+    (insert s)
+    (mm-url-decode-entities-nbsp)
+    (buffer-string)))
+
+(defun my-eglot-decode-entities (args)
+  "Decode HTML entities in LSP docs before Eglot shows them."
+  (let ((markup (car args)))
+    (cons (cond ((stringp markup) (my-decode-html-entities))
+                ((plist-get markup :value)
+                 (plist-put (copy-sequence markup) :value
+                            (my-decode-html-entities (plist-get markup :value))))
+                (t markup))
+          (cdr args))))
+
+(with-eval-after-load 'eglot
+  (advice-add 'eglot--format-markup :filter-args #'my-eglot-decode-entities))
 #+end_src

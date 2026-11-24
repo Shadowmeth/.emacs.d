@@ -893,6 +893,11 @@ moving up and down. Corfu is the minimalistic in-buffer completion counterpart
 of the Vertico minibuffer UI.
 
 #+begin_src emacs-lisp
+(use-package nerd-icons-corfu
+  :after corfu
+  :config
+  (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
+
 (use-package corfu
   :demand t ;; Don't lazy load
   :custom
@@ -901,7 +906,7 @@ of the Vertico minibuffer UI.
   (corfu-popupinfo-delay 0.1)
   (corfu-auto-delay 0.1)
   (corfu-auto-trigger ".") ;; popup right after "foo."
-  (corfu-auto-prefix 1)
+  (corfu-auto-prefix 2)
   (corfu-preselect 'first)
   (corfu-quit-no-match t)
   (corfu-on-exact-match 'show)
@@ -999,12 +1004,6 @@ capf extensions for corfu.
   (advice-add #'cape-keyword                      :around #'cape-wrap-noninterruptible)
   (advice-add #'cape-file                         :around #'cape-wrap-noninterruptible)
 
-  ;; Cache buster (corfu wiki): Corfu fetches the candidate table once per
-  ;; completion session, and Eglot's capf never refreshes it -- servers cap
-  ;; how many candidates they send, so typing further into a session can
-  ;; miss valid candidates. The buster re-queries the server as you type.
-  (advice-add 'eglot-completion-at-point :around #'cape-wrap-buster)
-
   (defun my-eglot-capf ()
     (if (eglot-managed-p)
         (setq-local completion-at-point-functions
@@ -1035,6 +1034,14 @@ capf extensions for corfu.
 Built-in LSP client for Emacs.
 
 #+begin_src emacs-lisp
+(use-package eglot-booster
+  :vc (:url "https://github.com/jdtsmith/eglot-booster")
+  :after eglot
+  :config
+  ;; Emacs 30+ already reads JSON fast; let the booster only handle I/O
+  (setq eglot-booster-io-only t)
+  (eglot-booster-mode))
+
 (use-package eglot
   :ensure nil
   :hook (((python-mode
@@ -1469,4 +1476,37 @@ their documentation strings. Use mm-url to decode those before rendering.
 
 (with-eval-after-load 'eglot
   (advice-add 'eglot--format-markup :filter-args #'my-eglot-decode-entities))
+#+end_src
+
+** Install LSP Servers
+Install the LSP servers and tools I use. Only installs the ones thar are
+missing. Use *C-u M-x my/install-lsp-servers* to reinstall all of them.
+
+#+begin_src emacs-lisp
+(defvar my-lsp-servers
+  '((:bin "clangd"                  :cmd "sudo apt install -y clangd")
+    (:bin "clang-format"            :cmd "sudo apt install -y clang-format")
+    (:bin "clang-tidy"              :cmd "sudo apt install -y clang-tidy")
+    (:bin "neocmakelsp"             :cmd "cargo install neocmakelsp")
+    (:bin "basedpyright-langserver" :cmd "pipx install basedpyright")
+    (:bin "emacs-lsp-booster"       :cmd "cargo install emacs-lsp-booster"))
+  "LSP servers and tools, each with its program name and install command.")
+
+(defun my/install-lsp-servers (&optional force)
+  "Install the missing programs listed in `my-lsp-servers`.
+With a prefix argument FORCE, reinstall all of them."
+  (interactive "P")
+  (let ((cmds (delq nil
+                    (mapcar (lambda (server)
+                              (when (or force
+                                        (not (executable-find
+                                              (plist-get server :cmd))))
+                                (plist-get server :cmd)))
+                            my-lsp-servers))))
+    (if (null cmds)
+        (message "All LSP servers and tools are already installed")
+      ;; t = run in comint mode, so sudo can ask for the password
+      (compilation-start (mapconcat #'identity cmds " && ")
+                         t
+                         (lambda (_) "*install-lsp-servers*")))))
 #+end_src

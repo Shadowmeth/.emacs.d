@@ -999,10 +999,18 @@ capf extensions for corfu.
   (add-hook 'completion-at-point-functions #'yasnippet-capf)
   (add-hook 'completion-at-point-functions #'cape-keyword)
   :config
-  (advice-add #'yasnippet-capf                    :around #'cape-wrap-noninterruptible)
-  (advice-add #'cape-dabbrev                      :around #'cape-wrap-noninterruptible)
-  (advice-add #'cape-keyword                      :around #'cape-wrap-noninterruptible)
-  (advice-add #'cape-file                         :around #'cape-wrap-noninterruptible)
+  (defun my-cape-noninterruptible (orig &rest args)
+    "Make ORIG non-interruptible when Corfu uses it as a completion source.
+When called as a command (with arguments), call it normally"
+    (if args
+        (apply orig args)
+      (cape-wrap-noninterruptible orig)))
+
+  (dolist (fn '(yasnippet-capf cape-dabbrev cape-keyword cape-file))
+    (advice-add fn :around #'my-cape-noninterruptible))
+
+  ;; M-/ shows a Corfu popup with only dabbrev completions
+  (keymap-global-set "M-/" #'cape-dabbrev)
 
   (defun my-eglot-capf ()
     (if (eglot-managed-p)
@@ -1071,6 +1079,7 @@ Built-in LSP client for Emacs.
 
   :config
   (fset #'jsonrpc--log-event #'ignore) ;; Performance
+  (setq eglot-cache-session-completions nil)
   (setq mode-line-misc-info (assq-delete-all 'eglot--managed-mode mode-line-misc-info)) ;; Hide Eglot info on mode line
 
   (add-hook 'eglot-managed-mode-hook (lambda ()
@@ -1107,6 +1116,10 @@ Show LSP symbols.
             (lambda ()
               (setq-local symbols-outline-fetch-fn #'symbols-outline-lsp-fetch)))
   :config
+  ;; Nerd icons instead of SVG icons. With SVG icons the line prefix is a
+  ;; plain-byte string, and writing the "," indicator into it errors with
+  ;; "Attempt to store non-byte value into unibyte string"
+  (setq symbols-outline-use-nerd-icon-in-gui t)
   (setq symbols-outline-window-position 'left)
   (symbols-outline-follow-mode))
 #+end_src
@@ -1492,7 +1505,7 @@ missing. Use *C-u M-x my/install-lsp-servers* to reinstall all of them.
     (:bin "emacs-lsp-booster"       :cmd "cargo install emacs-lsp-booster"))
   "LSP servers and tools, each with its program name and install command.")
 
-(defun my/install-lsp-servers (&optional force)
+(defun my/install-tools (&optional force)
   "Install the missing programs listed in `my-lsp-servers`.
 With a prefix argument FORCE, reinstall all of them."
   (interactive "P")

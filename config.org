@@ -1492,8 +1492,8 @@ their documentation strings. Use mm-url to decode those before rendering.
 #+end_src
 
 ** Install LSP Servers
-Install the LSP servers and tools I use. Only installs the ones thar are
-missing. Use *C-u M-x my/install-lsp-servers* to reinstall all of them.
+Install the LSP servers, DAP adapters and tools I use. Only installs the ones
+that are missing. Use *C-u M-x my/install-tools* to reinstall all of them.
 
 #+begin_src emacs-lisp
 (defvar my-lsp-servers

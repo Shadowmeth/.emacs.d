@@ -1513,7 +1513,7 @@ With a prefix argument FORCE, reinstall all of them."
                     (mapcar (lambda (server)
                               (when (or force
                                         (not (executable-find
-                                              (plist-get server :cmd))))
+                                              (plist-get server :bin))))
                                 (plist-get server :cmd)))
                             my-lsp-servers))))
     (if (null cmds)

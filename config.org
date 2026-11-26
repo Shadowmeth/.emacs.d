@@ -296,10 +296,6 @@ Configuration for Eldoc Mode. This is a built-in mode. Displays information
 about variables / functions in mninibuffer.
 
 #+begin_src emacs-lisp
-(defun my-eldoc-display-in-buffer-quietly (docs _interactive)
-  "Refresh the ElDoc buffer without ever popping up a window."
-  (eldoc--format-doc-buffer docs))
-
 (defun my-eldoc-echo-signature-only (docs interactive)
   "In Eglot buffers, show only the function signature in the echo area."
   (eldoc-display-in-echo-area
@@ -311,9 +307,11 @@ about variables / functions in mninibuffer.
      docs)
    interactive))
 
-(setq eldoc-idle-delay 0.3)
+(setq eldoc-idle-delay 0.1)
+;; Built-in `eldoc-display-in-buffer' fills the doc buffer quietly on normal
+;; updates, and only shows its window when `eldoc' is called by hand.
 (setq eldoc-display-functions '(my-eldoc-echo-signature-only
-                                my-eldoc-display-in-buffer-quietly))
+                                eldoc-display-in-buffer))
 (setq eldoc-documentation-strategy #'eldoc-documentation-compose)
 (setq eldoc-echo-area-use-multiline-p nil)
 (add-hook 'prog-mode-hook #'eldoc-mode)
@@ -1134,7 +1132,7 @@ provide these so we have to manually set them up.
     "i" #'eglot-find-implementation
     "t" #'eglot-show-type-hierarchy
     "c" #'eglot-show-call-hierarchy
-    "h" #'eldoc-doc-buffer
+    "h" #'eldoc
     "n" #'flycheck-next-error
     "p" #'flycheck-previous-error
     "l" #'flycheck-list-errors

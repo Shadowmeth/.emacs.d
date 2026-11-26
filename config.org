@@ -40,18 +40,6 @@ Include the folder in load-path.
 (add-to-list 'load-path (expand-file-name "user-lisp/" user-emacs-directory))
 #+end_src
 
-** Whitespace Mode
-Clearly show the whitespaces.
-
-#+begin_src emacs-lisp :tangle no
-(use-package whitespace
-  :ensure nil
-  :config
-  (setq whitespace-style '(face tabs spaces space-mark tab-mark))
-  (add-hook 'prog-mode-hook #'whitespace-mode)
-  (add-hook 'prog-mode-hook #'whitespace-mode))
-#+end_src
-
 ** Context Menu Mode
 Built-in mode that shows context based options when right click on mouse is
 pressed.
@@ -1522,4 +1510,47 @@ With a prefix argument FORCE, reinstall all of them."
       (compilation-start (mapconcat #'identity cmds " && ")
                          t
                          (lambda (_) "*install-lsp-servers*")))))
+#+end_src
+
+** Whitespace Dots Mode
+Show a dim dot for each trailing space at the end of a line, like Neovim's
+listchars "trail". Nothing else is marked and nothing gets a background color.
+Toggle with *M-x my-whitespace-dots-mode*.
+
+#+begin_src emacs-lisp
+(defface my-whitespace-dot
+  '((t :inherit shadow))
+  "Face for the dots shown in place of trailing spaces.")
+
+(defconst my-whitespace-dot-keywords
+  '(;; Trailing spaces: find the run, then mark each space in it.
+    ;; (string ?·) makes a new string for every space. If neighbouring
+    ;; spaces shared one string, Emacs would draw only one dot for the run.
+    (" +$"
+     (" " (progn (goto-char (match-beginning 0)) (match-end 0)) nil
+      (0 (list 'face 'my-whitespace-dot 'display (string ?·))))))
+  "Font-lock rules that show trailing spaces as dots.")
+
+(defun my-whitespace-dots--manage-display ()
+  "Make font-lock clear old dots when the text changes.
+Some modes (like Emacs Lisp) reset `font-lock-extra-managed-props' when
+font-lock starts, which drops `display' and leaves stale dots behind."
+  (when my-whitespace-dots-mode
+    (add-to-list (make-local-variable 'font-lock-extra-managed-props)
+                 'display)))
+
+(add-hook 'font-lock-mode-hook #'my-whitespace-dots--manage-display)
+
+(define-minor-mode my-whitespace-dots-mode
+  "Show trailing spaces as dim dots."
+  :lighter nil
+  (if my-whitespace-dots-mode
+      (progn
+        (my-whitespace-dots--manage-display)
+        (font-lock-add-keywords nil my-whitespace-dot-keywords 'append))
+    (font-lock-remove-keywords nil my-whitespace-dot-keywords))
+  (font-lock-flush))
+
+(add-hook 'prog-mode-hook #'my-whitespace-dots-mode)
+(add-hook 'conf-mode-hook #'my-whitespace-dots-mode)
 #+end_src

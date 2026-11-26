@@ -1107,10 +1107,12 @@ Show LSP symbols.
             (lambda ()
               (setq-local symbols-outline-fetch-fn #'symbols-outline-lsp-fetch)))
   :config
-  ;; Nerd icons instead of SVG icons. With SVG icons the line prefix is a
-  ;; plain-byte string, and writing the "," indicator into it errors with
-  ;; "Attempt to store non-byte value into unibyte string"
+  ;; Nerd icons instead of SVG icons
   (setq symbols-outline-use-nerd-icon-in-gui t)
+  ;; Plain ASCII marker for the current symbol. The default "›" can't be
+  ;; written into some line prefixes and causes "Attempt to store non-byte
+  ;; value into unibyte string".
+  (setq symbols-outline-current-symbol-indicator ">")
   (setq symbols-outline-window-position 'left)
   (symbols-outline-follow-mode))
 #+end_src

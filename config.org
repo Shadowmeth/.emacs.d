@@ -999,6 +999,9 @@ When called as a command (with arguments), call it normally"
 
   ;; M-/ shows a Corfu popup with only dabbrev completions
   (keymap-global-set "M-/" #'cape-dabbrev)
+  ;; Let dabbrev look in all code and text buffers, not just ones in the
+  ;; same major mode
+  (setq cape-dabbrev-buffer-function #'cape-text-buffers)
 
   (defun my-eglot-capf ()
     (if (eglot-managed-p)

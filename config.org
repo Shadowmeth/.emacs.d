@@ -1400,6 +1400,36 @@ Built-in Verilog mode configuration.
 (add-hook 'verilog-mode-hook #'my-verilog-style-hook)
 #+end_src
 
+** Python Mode
+*TAB* completes when there is code before point, or when an empty line is already
+at a valid indentation level. Otherwise it fixes the indentation.
+
+#+begin_src emacs-lisp
+(defun my-python-tab ()
+  "TAB for Python buffers.
+Code before point: complete.
+Indentation not at a valid level: fix it.
+Empty line already at a valid level: compelete.
+Otherwise: leave the line alone."
+  (interactive)
+  (let ((in-indent (looking-back "^[[:space:]]*" (line-beginning-position)))
+        (valid (memq (current-indentation) (python-indent-calculate-levels)))
+        (blank (save-excursion
+                 (beginning-of-line)
+                 (looking-at-p "[[:space:]]*$"))))
+    (cond ((not in-indent)
+           (completion-at-point))
+          ((not valid)
+           (indent-for-tab-command))
+          (blank
+           (back-to-indentation)
+           (completion-at-point)))))
+
+(with-eval-after-load 'python
+  (keymap-set python-mode-map "TAB" #'my-python-tab)
+  (keymap-set python-ts-mode-map "TAB" #'my-python-tab))
+#+end_src
+
 * My Configuration
 All the useful snippets of codes that I have written over the years go here.
 This should be the last thing in the config obviously.

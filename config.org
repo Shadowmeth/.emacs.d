@@ -1005,6 +1005,10 @@ When called as a command (with arguments), call it normally"
   ;; same major mode
   (setq cape-dabbrev-buffer-function #'cape-text-buffers)
 
+  ;; Ask the server again whenever the typed text changes, instead of
+  ;; only filtering the list from when the popup opened
+  (advice-add 'eglot-completion-at-point :around #'cape-wrap-buster)
+
   (defun my-eglot-capf ()
     (if (eglot-managed-p)
         (setq-local completion-at-point-functions
@@ -1062,7 +1066,7 @@ Built-in LSP client for Emacs.
   (eglot-autoshutdown t)                               ;; Shut down server when last buffer closes
   (eglot-sync-connect nil)                             ;; Don't block on slow connections
   (eglot-confirm-server-edits nil)                     ;; Don't preview edits before applying them
-  (eglot-send-changes-idle-time 0.5)                   ;; Debounce didChange notifications a bit
+  (eglot-send-changes-idle-time 0.3)                   ;; Debounce didChange notifications a bit
   (eglot-extend-to-xref t)                             ;; Manage files jumped to outside project (system headers)
   (eglot-events-buffer-config '(:size 0 :format full)) ;; Performance
   (eglot-code-action-indications nil)

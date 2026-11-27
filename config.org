@@ -378,6 +378,10 @@ All the indentation settings for every mode goes here.
                           (display-line-numbers-mode +1)
                           (setq indent-tabs-mode nil)
                           (setq tab-width 4)))
+
+;; Lua
+(add-hook 'lua-mode-hook (lambda ()
+                           (setq lua-indent-level 4)))
 #+end_src
 
 ** Compilation Mode
@@ -1160,12 +1164,12 @@ LSP configurations for all the servers I use.
                     "--all-scopes-completion=true"
                     "--header-insertion=never"
                     "--header-insertion-decorators=0")))
-  
+
   ;; Python
-  ;; pipx install basedpyright ruff
+  ;; pipx install ty ruff
   (add-to-list 'eglot-server-programs
                '((python-mode python-ts-mode)
-                 . ("basedpyright-langserver" "--stdio")))
+                 . ("rass" "tyruff")))
 
   ;; CMake
   ;; cargo install neocmakelsp
@@ -1482,7 +1486,7 @@ their documentation strings. Use mm-url to decode those before rendering.
   (advice-add 'eglot--format-markup :filter-args #'my-eglot-decode-entities))
 #+end_src
 
-** Install LSP Servers
+** Install Tools
 Install the LSP servers, DAP adapters and tools I use. Only installs the ones
 that are missing. Use *C-u M-x my/install-tools* to reinstall all of them.
 
@@ -1493,7 +1497,10 @@ that are missing. Use *C-u M-x my/install-tools* to reinstall all of them.
     (:bin "clang-tidy"              :cmd "sudo apt install -y clang-tidy")
     (:bin "neocmakelsp"             :cmd "cargo install neocmakelsp")
     (:bin "basedpyright-langserver" :cmd "pipx install basedpyright")
-    (:bin "emacs-lsp-booster"       :cmd "cargo install emacs-lsp-booster"))
+    (:bin "emacs-lsp-booster"       :cmd "cargo install emacs-lsp-booster")
+    (:bin "ty"                      :cmd "pipx install ty")
+    (:bin "rass"                    :cmd "pipx install rassumfrassum" )
+    (:bin "ruff"                    :cmd "pipx install ruff" ))
   "LSP servers and tools, each with its program name and install command.")
 
 (defun my/install-tools (&optional force)

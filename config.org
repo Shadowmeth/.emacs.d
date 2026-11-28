@@ -1447,6 +1447,7 @@ Keys under *C-c TAB*:
   (tabspaces-session-project-session-store
    (expand-file-name "tabspaces-sessions/" user-emacs-directory))
   :config
+  (setq tab-bar-select-restore-windows nil)
   ;; Make consult's buffer lists (C-x b, C-x p b, ...) show only
   ;; the current workspace's buffers while tabspaces is on.
   ;; Needs consult 2.7 or newer.

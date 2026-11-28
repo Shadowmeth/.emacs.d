@@ -39,3 +39,4 @@ config.odt
 user-lisp/.user-lisp-autoloads.el
 user-lisp/*.elc
 *.eld
+tabsession.el

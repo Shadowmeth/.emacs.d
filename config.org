@@ -1254,6 +1254,58 @@ lazy!
                  :sourceLanguages ["rust"])))
 #+end_src
 
+** Tabspaces
+Workspaces per project, like tmux sessions. Each tab-bar tab gets its own
+isolated buffer list, so *C-x b* (and consult) only show the current
+workspace's buffers. *C-x p p* opens a project in its own tab, or switches to
+it if it's already open. Tabs keep their window layout while switching, and
+sessions (buffers, splits and sizes) are saved on exit and restored on
+startup. Running processes like shells and Ghostel terminals are not revived.
+
+Installed from Codeberg (where development moved in May 2026) to get the
+latest version. Update with *M-x package-vc-upgrade*, not *package-upgrade*.
+
+Keys under *C-c TAB*:
+- *s* switch to or create a workspace
+- *o* open or create a project workspace
+- *b* switch to a buffer in this workspace
+- *d* close the workspace (buffers stay open)
+- *k* close the workspace and kill its buffers
+- *r* remove the current buffer from this workspace
+- *w* show all workspaces
+
+#+begin_src emacs-lisp
+(use-package tabspaces
+  ;; Latest version straight from Codeberg (development moved there)
+  :vc (:url "https://codeberg.org/mclear-tools/tabspaces"
+            :rev :newest)
+  :hook (after-init . tabspaces-mode)
+  :custom
+  ;; C-x b shows only the current workspace's buffers
+  (tabspaces-use-filtered-buffers-as-default t)
+  (tabspaces-default-tab "Default")
+  (tabspaces-remove-to-default t)
+  (tabspaces-include-buffers '("*scratch*"))
+  ;; Don't create a project-todo.org file in new projects
+  (tabspaces-initialize-project-with-todo nil)
+  ;; Make the normal C-x p p open the project in its own workspace
+  (tabspaces-project-switch-opens-workspace t)
+  ;; Save workspaces (buffers + window layout) on exit, restore on startup
+  (tabspaces-session t)
+  (tabspaces-session-auto-restore t)
+  ;; New tabs start on *scratch*
+  (tab-bar-new-tab-choice "*scratch*")
+  :config
+  ;; Make consult's buffer lists (C-x b, C-x p b, ...) show only
+  ;; the current workspace's buffers while tabspaces is on.
+  ;; Needs consult 2.7 or newer.
+  (defun my--consult-tabspaces ()
+    "Isolate consult's buffer list only while tabspaces is active."
+    (setq consult-buffer-list-function
+          (if tabspaces-mode #'tabspaces-local-buffer-list #'buffer-list)))
+  (add-hook 'tabspaces-mode-hook #'my--consult-tabspaces))
+#+end_src
+
 * Modes Configuration
 Language specific modes configuration goes here.
 

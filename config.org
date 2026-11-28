@@ -1216,8 +1216,119 @@ instead of LSP mode. There's always VSCode for debugging too if you are feeling
 lazy!
 
 #+begin_src emacs-lisp
+(defconst my-dap-dir (expand-file-name "debug-adapters" user-emacs-directory)
+  "Where the debug adapters are installed.")
+
+(defconst my-debugpy-python (file-name-concat my-dap-dir "debugpy/bin/python")
+  "Python from the venv that holds debugpy.")
+
+;; Settings that can be changed per project in .dir-locals.el
+(defvar my-dape-cross-gdb "arm-none-linux-gnueabihf-gdb"
+  "GDB for cross-compiled Linux programs.")
+(put 'my-dape-cross-gdb 'safe-local-variable #'stringp)
+
+(defvar my-dape-stm32-gdb "arm-none-eabi-gdb"
+  "GDB for STM32 programs.")
+(put 'my-dape-stm32-gdb 'safe-local-variable #'stringp)
+
+(defvar my-dape-sysroot nil
+  "Sysroot for cross-compiled programs, e.g. \"~/sysroots/rpi\".")
+(put 'my-dape-sysroot 'safe-local-variable #'stringp)
+
+;; Prompts. Dape calls these when a session starts.
+(defun my-dape-read-program ()
+  "Ask for the program to debug, starting in build/."
+  (expand-file-name
+   (read-file-name "Program: " (file-name-concat (dape-cwd) "build/") nil t)))
+
+(defun my-dape-read-elf ()
+  "Ask for an ELF file, showing only folders and .elf files."
+  (expand-file-name
+   (read-file-name "ELF: " (file-name-concat (dape-cwd) "build/") nil t nil
+                   (lambda (f)
+                     (string-match-p "\\(/\\|\\.elf\\)\\'" f)))))
+
+(defun my-dape-read-rust-program ()
+  "Ask for the Rust binary, defaulting to target/debug/<project name>."
+  (let ((name (file-name-nondirectory (directory-file-name (dape-cwd)))))
+    (expand-file-name
+     (read-file-name "Program: " (file-name-concat (dape-cwd) "target/debug/")
+                     nil t name))))
+
+(defun my-dape-read-pid ()
+  "Pick a running process and return its PID."
+  (let ((procs (mapcar (lambda (pid)
+                         (cons (format "%-8d %s" pid
+                                       (alist-get 'args (process-attributes pid)))
+                               pid))
+                       (list-system-processes))))
+    (cdr (assoc (completing-read "Attach to: " procs nil t) procs))))
+
+(defun my-dape-read-gdbserver ()
+  "Ask for the gdbserver address."
+  (read-string "gdbserver (host:port): " "localhost:1234"))
+
+(defun my-dape-python ()
+  "The project's .venv Python if it exists, otherwise python3."
+  (let ((venv (file-name-concat (dape-cwd) ".venv/bin/python")))
+    (if (file-executable-p venv)
+        venv
+      (executable-find "python3"))))
+
+;; GDB setup commands.
+(defun my-dape-gdb-setup ()
+  "GDB commands run at start.  Adds the sysroot if one is set."
+  (vconcat
+   [(:text "-enable-pretty-printing" :description "Pretty printing" :ignoreFailures t)]
+   (when my-dape-sysroot
+     (vector (list :text (concat "set sysroot " (expand-file-name my-dape-sysroot)))))))
+
+(defconst my-stm32-commands
+  [(:text "monitor reset halt")
+   (:text "load")
+   (:text "monitor reset halt")]
+  "Flash the board and halt at reset after GDB connects.")
+
+;; Config builders.
+(defun my-dape-cppdbg (name &rest args)
+  "A cpptools config called NAME. ARGS override the defaults."
+  `(,name
+    ,@args
+    modes (c-mode c-ts-mode c++-mode c++-ts-mode)
+    ensure dape-ensure-command
+    command ,(file-name-concat my-dap-dir "cpptools/extension/debugAdapters/bin/OpenDebugAD7")
+    :type "cppdbg"
+    :request "launch"
+    :cwd dape-cwd
+    :MIMode "gdb"
+    :miDebuggerPath "gdb"
+    :setupCommands my-dape-gdb-setup
+    :args []
+    :stopAtEntry nil))
+
+(defun my-dape-debugpy (name &rest args)
+  "A debugpy config called NAME. ARGS override the defaults."
+  `(,name
+    ,@args
+    modes (python-mode python-ts-mode)
+    ensure dape-ensure-command
+    command ,my-debugpy-python
+    command-args ("-m" "debugpy.adapter" "--host" "127.0.0.1" "--port" :autoport)
+    port :autoport
+    :type "python"
+    :request "launch"
+    :cwd dape-cwd
+    :python my-dape-python
+    :justMyCode nil
+    :console "integratedTerminal"
+    :showReturnValue t
+    :stopOnEntry nil))
+
+
+
 (use-package dape
   :custom
+  (dape-adapter-dir my-dap-dir)
   ;; Turn on global bindings for setting breakpoints with mouse
   (dape-breakpoint-global-mode +1)
   ;; Info buffers to the right
@@ -1228,30 +1339,68 @@ lazy!
   ;; Save buffers on startup, useful for interpreted languages
   (add-hook 'dape-start-hook (lambda () (save-some-buffers t t)))
   ;; Kill compile buffer on build success
-  (add-hook 'dape-compile-hook #'kill-buffer))
+  (add-hook 'dape-compile-hook #'kill-buffer)
 
-(with-eval-after-load 'dape
-  ;; codelldb
-  ;; Look at the codelldb vsix extension
-  (add-to-list 'dape-configs
-               `(codelldb-rust-mine
-                 modes (rust-mode rust-ts-mode)
-                 ensure dape-ensure-command
-                 command ,(expand-file-name
-                           "~/.emacs.d/debug-adapters/codelldb/extension/adapter/codelldb")
-                 command-args ("--port" :autoport)
-                 port :autoport
-                 :type "lldb"
-                 :request "launch"
-                 :cwd dape-cwd
-                 :program (lambda ()
-                            (file-name-concat
-                             (dape-cwd) "target" "debug"
-                             (file-name-nondirectory
-                              (directory-file-name (dape-cwd)))))
-                 :args []
-                 :stopOnEntry nil
-                 :sourceLanguages ["rust"])))
+  (dolist (config
+           (list
+            ;; Normal programs
+            (my-dape-cppdbg 'c-launch
+                            :program 'my-dape-read-program)
+            (my-dape-cppdbg 'c-launch-main
+                            :program 'my-dape-read-program
+                            :stopAtEntry t)
+            (my-dape-cppdbg 'c-attach
+                            :request "attach"
+                            :program 'my-dape-read-program
+                            :processId 'my-dape-read-pid)
+
+            ;; Cross compiled: on the target run `gdbserver :1234 ./prog'
+            (my-dape-cppdbg 'c-gdbserver
+                            :program 'my-dape-read-program
+                            :miDebuggerPath 'my-dape-cross-gdb
+                            :miDebuggerServerAddress 'my-dape-read-gdbserver)
+
+            ;; STM32 with OpenOCD
+            (my-dape-cppdbg 'stm32-openocd
+                            :program 'my-dape-read-elf
+                            :miDebuggerPath 'my-dape-stm32-gdb
+                            :miDebuggerServerAddress "localhost:3333"
+                            :targetArchitecture "arm"
+                            :stopAtConnect t
+                            :postRemoteConnectCommands my-stm32-commands)
+
+            ;; STM32 with st-util
+            (my-dape-cppdbg 'stm32-stutil
+                            :program 'my-dape-read-elf
+                            :miDebuggerPath 'my-dape-stm32-gdb
+                            :miDebuggerServerAddress "localhost:4242"
+                            :targetArchitecture "arm"
+                            :stopAtConnect t
+                            :postRemoteConnectCommands my-stm32-commands)
+
+            ;; Rust
+            `(rust-codelldb
+              modes (rust-mode rust-ts-mode)
+              ensure dape-ensure-command
+              command ,(file-name-concat my-dap-dir "codelldb/extension/adapter/codelldb")
+              command-args ("--port" :autoport)
+              port :autoport
+              compile "cargo build"
+              :type "lldb"
+              :request "launch"
+              :cwd dape-cwd
+              :program my-dape-read-rust-program
+              :args []
+              :stopOnEntry nil
+              :sourceLanguages ["rust"])
+
+            ;; Python
+            (my-dape-debugpy 'py-file
+                             :program 'dape-buffer-default)
+            (my-dape-debugpy 'py-pytest
+                             :module "pytest"
+                             :args ["-x" dape-buffer-default])))
+    (setf (alist-get (car config) dape-configs) (cdr config))))
 #+end_src
 
 ** Tabspaces
@@ -1295,6 +1444,8 @@ Keys under *C-c TAB*:
   (tabspaces-session-auto-restore t)
   ;; New tabs start on *scratch*
   (tab-bar-new-tab-choice "*scratch*")
+  (tabspaces-session-project-session-store
+   (expand-file-name "tabspaces-sessions/" user-emacs-directory))
   :config
   ;; Make consult's buffer lists (C-x b, C-x p b, ...) show only
   ;; the current workspace's buffers while tabspaces is on.
@@ -1589,6 +1740,32 @@ that are missing. Use *C-u M-x my/install-tools* to reinstall all of them.
     (:bin "ruff"                    :cmd "pipx install ruff" ))
   "LSP servers and tools, each with its program name and install command.")
 
+(defun my--vsix-cmd (name url &rest exes)
+  "Shell command that installs the VS Code extension at URL into NAME.
+EXES are paths inside the extension that need to be executable"
+  (let ((dir (shell-quote-argument (file-name-concat my-dap-dir name))))
+    (format "rm -rf %s && mkdir -p %s && curl -fL -o %s/a.vsix %s && unzip -q %s/a.vsix -d %s && rm %s/a.vsix && chmod +x %s"
+            dir dir dir url dir dir dir
+            (mapconcat (lambda (exe) (concat dir "/" exe)) exes " "))))
+
+(defvar my-dap-adapters
+  `((:bin ,(file-name-concat my-dap-dir "cpptools/extension/debugAdapters/bin/OpenDebugAD7")
+          :cmd ,(my--vsix-cmd "cpptools"
+                              "https://github.com/microsoft/vscode-cpptools/releases/latest/download/cpptools-linux-x64.vsix"
+                              "extension/debugAdapters/bin/OpenDebugAD7"
+                              "extension/debugAdapters/bin/createdump"))
+    (:bin ,(file-name-concat my-dap-dir "codelldb/extension/adapter/codelldb")
+          :cmd ,(my--vsix-cmd "codelldb"
+                              "https://github.com/vadimcn/codelldb/releases/latest/download/codelldb-linux-x64.vsix"
+                              "extension/adapter/codelldb"
+                              "extension/lldb/bin/*"))
+    (:bin ,my-debugpy-python
+          :cmd ,(let ((venv (shell-quote-argument (file-name-concat my-dap-dir "debugpy"))))
+                  (format "python3 -m venv %s && %s/bin/pip install -U debugpy" venv venv))))
+  "Debug adapters for dape. Each :bin is checked before installing")
+
+(setq my-lsp-servers (append my-lsp-servers my-dap-adapters))
+
 (defun my/install-tools (&optional force)
   "Install the missing programs listed in `my-lsp-servers`.
 With a prefix argument FORCE, reinstall all of them."
@@ -1606,6 +1783,7 @@ With a prefix argument FORCE, reinstall all of them."
       (compilation-start (mapconcat #'identity cmds " && ")
                          t
                          (lambda (_) "*install-lsp-servers*")))))
+
 #+end_src
 
 ** Whitespace Dots Mode
